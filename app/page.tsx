@@ -17,7 +17,6 @@ import { Input } from "@/components/ui/input";
 
 // Sample data
 const sampleProperties = [
-    
     {
         id: "1",
         title: "Modern Downtown Penthouse",
