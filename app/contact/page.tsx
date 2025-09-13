@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Navigation from '@/components/navigation';
 import Footer from '@/components/footer';
+import PageHeader from '@/components/page-header';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -102,19 +103,10 @@ const ContactPage = () => {
       <Navigation />
 
       {/* Hero Section */}
-      <section className="pt-24 pb-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-4xl mx-auto">
-            <h1 className="text-5xl font-bold text-gray-900 mb-6">
-              Contact Us
-            </h1>
-            <p className="text-xl text-gray-600 leading-relaxed">
-              Ready to find your dream property or have questions about our services? 
-              We're here to help and would love to hear from you.
-            </p>
-          </div>
-        </div>
-      </section>
+      <PageHeader 
+        title="Get in Touch"
+        subtitle="Have questions? We're here to help. Contact us today and our team will get back to you as soon as possible."
+      />
 
       {/* Contact Methods */}
       <section className="py-16">

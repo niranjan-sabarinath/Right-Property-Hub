@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Navigation from '@/components/navigation';
 import Footer from '@/components/footer';
+import PageHeader from '@/components/page-header';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -117,30 +118,20 @@ const BlogPage = () => {
       <Navigation />
 
       {/* Hero Section */}
-      <section className="pt-24 pb-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-4xl mx-auto">
-            <h1 className="text-5xl font-bold text-gray-900 mb-6">
-              Real Estate Insights & Tips
-            </h1>
-            <p className="text-xl text-gray-600 leading-relaxed mb-8">
-              Stay informed with the latest real estate trends, market analysis, and expert advice 
-              to make smarter property decisions.
-            </p>
-            
-            {/* Search */}
-            <div className="max-w-md mx-auto">
-              <div className="relative">
-                <Search className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
-                <Input 
-                  placeholder="Search articles..." 
-                  className="pl-10 h-12"
-                />
-              </div>
-            </div>
+      <PageHeader 
+        title="Real Estate Insights & Tips"
+        subtitle="Stay informed with the latest real estate trends, market analysis, and expert advice to make smarter property decisions."
+      >
+        <div className="max-w-md mx-auto mt-8">
+          <div className="relative">
+            <Search className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+            <Input 
+              placeholder="Search articles..." 
+              className="pl-10 h-12 bg-white/80 backdrop-blur-sm border-gray-200 focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all duration-200"
+            />
           </div>
         </div>
-      </section>
+      </PageHeader>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">

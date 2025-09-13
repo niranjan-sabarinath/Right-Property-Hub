@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Navigation from '@/components/navigation';
 import Footer from '@/components/footer';
+import PageHeader from '@/components/page-header';
 import PropertyCard from '@/components/property-card';
 import PropertyFilters from '@/components/property-filters';
 import PropertyComparison from '@/components/property-comparison';
@@ -251,18 +252,10 @@ const PropertiesPage = () => {
       <Navigation />
 
       {/* Hero Section */}
-      <section className="pt-24 pb-12 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-8">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              Find Your Perfect Property
-            </h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Browse through our extensive collection of premium properties. Use our advanced filters to find exactly what you're looking for.
-            </p>
-          </div>
-        </div>
-      </section>
+      <PageHeader 
+        title="Find your Dream Property"
+        subtitle="Discover the perfect home that matches your lifestyle"
+      />
 
       {/* Compare Bar */}
       {compareProperties.length > 0 && (

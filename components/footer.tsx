@@ -1,126 +1,155 @@
-import React from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
-import { MapPin, Phone, Mail, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import React from "react";
+import Link from "next/link";
+import Image from "next/image";
+import {
+    MapPin,
+    Phone,
+    Mail,
+    Facebook,
+    Twitter,
+    Instagram,
+    Linkedin,
+} from "lucide-react";
 
 const Footer = () => {
-  const currentYear = new Date().getFullYear();
+    const currentYear = new Date().getFullYear();
+    const socialIcons = [
+        { icon: Facebook, url: "#" },
+        { icon: Twitter, url: "#" },
+        { icon: Instagram, url: "#" },
+        { icon: Linkedin, url: "#" },
+        { icon: Mail, url: "mailto:info@rightpropertyhub.com" },
+    ];
 
-  return (
-    <footer className="bg-neutral-900 text-white m-6 mt-0 rounded-b-3xl">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {/* Company Info */}
-          <div className="space-y-4">
-            <Link href="/" className="flex items-center space-x-3 group">
-              <div className="relative h-16 w-auto transform group-hover:scale-105 transition-transform duration-200">
-                <Image
-                  src="/images/logo.png"
-                  alt="Right Property Hub Logo"
-                  height={90}
-                  width={180}
-                  className="h-full w-auto object-contain"
-                />
-              </div>
-            </Link>
-            <p className="text-gray-300 text-sm leading-relaxed font-coco-light">
-              Your trusted partner in finding the perfect property. We provide exceptional real estate services with a focus on quality, integrity, and client satisfaction.
-            </p>
-            <div className="flex space-x-4">
-              {[Facebook, Twitter, Instagram, Linkedin].map((Icon, index) => (
-                <Button
-                  key={index}
-                  variant="ghost"
-                  size="icon"
-                  className="text-gray-400 hover:text-primary hover:bg-primary/10"
-                >
-                  <Icon className="w-5 h-5" />
-                </Button>
-              ))}
-            </div>
-          </div>
+    const navLinks = [
+        { href: "/", label: "Home" },
+        { href: "/properties", label: "Properties" },
+        { href: "/about", label: "About" },
+        { href: "/blog", label: "Insights" },
+        { href: "/contact", label: "Contact" },
+    ];
 
-          {/* Quick Links */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4 font-coco-regular tracking-wide">Quick Links</h3>
-            <div className="space-y-2 font-coco-light">
-              {[
-                { href: '/', label: 'Home' },
-                { href: '/properties', label: 'Properties' },
-                { href: '/about', label: 'About Us' },
-                { href: '/blog', label: 'Blog' },
-                { href: '/contact', label: 'Contact' },
-              ].map(({ href, label }) => (
-                <Link
-                  key={href}
-                  href={href}
-                  className="block text-gray-300 hover:text-primary transition-colors text-sm"
-                >
-                  {label}
-                </Link>
-              ))}
-            </div>
-          </div>
+    return (
+        <footer className="w-full bg-[#eef2f3] border-t border-gray-100">
+            {/* Top Section: Quote & Contact */}
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16">
+                <div className="flex flex-col space-y-8 md:space-y-0 md:flex-row justify-between items-start">
+                    {/* Quote */}
+                    <div className="w-full md:w-2/3">
+                        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-coco-light text-gray-900 leading-tight">
+                            Your perfect property journey starts with{" "}
+                            <span className="font-coco-regular">
+                                expert guidance
+                            </span>
+                        </h2>
+                    </div>
 
-          {/* Services */}
-          <div className='font-coco-light'>
-            <h3 className="text-lg font-semibold mb-4 font-coco-regular tracking-wide">Services</h3>
-            <div className="space-y-2">
-              {[
-                'Property Sales',
-                'Property Rentals',
-                'Property Management',
-                'Investment Consulting',
-                'Market Analysis',
-                'Property Valuation',
-              ].map((service) => (
-                <div key={service} className="text-gray-300 text-sm">
-                  {service}
+                    {/* Contact Details */}
+                    <div className="w-full md:w-auto text-left md:text-right">
+                        <div className="space-y-3">
+                            <div className="flex items-start">
+                                <MapPin className="w-4 h-4 mt-0.5 mr-2 text-gray-600 flex-shrink-0 md:hidden" />
+                                <div className="flex flex-col items-start">
+                                    <p className="text-sm sm:text-base">123 Real Estate Ave</p>
+                                    <p className="text-sm sm:text-base">Property City, PC 12345</p>
+                                </div>
+                            </div>
+                            <div className="flex items-center">
+                                <Phone className="w-4 h-4 mr-2 text-gray-600 flex-shrink-0 md:hidden" />
+                                <a 
+                                    href="tel:+919876543210" 
+                                    className="text-sm sm:text-base text-gray-700 hover:text-gray-900 font-medium transition-colors"
+                                >
+                                    +91 9876543210
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              ))}
             </div>
-          </div>
 
-          {/* Contact & Newsletter */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4 font-coco-regular tracking-wide">Contact Info</h3>
-            <div className="space-y-3 ">
-              <div className="flex items-start space-x-3">
-                <MapPin className="w-5 h-5 text-primary mt-1 flex-shrink-0" />
-                <span className="text-gray-300 text-sm">
-                  123 Real Estate Ave<br />
-                  Property City, PC 12345
-                </span>
-              </div>
-              <div className="flex items-center space-x-3">
-                <Phone className="w-5 h-5 text-primary" />
-                <span className="text-gray-300 text-sm">+1 (555) 123-4567</span>
-              </div>
-              <div className="flex items-center space-x-3">
-                <Mail className="w-5 h-5 text-primary" />
-                <span className="text-gray-300 text-sm ">info@rightpropertyhub.com</span>
-              </div>
-            </div>
-          </div>
-        </div>
+            {/* Middle Section: Navigation & Social */}
+            <div className="py-2">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="border-t border-b border-gray-300 py-4">
+                        <div className="flex flex-col space-y-6 md:space-y-0 md:flex-row items-center justify-between">
+                            {/* Navigation Links */}
+                            <div className="w-full md:flex-1">
+                                <nav className="flex flex-wrap justify-center md:justify-start gap-4 sm:gap-6">
+                                    {navLinks.map(({ href, label }) => (
+                                        <Link
+                                            key={href}
+                                            href={href}
+                                            className="text-xs sm:text-sm text-gray-700 hover:text-gray-900 transition-colors font-medium"
+                                        >
+                                            {label}
+                                        </Link>
+                                    ))}
+                                </nav>
+                            </div>
 
-        <div className="border-t border-gray-800 mt-12 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <p className="text-gray-400 text-sm ">
-              © {currentYear} <span className="font-coco-light">Right Property Hub</span>. All rights reserved.
-            </p>
-            <div className="flex space-x-6 text-sm text-gray-400 font-coco-light">
-              <Link href="#" className="hover:text-primary transition-colors">Privacy Policy</Link>
-              <Link href="#" className="hover:text-primary transition-colors">Terms of Service</Link>
-              <Link href="#" className="hover:text-primary transition-colors">Cookie Policy</Link>
+                            {/* Logo - Centered on mobile, positioned between nav and social on desktop */}
+                            <div className="order-first md:order-none my-2 md:my-0 px-4 md:px-8">
+                                <Link href="/" className="block w-20 md:w-24 lg:w-28">
+                                    <Image
+                                        src="/images/logo.png"
+                                        alt="Right Property Hub"
+                                        width={112}
+                                        height={56}
+                                        className="w-full h-auto"
+                                        priority
+                                    />
+                                </Link>
+                            </div>
+
+                            {/* Social Icons */}
+                            <div className="w-full md:flex-1">
+                                <div className="flex justify-center md:justify-end items-center space-x-4 sm:space-x-6">
+                                    {socialIcons.map(
+                                        ({ icon: Icon, url }, index) => (
+                                            <a
+                                                key={index}
+                                                href={url}
+                                                className="text-gray-400 hover:text-gray-900 transition-colors"
+                                                aria-label={`Social media link ${
+                                                    index + 1
+                                                }`}
+                                            >
+                                                <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
+                                            </a>
+                                        )
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </footer>
-  );
+
+            {/* Bottom Section: Copyright */}
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pt-10 md:pt-16">
+                <div className="flex flex-col space-y-4 sm:space-y-0 sm:flex-row justify-between items-center text-xs sm:text-sm text-gray-500">
+                    <div className="text-center sm:text-left">
+                        <p>&copy; {currentYear} Right Property Hub. All rights reserved.</p>
+                    </div>
+                    <div className="flex flex-wrap justify-center items-center gap-3 sm:gap-6">
+                        <Link
+                            href="/privacy"
+                            className="hover:text-gray-900 transition-colors whitespace-nowrap"
+                        >
+                            Privacy Policy
+                        </Link>
+                        <Link
+                            href="/terms"
+                            className="hover:text-gray-900 transition-colors whitespace-nowrap"
+                        >
+                            Terms of Service
+                        </Link>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    );
 };
 
 export default Footer;

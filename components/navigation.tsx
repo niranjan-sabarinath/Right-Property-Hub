@@ -13,14 +13,19 @@ const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+  const isHomePage = pathname === '/';
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    if (isHomePage) {
+      const handleScroll = () => {
+        setIsScrolled(window.scrollY > 20);
+      };
+      window.addEventListener('scroll', handleScroll, { passive: true });
+      return () => window.removeEventListener('scroll', handleScroll);
+    } else {
+      setIsScrolled(true);
+    }
+  }, [isHomePage]);
 
   const navItems = [
     { href: '/', label: 'DISCOVER', icon: Home },
@@ -30,43 +35,51 @@ const Navigation = () => {
   ];
 
   return (
-    <nav className={cn(
-      "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-      isScrolled 
-        ? "glass-effect shadow-lg py-1" 
-        : "bg-transparent py-2"
-    )}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-12">
+    <nav className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] max-w-6xl">
+      <div className={cn(
+        "transition-all duration-500 w-full",
+        isScrolled 
+          ? "backdrop-blur-md bg-white/80 shadow-lg rounded-full border py-1.5 px-6" 
+          : "backdrop-blur-md bg-white/5 rounded-full py-1.5 px-6 w-auto"
+      )}>
+      <div className="mx-auto">
+        <div className="flex items-center justify-between h-14">
           {/* Logo */}
           <Link 
             href="/" 
-            className="flex items-center space-x-3 group"
+            className="flex items-center space-x-3 group transition-transform duration-300 hover:scale-105"
           >
-            <div className="relative transform group-hover:scale-105 transition-transform duration-200">
+            <div className="relative">
               <Image
                 src="/images/logo.png"
                 alt="Right Property Hub Logo"
-                height={90}
-                width={90}
-                className="object-contain"
+                height={isScrolled ? 70 : 80}
+                width={isScrolled ? 70 : 80}
+                className="transition-all duration-500 object-contain"
                 priority
               />
             </div>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className={cn(
+            "hidden md:flex items-center space-x-1 mx-auto",
+            !isScrolled && "px-4 py-1.5"
+          )}>
             {navItems.map(({ href, label }) => (
               <Link
                 key={href}
                 href={href}
                 className={cn(
-                  "relative px-3 py-1 text-sm font-medium transition-colors duration-200 rounded-full",
-                  "hover:text-gray-900",
-                  pathname === href 
-                    ? "text-gray-900 font-semibold" 
-                    : "text-gray-600"
+                  "relative px-4 py-2 text-sm font-medium transition-all duration-300 rounded-full",
+                  isScrolled 
+                    ? pathname === href 
+                      ? "text-gray-900 font-semibold"
+                      : "text-gray-700 hover:text-gray-900"
+                    : pathname === href 
+                      ? "text-white font-medium relative after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-1/2 after:h-0.5 after:bg-white after:rounded-full" 
+                      : "text-white/70 hover:text-white",
+                  "hover:scale-105 transform transition-transform"
                 )}
               >
                 {label}
@@ -78,7 +91,13 @@ const Navigation = () => {
           <div className="hidden md:flex">
             <Link 
               href="/contact" 
-              className="flex items-center uppercase space-x-2 text-gray-900 font-semibold underline text-sm hover:text-primary transition-colors duration-200"
+              className={cn(
+                "flex items-center space-x-2 font-medium text-sm transition-all duration-300 px-4 py-2.5 rounded-full",
+                isScrolled 
+                  ? "bg-gray-900 text-white hover:bg-gray-800 shadow-md"
+                  : "bg-white text-gray-900 hover:bg-gray-100 shadow-lg",
+                "hover:scale-105 transform"
+              )}
             >
               <span>Get in Touch</span>
               <ArrowRight className="w-4 h-4" />
@@ -88,33 +107,39 @@ const Navigation = () => {
           {/* Mobile Menu */}
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="md:hidden">
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className={cn(
+                  "md:hidden transition-all duration-300 hover:bg-white/20",
+                  isScrolled ? "text-gray-900" : "text-white"
+                )}
+              >
                 <Menu className="h-6 w-6" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-80">
-              <div className="flex flex-col space-y-6 mt-8">
+            <SheetContent side="right" className="w-72 bg-white/95 backdrop-blur-sm border-l border-white/20">
+              <div className="flex flex-col space-y-2 mt-8 p-2">
                 {navItems.map(({ href, label, icon: Icon }) => (
                   <Link
                     key={href}
                     href={href}
                     onClick={() => setIsOpen(false)}
                     className={cn(
-                      "flex items-center space-x-3 px-4 py-2 rounded-full transition-colors",
-                      "hover:bg-gray-100",
+                      "flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200",
                       pathname === href 
-                        ? "bg-gray-100 text-gray-900 font-semibold" 
-                        : "text-gray-600"
+                        ? "bg-gray-100 text-gray-900 font-medium" 
+                        : "text-gray-700 hover:bg-gray-50"
                     )}
                   >
                     <Icon className="w-5 h-5" />
-                    <span className="font-medium">{label}</span>
+                    <span>{label}</span>
                   </Link>
                 ))}
                 <Link 
                   href="/contact" 
                   onClick={() => setIsOpen(false)}
-                  className="flex items-center space-x-2 mx-4 text-gray-900 font-bold hover:text-primary transition-colors duration-200"
+                  className="mt-4 flex items-center justify-center space-x-2 px-4 py-3 bg-gray-900 text-white rounded-xl font-medium hover:bg-gray-800 transition-colors"
                 >
                   <span>Get in Touch</span>
                   <ArrowRight className="w-4 h-4" />
@@ -123,6 +148,7 @@ const Navigation = () => {
             </SheetContent>
           </Sheet>
         </div>
+      </div>
       </div>
     </nav>
   );

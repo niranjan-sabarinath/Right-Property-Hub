@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Search, Building, ArrowRight } from "lucide-react";
 import { motion, useAnimation, useInView } from "framer-motion";
+import PropertyCarousel from "@/components/property-carousel";
 
 // Components
 import Navigation from "@/components/navigation";
@@ -192,66 +193,95 @@ const HomePage = () => {
             <Navigation />
 
             {/* Hero Section */}
-            <section className="relative min-h-screen flex items-center overflow-hidden">
-                {/* Background Image */}
-                <div className="absolute inset-0 z-0">
+            <section className="relative min-h-screen flex items-end pb-16 sm:pb-0 overflow-hidden">
+                {/* Background Image with Overlay */}
+                <div className="inset-0 z-0">
                     <Image
-                        src="https://e0.pxfuel.com/wallpapers/235/937/desktop-wallpaper-building-background-super-building-buildings.jpg"
+                        src="/images/2.jpg"
                         alt="Luxury Home"
                         fill
                         className="object-cover"
                         priority
                     />
-                    {/* Gradient overlay for better text contrast */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-white/90 via-white/60 to-transparent" />
+                    <div className="absolute inset-0 bg-black/60 md:bg-black/40" />
                 </div>
 
-                <div className="relative z-10 text-left px-6 sm:px-8 lg:px-12 max-w-4xl pt-32 pb-40 md:pt-40 md:pb-48">
-                    <h1 className="text-4xl sm:text-5xl md:text-6xl font-coco-regular mb-6 animate-fade-in text-gray-900">
-                        A place for today, a story for tomorrow, a home for a lifetime.
-                    </h1>
-                    <p className="text-lg sm:text-xl md:text-2xl font-coco-light mb-8 text-gray-700 animate-slide-up max-w-2xl">
-                        Every great journey starts with finding the perfect place to call home. 
-                        Let us guide you to properties that don't just meet your needs, but inspire your future.
-                    </p>
-
-                    {/* Hero Search */}
-                    <div className="bg-white/80 backdrop-blur-sm p-4 sm:p-5 max-w-2xl animate-scale-in rounded-lg border border-gray-200 shadow-lg">
-                        <div className="flex flex-col md:flex-row gap-4">
-                            <div className="flex-1 relative">
-                                <Search className="absolute left-3 top-3.5 w-5 h-5 text-gray-500" />
-                                <Input
-                                    placeholder="Search by location, property type, or keyword..."
-                                    value={searchTerm}
-                                    onChange={(e) =>
-                                        setSearchTerm(e.target.value)
-                                    }
-                                    className="pl-10 h-12 bg-white/90 border-gray-300 text-gray-900 placeholder-gray-500 focus:border-primary/50 focus-visible:ring-1 focus-visible:ring-primary/50 focus-visible:ring-offset-1"
-                                />
+                <div className="relative z-10 w-full mb-8 ">
+                    <div className="px-4 sm:px-6 lg:px-12 flex flex-grow items-end h-full">
+                        <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start md:items-center w-full">
+                            {/* Left Column - Title */}
+                            <div className="animate-fade-in flex-1 w-full mt-16 md:mt-0">
+                                <div className="flex flex-wrap gap-2 sm:gap-3 mb-4 sm:mb-6">
+                                    {['Homes', 'Apartments', 'Residential'].map((badge) => (
+                                        <span 
+                                            key={badge}
+                                            className="px-3 sm:px-4 py-1.5 sm:py-2 bg-white/10 backdrop-blur-sm text-white/90 text-xs sm:text-sm font-medium rounded-full border border-white/20 hover:bg-white/20 transition-colors duration-200 whitespace-nowrap"
+                                        >
+                                            {badge}
+                                        </span>
+                                    ))}
+                                </div>
+                                <h1 className="text-4xl sm:text-4xl md:text-5xl lg:text-[5rem] font-coco-light mb-6 md:mb-8 text-white/90 leading-tight">
+                                    Homes built for memories, crafted for futures.
+                                </h1>
+                                <div className="w-full max-w-2xl relative pr-4 sm:pr-0">
+                                    <div className="relative flex items-center sm:bg-white/10 sm:backdrop-blur-lg rounded-full border border-white/30 hover:border-white/40 transition-all duration-300 shadow-lg hover:shadow-xl">
+                                        <Search className="absolute left-4 sm:left-6 h-4 w-4 sm:h-5 sm:w-5 text-white/80" />
+                                        <Input
+                                            type="text"
+                                            placeholder="Search properties..."
+                                            className="w-full pl-10 sm:pl-14 pr-24 sm:pr-28 py-3 sm:py-4 md:py-5 lg:py-6 bg-transparent border-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-white placeholder-white/70 text-sm sm:text-base"
+                                            value={searchTerm}
+                                            onChange={(e) => setSearchTerm(e.target.value)}
+                                            onKeyDown={(e) => {
+                                                if (e.key === 'Enter' && searchTerm.trim()) {
+                                                    window.location.href = `/properties?search=${encodeURIComponent(searchTerm)}`;
+                                                }
+                                            }}
+                                        />
+                                        <Button 
+                                            asChild
+                                            size="sm" 
+                                            className="absolute right-[0.4rem] sm:right-[0.35rem] bg-white/20 backdrop-blur-md text-white hover:bg-white/30 transition-all duration-300 px-4 sm:px-6 py-1.5 sm:py-2 h-auto rounded-full text-xs sm:text-sm font-medium border border-white/20 hover:border-white/40 whitespace-nowrap"
+                                        >
+                                            <Link href={`/properties?search=${encodeURIComponent(searchTerm)}`}>
+                                                <span className="hidden sm:inline">Search</span>
+                                                <Search className="sm:hidden h-4 w-4" />
+                                            </Link>
+                                        </Button>
+                                    </div>
                             </div>
-                            <Button
-                                size="lg"
-                                variant="outline"
-                                className="h-12 px-8 bg-primary text-white border-primary hover:bg-primary/90 hover:border-primary/90 transition-colors"
-                            >
-                                Search Properties
-                            </Button>
+                            </div>
+                            
+                            {/* Right Column - Description */}
+                            <div className="animate-slide-up w-full md:w-auto mt-8 md:mt-0">
+                                <p className="text-base sm:text-lg md:text-xl lg:text-2xl font-coco-light text-white/90 max-w-sm">
+                                    Every great journey starts with finding the perfect
+                                    place to call home. Let us guide you to properties that
+                                    inspire your future, not just meet your needs.
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </section>
 
             {/* Featured Properties */}
-            <section className="pt-20">
+            <section className="pt-24 relative overflow-hidden">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="mb-8">
-                        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
+                    <div className="mb-8 relative">
+                        <div className="absolute -top-6 left-4 md:left-36 right-0 flex items-center z-0">
+                            <span className="font-amsterdam text-2xl md:text-3xl text-gray-400 select-none pointer-events-none opacity-30">
+                                Featured Properties
+                            </span>
+                        </div>
+                        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4 relative z-10">
                             <h2 className="text-3xl md:text-6xl font-medium text-gray-900 font-coco-regular">
-                                Discover
+                                Discover Our Collection
                             </h2>
                             <Link
                                 href="/properties"
-                                className="group inline-flex items-center underline mt-4 text-lg font-medium text-gray-900 hover:text-gray-600 transition-colors"
+                                className="hidden sm:inline-flex group items-center underline mt-4 text-lg font-medium text-gray-900 hover:text-gray-600 transition-colors"
                             >
                                 Get to Know Us
                                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
@@ -262,16 +292,32 @@ const HomePage = () => {
                             properties, designed to bring you closer to your
                             dream home.
                         </p>
-                        <hr className="mt-3" />
+                        <div className="relative mt-6">
+                            <hr className="md:w-[calc(100%-25rem)] w-[calc(100%-4rem)] border-t border-gray-300" />
+                            <div className="absolute right-[calc(25rem)] -top-4 w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center bg-gray-50">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="16"
+                                    height="16"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    className="text-gray-400"
+                                >
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </div>
+                        </div>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 mb-8 md:mb-12">
+                    {/* Desktop Grid View - Hidden on mobile */}
+                    <div className="hidden md:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8 md:mb-12">
                         {featuredProperties.map((property) => (
-                            <div
-                                key={property.id}
-                                className="group cursor-pointer"
-                            >
-                                {/* Image Container */}
+                            <div key={property.id} className="group cursor-pointer">
                                 <div className="relative aspect-[2/3] overflow-hidden rounded-xl mb-4">
                                     <div className="relative w-full h-full">
                                         <Image
@@ -280,13 +326,10 @@ const HomePage = () => {
                                             fill
                                             className="object-cover group-hover:scale-105 transition-transform duration-500"
                                         />
-                                        {/* Shine Effect */}
                                         <motion.div
                                             className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent z-10 pointer-events-none"
                                             initial={{ x: "-100%" }}
-                                            animate={{
-                                                x: ["-100%", "100%"],
-                                            }}
+                                            animate={{ x: ["-100%", "100%"] }}
                                             transition={{
                                                 x: {
                                                     repeat: Infinity,
@@ -296,34 +339,26 @@ const HomePage = () => {
                                                     repeatDelay: 1,
                                                 },
                                             }}
-                                            style={{
-                                                transform: "skewX(-20deg)",
-                                            }}
+                                            style={{ transform: "skewX(-20deg)" }}
                                         />
                                     </div>
-                                    {/* Status Badge */}
                                     <div className="absolute top-3 left-3">
-                                        <span
-                                            className={`inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium ${
-                                                property.status === "For Sale"
-                                                    ? "bg-green-100 text-green-800"
-                                                    : property.status ===
-                                                      "For Rent"
-                                                    ? "bg-blue-100 text-blue-800"
-                                                    : "bg-gray-100 text-gray-800"
-                                            }`}
-                                        >
+                                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium ${
+                                            property.status === "For Sale"
+                                                ? "bg-green-100 text-green-800"
+                                                : property.status === "For Rent"
+                                                ? "bg-blue-100 text-blue-800"
+                                                : "bg-gray-100 text-gray-800"
+                                        }`}>
                                             {property.status}
                                         </span>
                                     </div>
                                 </div>
-
-                                {/* Property Info */}
                                 <div className="ml-1">
                                     <h3 className="text-lg font-coco-regular text-gray-900 group-hover:text-primary transition-colors">
                                         {property.title}
                                     </h3>
-                                    <p className="text-gray-600 flex items-center">
+                                    <p className="text-gray-600">
                                         <span className="text-sm font-coco-light">
                                             {property.location}
                                         </span>
@@ -332,13 +367,17 @@ const HomePage = () => {
                             </div>
                         ))}
                     </div>
+
+                    {/* Mobile Carousel - Only visible on mobile */}
+                    <div className="md:hidden mb-8">
+                        <PropertyCarousel properties={featuredProperties} />
+                    </div>
                 </div>
             </section>
 
-            <section className="py-12 md:py-20 md:pt-10">
+            <section className="py-12 md:py-20 bg-[#eef2f3] relative overflow-hidden">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <hr className="mb-8 md:mb-10" />
-                    <div className="mb-8">
+                    <div className="mb-8 relative z-10">
                         <span className="inline-block px-3 py-1 text-sm font-medium border border-zinc-800 rounded-full mb-4">
                             What We Do
                         </span>
@@ -348,7 +387,7 @@ const HomePage = () => {
                         </h2>
                     </div>
                     <div className="bg-neutral-900 p-4 sm:p-6 lg:p-8 rounded-lg">
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-12">
                             {/* Property Image */}
                             <div className="relative h-64 sm:h-80 md:h-96 lg:h-[350px] overflow-hidden rounded-lg">
                                 <Image
@@ -362,8 +401,8 @@ const HomePage = () => {
                             </div>
 
                             {/* Content */}
-                            <div className="pr-8">
-                                <p className="text-gray-300 mb-6 text-base md:text-lg lg:text-xl xl:text-2xl font-coco-light tracking-wide">
+                            <div className="sm:pr-8">
+                                <p className="text-gray-300 sm:mb-6 text-base md:text-lg lg:text-xl xl:text-2xl font-coco-light tracking-wide">
                                     At Right Property Hub, we're dedicated to
                                     helping you find your dream property or get
                                     the best value when selling. Our experienced
@@ -375,7 +414,7 @@ const HomePage = () => {
                                 </p>
                                 <Link
                                     href="/about"
-                                    className="mt-6 md:mt-8 inline-flex items-center bg-neutral-200 justify-center w-12 h-12 md:w-14 md:h-14 rounded-full border border-gray-600 hover:bg-white/10 transition-colors group"
+                                    className="mt-4 sm:mt-6 md:mt-8 inline-flex items-center bg-neutral-200 justify-center w-12 h-12 md:w-14 md:h-14 rounded-full border border-gray-600 hover:bg-white/10 transition-colors group"
                                 >
                                     <ArrowRight className="w-6 h-6 text-black group-hover:text-primary transition-colors" />
                                 </Link>
@@ -386,27 +425,51 @@ const HomePage = () => {
             </section>
 
             {/* Property Listings with Filters */}
-            <section className="py-20">
+            <section className="py-20 relative overflow-hidden">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="mb-8">
+                    <div className="mb-8 relative z-10">
+                        <div className="absolute -top-6 left-4 md:left-44 right-0 flex items-center z-0">
+                        <span className="font-amsterdam text-2xl md:text-4xl text-gray-400 select-none pointer-events-none opacity-30">
+                            Our Properties
+                        </span>
+                    </div>
                         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
                             <h2 className="text-3xl md:text-6xl font-medium text-gray-900 font-coco-regular">
-                                Homes for you
+                                Explore our premier spaces
                             </h2>
                             <Link
                                 href="/properties"
-                                className="group inline-flex items-center underline mt-4 text-lg font-medium text-gray-900 hover:text-gray-600 transition-colors"
+                                className="hidden sm:inline-flex group items-center underline mt-4 text-lg font-medium text-gray-900 hover:text-gray-600 transition-colors"
                             >
                                 See our Marketplace
                                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                             </Link>
                         </div>
-                        <p className="text-base md:text-lg text-gray-600 max-w-2xl font-coco-regular leading-6">
+                        <p className="text-base md:text-lg text-gray-600 md:max-w-xl lg:max-w-2xl font-coco-regular leading-6">
                             Browse our complete collection of available
                             properties and discover the perfect place that fits
                             your lifestyle and future.
                         </p>
-                        <hr className="mt-3" />
+                        <div className="relative mt-6">
+                            <hr className="border-t md:w-[calc(100%-25rem)] w-[calc(100%-4rem)] border-gray-300" />
+                            <div className="absolute right-[calc(25rem)] -top-4 w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center bg-gray-50">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="16"
+                                    height="16"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    className="text-gray-400"
+                                >
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </div>
+                        </div>
                     </div>
 
                     <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 md:gap-8">
@@ -454,9 +517,9 @@ const HomePage = () => {
             </section>
 
             {/* Testimonials */}
-            <section className="py-16 bg-gray-100">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
-                    <div className="flex flex-col md:flex-row items-start justify-between gap-8">
+            <section className="py-16 bg-[#eef2f3] relative overflow-hidden">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="flex flex-col md:flex-row items-start justify-between gap-8 relative z-10">
                         <div className="md:max-w-md md:pt-6">
                             <span className="inline-block px-3 py-1 text-sm font-medium border border-zinc-800 rounded-full mb-4">
                                 Testimonials
@@ -537,63 +600,81 @@ const HomePage = () => {
                 </div>
             </section>
 
+            {/* Client Logos Marquee */}
+            <section className="py-12 bg-white border-t border-b border-gray-100">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="mb-8 text-center">
+                        <span className="inline-block px-3 py-1 text-sm font-medium border border-zinc-800 rounded-full mb-4">
+                            Our Clients
+                        </span>
+                        <h3 className="text-2xl md:text-3xl font-medium text-gray-900 font-coco-light">
+                            Trusted by the best in the business
+                        </h3>
+                    </div>
+
+                    <div className="relative overflow-hidden">
+                        <div className="relative py-6">
+                            <div className="flex items-center animate-marquee whitespace-nowrap">
+                                {[...Array(3)].map((_, loop) => (
+                                    <div
+                                        key={loop}
+                                        className="inline-flex items-center space-x-12 md:space-x-24 mr-12 md:mr-24"
+                                    >
+                                        {[
+                                            "Client 1",
+                                            "Client 2",
+                                            "Client 3",
+                                            "Client 4",
+                                            "Client 5",
+                                            "Client 6",
+                                        ].map((client, i) => (
+                                            <div
+                                                key={`${i}-${loop}`}
+                                                className="inline-flex items-center justify-center opacity-60 hover:opacity-100 transition-opacity duration-300"
+                                            >
+                                                <span className="text-2xl md:text-3xl font-coco-light text-gray-700">
+                                                    {client}
+                                                </span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             {/* CTA Section */}
-            <section className="relative py-24 overflow-hidden mx-6 rounded-t-3xl mt-10">
+            <section className="relative py-24 overflow-hidden mt-10">
                 {/* Background Image */}
                 <div className="absolute inset-0 z-0">
                     <Image
-                        src="https://www.constructionweekonline.in/cloud/2021/11/25/qql7Fgdl-luxury_1-3.jpg"
+                        src="/images/1.jpg"
                         alt="Luxury property"
                         fill
                         className="object-cover"
                         priority
                     />
-                    <div className="absolute inset-0 bg-black/50" />
+                    <div className="absolute inset-0 bg-black/60" />
                 </div>
 
-                <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
-                    <div className="grid lg:grid-cols-2 md:px-16 items-center text-center">
-                        {/* Left Side - Work With Us */}
-                        <div className="bg-black/60 p-8 py-16 text-white shadow-sm flex flex-col items-center">
-                            <h2 className="text-2xl md:text-3xl font-light tracking-wider font-coco-regular">
-                                WORK WITH US
-                            </h2>
-                            <p className="my-6 max-w-md font-coco-light">
-                                We are committed to the highest level of
-                                expertise, knowledge and service. Your real
-                                estate inquiries are important to us, so please
-                                expect a prompt reply.
-                            </p>
-                            <Button variant="outline" className="px-8 py-3 bg-transparent border-white text-white hover:border-gray-800 ">
-                                Let's Connect
+                <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10">
+                    <div className="space-y-8">
+                        <h2 className="text-3xl md:text-6xl font-light text-white font-coco-regular">
+                            Ready to Make your Dream Property a Reality ?
+                        </h2>
+                        <p className="text-xl text-gray-100 font-coco-light max-w-2xl mx-auto">
+                            Explore a curated selection that aligns with your vision and goals.
+                        </p>
+                        <div>
+                            <Button 
+                                className="px-8 py-4 text-lg rounded-3xl bg-white text-gray-900 hover:bg-gray-100 transition-colors font-medium group"
+                                size="lg"
+                            >
+                                View Properties
+                                <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
                             </Button>
-                        </div>
-
-                        {/* Right Side - Newsletter */}
-                        <div className=" p-8 py-12 border text-white border-white border-l-0">
-                            <h3 className="text-2xl font-light mb-2 tracking-wider font-coco-regular">
-                                NEWSLETTER
-                            </h3>
-                            <p className="mb-6 font-coco-light">
-                                Subscribe to get our weekly newsletter
-                            </p>
-                            <form className="mt-8">
-                                <div className="flex flex-col sm:flex-row gap-4">
-                                    <Input
-                                        type="email"
-                                        placeholder="Your email"
-                                        className="flex-1 px-4 py-3 bg-transparent border-2 border-white/50 text-white placeholder-gray-300 focus:border-white/80 focus:ring-0"
-                                        required
-                                    />
-                                    <Button
-                                        type="submit"
-                                        variant="outline"
-                                        className="px-8 py-3 bg-transparent border-2 border-white/70 text-white hover:bg-white/10 hover:border-white transition-colors"
-                                    >
-                                        Subscribe
-                                    </Button>
-                                </div>
-                            </form>
                         </div>
                     </div>
                 </div>

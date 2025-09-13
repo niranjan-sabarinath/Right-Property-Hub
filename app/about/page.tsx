@@ -2,6 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import Navigation from '@/components/navigation';
 import Footer from '@/components/footer';
+import PageHeader from '@/components/page-header';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -86,19 +87,10 @@ const AboutPage = () => {
       <Navigation />
 
       {/* Hero Section */}
-      <section className="pt-24 pb-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-4xl mx-auto">
-            <h1 className="text-5xl font-bold text-gray-900 mb-6">
-              About Right Property Hub
-            </h1>
-            <p className="text-xl text-gray-600 leading-relaxed">
-              We're more than just a real estate company. We're your trusted partners in finding the perfect property, 
-              backed by years of experience, local expertise, and an unwavering commitment to excellence.
-            </p>
-          </div>
-        </div>
-      </section>
+      <PageHeader 
+        title="About Right Property Hub"
+        subtitle="We're more than just a real estate company. We're your trusted partners in finding the perfect property, backed by years of experience, local expertise, and an unwavering commitment to excellence."
+      />
 
       {/* Story Section */}
       <section className="py-20 bg-white">
