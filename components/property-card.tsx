@@ -158,7 +158,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
         </div>
       </div>
 
-      <div className="mt-3 relative z-20">
+      <div className="mt-3 relative z-20 px-2">
         <Link href={`/properties/${property.id}`}>
           <h3 className="font-medium font-coco-regular text-gray-900 group-hover:text-primary transition-colors line-clamp-1">
             {property.title}

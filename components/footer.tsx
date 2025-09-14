@@ -104,28 +104,31 @@ const Footer = () => {
           </motion.div>
 
           {/* Contact Details */}
-          <motion.div className="w-full md:w-auto text-left md:text-right" variants={itemVariants}>
-            <div className="space-y-3">
+          <motion.div 
+            className="w-full md:w-auto mt-6 md:mt-0" 
+            variants={itemVariants}
+          >
+            <div className="space-y-4 sm:space-y-3 text-left md:text-right">
               <motion.div
-                className="flex items-start"
+                className="flex items-start space-x-2 md:justify-end"
                 whileHover={{ x: -5 }}
                 transition={{ type: "spring", stiffness: 300 }}
               >
-                <MapPin className="w-4 h-4 mt-0.5 mr-2 text-gray-600 flex-shrink-0 md:hidden" />
-                <div className="flex flex-col items-start">
-                  <p className="text-sm sm:text-base">123 Real Estate Ave</p>
-                  <p className="text-sm sm:text-base">Property City, PC 12345</p>
+                <MapPin className="w-5 h-5 mt-0.5 text-gray-600 flex-shrink-0 md:hidden" />
+                <div className="flex flex-col">
+                  <p className="text-base font-medium text-gray-800">123 Real Estate Ave</p>
+                  <p className="text-sm text-gray-600">Property City, PC 12345</p>
                 </div>
               </motion.div>
               <motion.div
-                className="flex items-center"
-                whileHover={{ x: -5, scale: 1.05 }}
+                className="flex items-center space-x-2 md:justify-end"
+                whileHover={{ x: -5 }}
                 transition={{ type: "spring", stiffness: 300 }}
               >
-                <Phone className="w-4 h-4 mr-2 text-gray-600 flex-shrink-0 md:hidden" />
+                <Phone className="w-5 h-5 text-gray-600 flex-shrink-0 md:hidden" />
                 <a
                   href="tel:+919876543210"
-                  className="text-sm sm:text-base text-gray-700 hover:text-gray-900 font-medium transition-colors"
+                  className="text-base text-gray-700 hover:text-gray-900 font-medium transition-colors"
                 >
                   +91 9876543210
                 </a>

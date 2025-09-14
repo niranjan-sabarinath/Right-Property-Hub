@@ -566,11 +566,11 @@ const HomePage = () => {
                         </motion.div>
 
                         <motion.div
-                            className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 md:mb-4 relative z-10"
+                            className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 md:mb-4 relative z-10 text-center md:text-left"
                             variants={itemVariants}
                         >
                             <motion.h2
-                                className="text-3xl md:text-6xl font-medium text-gray-900 font-coco-regular"
+                                className="text-3xl md:text-6xl font-medium text-gray-900 font-coco-regular w-full md:w-auto"
                                 variants={textRevealVariants}
                             >
                                 Discover Our Collection
