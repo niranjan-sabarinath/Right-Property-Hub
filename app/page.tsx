@@ -230,7 +230,7 @@ const HomePage = () => {
                                         <Search className="absolute left-4 sm:left-6 h-4 w-4 sm:h-5 sm:w-5 text-white/80" />
                                         <Input
                                             type="text"
-                                            placeholder="Search properties..."
+                                            placeholder="Search properties...."
                                             className="w-full pl-10 sm:pl-14 pr-24 sm:pr-28 py-3 sm:py-4 md:py-5 lg:py-6 bg-transparent border-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-white placeholder-white/70 text-sm sm:text-base"
                                             value={searchTerm}
                                             onChange={(e) => setSearchTerm(e.target.value)}
