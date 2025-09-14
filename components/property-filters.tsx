@@ -1,92 +1,97 @@
-'use client';
+"use client"
 
-import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Slider } from '@/components/ui/slider';
-import { Badge } from '@/components/ui/badge';
-import { Search, Filter, X, ChevronDown, ChevronUp } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import type React from "react"
+import { useState } from "react"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Slider } from "@/components/ui/slider"
+import { Search, Filter, X, ChevronDown, ChevronUp } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 interface FilterState {
-  search: string;
-  priceRange: [number, number];
-  propertyType: string;
-  bedrooms: string;
-  bathrooms: string;
-  location: string;
-  status: string;
+  search: string
+  priceRange: [number, number]
+  propertyType: string
+  bedrooms: string
+  bathrooms: string
+  location: string
+  status: string
 }
 
 interface PropertyFiltersProps {
-  onFiltersChange: (filters: FilterState) => void;
-  className?: string;
+  onFiltersChange: (filters: FilterState) => void
+  className?: string
 }
 
 const PropertyFilters: React.FC<PropertyFiltersProps> = ({ onFiltersChange, className }) => {
   const [filters, setFilters] = useState<FilterState>({
-    search: '',
+    search: "",
     priceRange: [0, 2000000],
-    propertyType: 'all-types',
-    bedrooms: 'any-bedrooms',
-    bathrooms: 'any-bathrooms',
-    location: 'all-locations',
-    status: 'all-status',
-  });
+    propertyType: "all-types",
+    bedrooms: "any-bedrooms",
+    bathrooms: "any-bathrooms",
+    location: "all-locations",
+    status: "all-status",
+  })
 
-  const [activeFilters, setActiveFilters] = useState<string[]>([]);
+  const [activeFilters, setActiveFilters] = useState<string[]>([])
 
   const updateFilter = (key: keyof FilterState, value: any) => {
-    const newFilters = { ...filters, [key]: value };
-    setFilters(newFilters);
-    onFiltersChange(newFilters);
+    const newFilters = { ...filters, [key]: value }
+    setFilters(newFilters)
+    onFiltersChange(newFilters)
 
     // Update active filters
-    const newActiveFilters = [];
-    if (newFilters.search) newActiveFilters.push(`Search: ${newFilters.search}`);
-    if (newFilters.propertyType && newFilters.propertyType !== 'all-types') newActiveFilters.push(`Type: ${newFilters.propertyType}`);
-    if (newFilters.bedrooms && newFilters.bedrooms !== 'any-bedrooms') newActiveFilters.push(`Beds: ${newFilters.bedrooms}+`);
-    if (newFilters.bathrooms && newFilters.bathrooms !== 'any-bathrooms') newActiveFilters.push(`Baths: ${newFilters.bathrooms}+`);
-    if (newFilters.location && newFilters.location !== 'all-locations') newActiveFilters.push(`Location: ${newFilters.location}`);
-    if (newFilters.status && newFilters.status !== 'all-status') newActiveFilters.push(`Status: ${newFilters.status}`);
+    const newActiveFilters = []
+    if (newFilters.search) newActiveFilters.push(`Search: ${newFilters.search}`)
+    if (newFilters.propertyType && newFilters.propertyType !== "all-types")
+      newActiveFilters.push(`Type: ${newFilters.propertyType}`)
+    if (newFilters.bedrooms && newFilters.bedrooms !== "any-bedrooms")
+      newActiveFilters.push(`Beds: ${newFilters.bedrooms}+`)
+    if (newFilters.bathrooms && newFilters.bathrooms !== "any-bathrooms")
+      newActiveFilters.push(`Baths: ${newFilters.bathrooms}+`)
+    if (newFilters.location && newFilters.location !== "all-locations")
+      newActiveFilters.push(`Location: ${newFilters.location}`)
+    if (newFilters.status && newFilters.status !== "all-status") newActiveFilters.push(`Status: ${newFilters.status}`)
     if (newFilters.priceRange[0] > 0 || newFilters.priceRange[1] < 2000000) {
-      newActiveFilters.push(`Price: $${newFilters.priceRange[0].toLocaleString()} - $${newFilters.priceRange[1].toLocaleString()}`);
+      newActiveFilters.push(
+        `Price: $${newFilters.priceRange[0].toLocaleString()} - $${newFilters.priceRange[1].toLocaleString()}`,
+      )
     }
 
-    setActiveFilters(newActiveFilters);
-  };
+    setActiveFilters(newActiveFilters)
+  }
 
   const clearFilters = () => {
     const resetFilters: FilterState = {
-      search: '',
+      search: "",
       priceRange: [0, 2000000],
-      propertyType: 'all-types',
-      bedrooms: 'any-bedrooms',
-      bathrooms: 'any-bathrooms',
-      location: 'all-locations',
-      status: 'all-status',
-    };
-    setFilters(resetFilters);
-    setActiveFilters([]);
-    onFiltersChange(resetFilters);
-  };
+      propertyType: "all-types",
+      bedrooms: "any-bedrooms",
+      bathrooms: "any-bathrooms",
+      location: "all-locations",
+      status: "all-status",
+    }
+    setFilters(resetFilters)
+    setActiveFilters([])
+    onFiltersChange(resetFilters)
+  }
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
       minimumFractionDigits: 0,
-    }).format(price);
-  };
+    }).format(price)
+  }
 
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(true)
 
   return (
     <div className={className}>
       <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-        <div 
+        <div
           className="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 transition-colors"
           onClick={() => setIsOpen(!isOpen)}
         >
@@ -111,14 +116,16 @@ const PropertyFilters: React.FC<PropertyFiltersProps> = ({ onFiltersChange, clas
         <div className={cn("space-y-6 p-6 pt-0", !isOpen && "hidden")}>
           {/* Search */}
           <div className="space-y-2">
-            <Label htmlFor="search" className="text-sm font-medium text-gray-700">Search</Label>
+            <Label htmlFor="search" className="text-sm font-medium text-gray-700">
+              Search
+            </Label>
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
               <Input
                 id="search"
                 placeholder="Search properties..."
                 value={filters.search}
-                onChange={(e) => updateFilter('search', e.target.value)}
+                onChange={(e) => updateFilter("search", e.target.value)}
                 className="pl-10 h-11 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-gray-500"
               />
             </div>
@@ -134,7 +141,7 @@ const PropertyFilters: React.FC<PropertyFiltersProps> = ({ onFiltersChange, clas
             </div>
             <Slider
               value={filters.priceRange}
-              onValueChange={(value) => updateFilter('priceRange', value)}
+              onValueChange={(value) => updateFilter("priceRange", value)}
               max={2000000}
               min={0}
               step={25000}
@@ -146,7 +153,7 @@ const PropertyFilters: React.FC<PropertyFiltersProps> = ({ onFiltersChange, clas
             {/* Property Type */}
             <div className="space-y-2">
               <Label className="text-sm font-medium text-gray-700">Property Type</Label>
-              <Select value={filters.propertyType} onValueChange={(value) => updateFilter('propertyType', value)}>
+              <Select value={filters.propertyType} onValueChange={(value) => updateFilter("propertyType", value)}>
                 <SelectTrigger className="h-11">
                   <SelectValue placeholder="Type" />
                 </SelectTrigger>
@@ -165,7 +172,7 @@ const PropertyFilters: React.FC<PropertyFiltersProps> = ({ onFiltersChange, clas
             {/* Location */}
             <div className="space-y-2">
               <Label className="text-sm font-medium text-gray-700">Location</Label>
-              <Select value={filters.location} onValueChange={(value) => updateFilter('location', value)}>
+              <Select value={filters.location} onValueChange={(value) => updateFilter("location", value)}>
                 <SelectTrigger className="h-11">
                   <SelectValue placeholder="Location" />
                 </SelectTrigger>
@@ -183,7 +190,7 @@ const PropertyFilters: React.FC<PropertyFiltersProps> = ({ onFiltersChange, clas
           {/* Status */}
           <div className="space-y-2">
             <Label className="text-sm font-medium text-gray-700">Status</Label>
-            <Select value={filters.status} onValueChange={(value) => updateFilter('status', value)}>
+            <Select value={filters.status} onValueChange={(value) => updateFilter("status", value)}>
               <SelectTrigger className="h-11">
                 <SelectValue placeholder="Status" />
               </SelectTrigger>
@@ -202,22 +209,22 @@ const PropertyFilters: React.FC<PropertyFiltersProps> = ({ onFiltersChange, clas
               <div className="flex flex-wrap items-center gap-2">
                 <span className="text-sm font-medium text-gray-700">Active filters:</span>
                 {activeFilters.map((filter, index) => (
-                  <div 
-                    key={index} 
+                  <div
+                    key={index}
                     className="inline-flex items-center bg-gray-100 text-gray-800 text-sm px-3 py-1.5 rounded-full"
                   >
                     <span className="truncate max-w-[180px]">{filter}</span>
                     <button
                       type="button"
                       onClick={() => {
-                        const filterKey = filter.split(':')[0].trim().toLowerCase();
-                        if (filterKey === 'search') updateFilter('search', '');
-                        else if (filterKey === 'type') updateFilter('propertyType', 'all-types');
-                        else if (filterKey === 'beds') updateFilter('bedrooms', 'any-bedrooms');
-                        else if (filterKey === 'baths') updateFilter('bathrooms', 'any-bathrooms');
-                        else if (filterKey === 'location') updateFilter('location', 'all-locations');
-                        else if (filterKey === 'status') updateFilter('status', 'all-status');
-                        else if (filterKey === 'price') updateFilter('priceRange', [0, 2000000]);
+                        const filterKey = filter.split(":")[0].trim().toLowerCase()
+                        if (filterKey === "search") updateFilter("search", "")
+                        else if (filterKey === "type") updateFilter("propertyType", "all-types")
+                        else if (filterKey === "beds") updateFilter("bedrooms", "any-bedrooms")
+                        else if (filterKey === "baths") updateFilter("bathrooms", "any-bathrooms")
+                        else if (filterKey === "location") updateFilter("location", "all-locations")
+                        else if (filterKey === "status") updateFilter("status", "all-status")
+                        else if (filterKey === "price") updateFilter("priceRange", [0, 2000000])
                       }}
                       className="ml-1.5 -mr-1 p-0.5 hover:bg-gray-200 rounded-full transition-colors"
                     >
@@ -225,10 +232,7 @@ const PropertyFilters: React.FC<PropertyFiltersProps> = ({ onFiltersChange, clas
                     </button>
                   </div>
                 ))}
-                <button
-                  onClick={clearFilters}
-                  className="text-sm font-medium text-gray-600 hover:text-gray-900 ml-1"
-                >
+                <button onClick={clearFilters} className="text-sm font-medium text-gray-600 hover:text-gray-900 ml-1">
                   Clear all
                 </button>
               </div>
@@ -237,7 +241,7 @@ const PropertyFilters: React.FC<PropertyFiltersProps> = ({ onFiltersChange, clas
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default PropertyFilters;
+export default PropertyFilters
