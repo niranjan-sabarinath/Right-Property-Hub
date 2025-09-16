@@ -265,9 +265,32 @@ const PropertyDetailPage = ({ params }: PropertyDetailPageProps) => {
               <div className="mt-12">
                 <h2 className="text-2xl font-bold mb-6">Similar Properties</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {similarProperties.map((item) => (
-                    <PropertyCard key={item.id} property={item} />
-                  ))}
+                  {similarProperties.map((item) => {
+                    const propertyData = {
+                      id: item.id,
+                      title: item.title,
+                      price: item.price,
+                      location: item.location,
+                      bedrooms: item.bedrooms,
+                      bathrooms: item.bathrooms,
+                      area: item.area,
+                      type: item.type.toLowerCase() as 'residential' | 'commercial' | 'vacation' | 'luxury',
+                      status: item.status,
+                      image: item.image,
+                      featured: false,
+                      yearBuilt: new Date().getFullYear() - 2, // Default value
+                      description: `${item.bedrooms} bed, ${item.bathrooms} bath ${item.type} in ${item.location}`,
+                      features: [],
+                      agent: {
+                        name: 'Agent Name',
+                        phone: '(000) 000-0000',
+                        email: 'agent@example.com',
+                        image: ''
+                      },
+                      images: [item.image]
+                    };
+                    return <PropertyCard key={item.id} property={propertyData} />;
+                  })}
                 </div>
               </div>
             </div>
