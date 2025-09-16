@@ -85,7 +85,7 @@ const Navigation = () => {
         className="transition-all duration-500 w-full rounded-full border border-white/30 py-1.5 px-6 shadow-lg"
       >
         <div className="mx-auto">
-          <div className="flex items-center justify-between h-14">
+          <div className="flex items-center justify-between h-14 md:h-16">
             {/* Logo */}
             <Link href="/" className="flex items-center space-x-3 group">
               <motion.div
@@ -98,8 +98,8 @@ const Navigation = () => {
                 <Image
                   src="/images/logo.png"
                   alt="Right Property Hub Logo"
-                  height={isScrolled ? 70 : 80}
-                  width={isScrolled ? 70 : 80}
+                  height={100}
+                  width={100}
                   className="transition-all duration-500 object-contain"
                   priority
                 />
