@@ -2,18 +2,18 @@
 import Link from "next/link"
 import Image from "next/image"
 import { motion } from "framer-motion"
-import { MapPin, Phone, Mail, Facebook, Twitter, Instagram, Linkedin } from "lucide-react"
+import { MapPin, Phone, Mail, Facebook, Instagram, Linkedin, Youtube } from "lucide-react"
 import { Variants } from "framer-motion"
 import { containerVariants, itemVariants, socialVariants, textRevealVariants, logoVariants } from "@/lib/animations"
 
 const Footer = () => {
   const currentYear = new Date().getFullYear()
   const socialIcons = [
-    { icon: Facebook, url: "#" },
-    { icon: Twitter, url: "#" },
-    { icon: Instagram, url: "#" },
+    { icon: Facebook, url: "https://www.facebook.com/share/178YN4zHWH/?mibextid=wwXIfr" },
+    { icon: Youtube, url: "https://youtube.com/@rightpropertyhubrphub?si=0pm2aHwij-YGLlXR" },
+    { icon: Instagram, url: "https://www.instagram.com/right_property_hub?igsh=MW8ybDA0ZjB0c3M5bQ%3D%3D&utm_source=qr" },
     { icon: Linkedin, url: "#" },
-    { icon: Mail, url: "mailto:info@rightpropertyhub.com" },
+    { icon: Mail, url: "mailto:solutions@rightpropertyhub.com" },
   ]
 
   const navLinks = [
@@ -116,22 +116,40 @@ const Footer = () => {
               >
                 <MapPin className="w-5 h-5 mt-0.5 text-gray-600 flex-shrink-0 md:hidden" />
                 <div className="flex flex-col">
-                  <p className="text-base font-medium text-gray-800">123 Real Estate Ave</p>
-                  <p className="text-sm text-gray-600">Property City, PC 12345</p>
+                  <p className="text-base font-medium text-gray-800">India: 123 Real Estate Ave, Mumbai</p>
+                  <p className="text-base font-medium text-gray-800 mt-2">Dubai: 456 Business Bay, Dubai</p>
                 </div>
               </motion.div>
               <motion.div
-                className="flex items-center space-x-2 md:justify-end"
-                whileHover={{ x: -5 }}
-                transition={{ type: "spring", stiffness: 300 }}
+                className="flex flex-col space-y-2"
+                variants={itemVariants}
               >
-                <Phone className="w-5 h-5 text-gray-600 flex-shrink-0 md:hidden" />
-                <a
-                  href="tel:+919876543210"
-                  className="text-base text-gray-700 hover:text-gray-900 font-medium transition-colors"
+                <motion.div 
+                  className="flex items-center space-x-2 md:justify-end"
+                  whileHover={{ x: -5 }}
+                  transition={{ type: "spring", stiffness: 300 }}
                 >
-                  +91 9876543210
-                </a>
+                  <Phone className="w-4 h-4 text-gray-600 flex-shrink-0" />
+                  <a
+                    href="tel:+919030225223"
+                    className="text-sm text-gray-700 hover:text-gray-900 font-medium transition-colors"
+                  >
+                    India: +91 9030225223
+                  </a>
+                </motion.div>
+                <motion.div 
+                  className="flex items-center space-x-2 md:justify-end"
+                  whileHover={{ x: -5 }}
+                  transition={{ type: "spring", stiffness: 300, delay: 0.1 }}
+                >
+                  <Phone className="w-4 h-4 text-gray-600 flex-shrink-0" />
+                  <a
+                    href="tel:+971505755424"
+                    className="text-sm text-gray-700 hover:text-gray-900 font-medium transition-colors"
+                  >
+                    Dubai: +971 50 575 5424
+                  </a>
+                </motion.div>
               </motion.div>
             </div>
           </motion.div>

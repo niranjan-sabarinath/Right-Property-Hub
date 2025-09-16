@@ -12,94 +12,11 @@ import {
     AnimatePresence,
 } from "framer-motion";
 import PropertyCarousel from "@/components/property-carousel";
-
-// Components
-import Navigation from "@/components/navigation";
-import Footer from "@/components/footer";
 import PropertyCard from "@/components/property-card";
 import PropertyFilters from "@/components/property-filters";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-
-// Sample data
-const sampleProperties = [
-    {
-        id: "1",
-        title: "Modern Downtown Penthouse",
-        price: 850000,
-        location: "Downtown, New York, USA",
-        bedrooms: 3,
-        bathrooms: 2,
-        area: 2200,
-        image: "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=600",
-        type: "Apartment",
-        status: "For Sale" as const,
-        featured: true,
-    },
-    {
-        id: "2",
-        title: "Charming Family Home",
-        price: 1200000,
-        location: "Greenwich, Connecticut, USA",
-        bedrooms: 4,
-        bathrooms: 3,
-        area: 3200,
-        image: "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&w=600",
-        type: "House",
-        status: "For Sale" as const,
-        featured: true,
-    },
-    {
-        id: "3",
-        title: "Luxury Waterfront Villa",
-        price: 2500000,
-        location: "Miami Beach, Florida, USA",
-        bedrooms: 5,
-        bathrooms: 4,
-        area: 4500,
-        image: "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=600",
-        type: "Villa",
-        status: "For Sale" as const,
-        featured: true,
-    },
-    {
-        id: "4",
-        title: "Cozy Studio Apartment",
-        price: 2200,
-        location: "Manhattan, New York, USA",
-        bedrooms: 1,
-        bathrooms: 1,
-        area: 750,
-        image: "https://images.pexels.com/photos/2029667/pexels-photo-2029667.jpeg?auto=compress&cs=tinysrgb&w=600",
-        type: "Studio",
-        status: "For Rent" as const,
-        featured: true,
-    },
-    {
-        id: "5",
-        title: "Executive Townhouse",
-        price: 950000,
-        location: "Beverly Hills, California, USA",
-        bedrooms: 3,
-        bathrooms: 2,
-        area: 2800,
-        image: "https://images.pexels.com/photos/1571468/pexels-photo-1571468.jpeg?auto=compress&cs=tinysrgb&w=600",
-        type: "Townhouse",
-        status: "For Sale" as const,
-    },
-    {
-        id: "6",
-        title: "Modern City Loft",
-        price: 3800,
-        location: "SoHo, New York, USA",
-        bedrooms: 2,
-        bathrooms: 2,
-        area: 1400,
-        image: "https://images.pexels.com/photos/1571453/pexels-photo-1571453.jpeg?auto=compress&cs=tinysrgb&w=600",
-        type: "Apartment",
-        status: "For Rent" as const,
-    },
-];
+import { properties, getFeaturedProperties, type Property } from "@/data/properties";
 
 const testimonials = [
     {
@@ -130,8 +47,7 @@ const testimonials = [
 
 const HomePage = () => {
     const [searchTerm, setSearchTerm] = useState("");
-    const [filteredProperties, setFilteredProperties] =
-        useState(sampleProperties);
+    const [filteredProperties, setFilteredProperties] = useState(properties);
     const [filters, setFilters] = useState<{
         search: string;
         priceRange: [number, number];
@@ -149,21 +65,7 @@ const HomePage = () => {
         location: "all-locations",
         status: "all-status",
     });
-    const [compareList, setCompareList] = useState<
-        Array<{
-            id: string;
-            title: string;
-            price: number;
-            location: string;
-            bedrooms: number;
-            bathrooms: number;
-            area: number;
-            image: string;
-            type: string;
-            status: "For Sale" | "For Rent" | "Sold";
-            featured?: boolean;
-        }>
-    >([]);
+    const [compareList, setCompareList] = useState<Array<Property>>([]);
 
     const { scrollYProgress } = useScroll();
     const heroRef = useRef(null);
@@ -196,7 +98,7 @@ const HomePage = () => {
     const heroOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0.3]);
 
     useEffect(() => {
-        let filtered = sampleProperties;
+        let filtered = [...properties];
 
         // Apply search filter
         if (filters.search) {
@@ -259,9 +161,7 @@ const HomePage = () => {
         setFilteredProperties(filtered);
     }, [filters]);
 
-    const featuredProperties = sampleProperties.filter(
-        (property) => property.featured
-    );
+    const featuredProperties = getFeaturedProperties().slice(0, 4);
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -351,19 +251,7 @@ const HomePage = () => {
         },
     };
 
-    const handleCompare = (property: {
-        id: string;
-        title: string;
-        price: number;
-        location: string;
-        bedrooms: number;
-        bathrooms: number;
-        area: number;
-        image: string;
-        type: string;
-        status: "For Sale" | "For Rent" | "Sold";
-        featured?: boolean;
-    }) => {
+    const handleCompare = (property: Property) => {
         if (compareList.some((p) => p.id === property.id)) {
             setCompareList(compareList.filter((p) => p.id !== property.id));
         } else {
@@ -373,8 +261,6 @@ const HomePage = () => {
 
     return (
         <div className="min-h-screen bg-gray-50">
-            <Navigation />
-
             {/* Hero Section */}
             <motion.section
                 ref={heroRef}
@@ -384,14 +270,14 @@ const HomePage = () => {
                 {/* Background Image with Overlay */}
                 <div className="inset-0 z-0">
                     <Image
-                        src="/images/2.jpg"
+                        src="https://firebasestorage.googleapis.com/v0/b/wellness-d79f2.appspot.com/o/luxurious-villa-with-modern-architectural-design%20(1)%201_11zon.jpg?alt=media&token=7bba8ed8-191d-4067-aca3-fd8909f2972c"
                         alt="Luxury Home"
                         fill
                         className="object-cover"
                         priority
                     />
                     <motion.div
-                        className="absolute inset-0 bg-black/60 md:bg-black/40"
+                        className="absolute inset-0 bg-black/50 md:bg-black/30"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ duration: 1.5, ease: "easeOut" }}
@@ -1031,7 +917,7 @@ const HomePage = () => {
                             >
                                 <p className="text-gray-600">
                                     Showing {filteredProperties.length} of{" "}
-                                    {sampleProperties.length} properties
+                                    {properties.length} properties
                                 </p>
                             </motion.div>
 
@@ -1073,7 +959,7 @@ const HomePage = () => {
                                             >
                                                 <PropertyCard
                                                     property={property}
-                                                    isLoading={index < 6} // Show skeleton for first 6 cards
+                                                    isLoading={false} // Show skeleton for first 6 cards
                                                     onCompare={handleCompare}
                                                     isSelected={compareList.some(
                                                         (p) =>
@@ -1387,8 +1273,6 @@ const HomePage = () => {
                     </motion.div>
                 </motion.div>
             </motion.section>
-
-            <Footer />
         </div>
     );
 };

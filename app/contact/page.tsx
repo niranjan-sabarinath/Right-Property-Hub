@@ -52,18 +52,18 @@ const ContactPage = () => {
 
   const officeLocations = [
     {
-      name: 'Main Office',
-      address: '123 Real Estate Avenue\nProperty City, PC 12345',
-      phone: '+1 (555) 123-4567',
-      email: 'info@rightpropertyhub.com',
-      hours: 'Mon-Fri: 9:00 AM - 6:00 PM\nSat: 10:00 AM - 4:00 PM\nSun: Closed'
+      name: 'India Office',
+      address: '123 Real Estate Avenue\nMumbai, MH 400001',
+      phone: '+91 9030225223',
+      email: 'solutions@rightpropertyhub.com',
+      hours: 'Mon-Sat: 9:00 AM - 8:00 PM\nSun: 10:00 AM - 6:00 PM'
     },
     {
-      name: 'Downtown Branch',
-      address: '456 Business District\nDowntown, DT 67890',
-      phone: '+1 (555) 234-5678',
-      email: 'downtown@rightpropertyhub.com',
-      hours: 'Mon-Fri: 9:00 AM - 7:00 PM\nSat: 10:00 AM - 5:00 PM\nSun: 12:00 PM - 4:00 PM'
+      name: 'Dubai Office',
+      address: '456 Business Bay\nDubai, UAE',
+      phone: '+971 50 575 5424',
+      email: 'dubai@rightpropertyhub.com',
+      hours: 'Mon-Fri: 9:00 AM - 7:00 PM\nSat: 10:00 AM - 5:00 PM'
     }
   ];
 
@@ -72,14 +72,14 @@ const ContactPage = () => {
       icon: Phone,
       title: 'Call Us',
       description: 'Speak directly with our team',
-      value: '+1 (555) 123-4567',
+      value: 'India: +91 9030225223\nDubai: +971 50 575 5424',
       action: 'Call Now'
     },
     {
       icon: Mail,
       title: 'Email Us',
       description: 'Send us a detailed message',
-      value: 'info@rightpropertyhub.com',
+      value: 'solutions@rightpropertyhub.com',
       action: 'Send Email'
     },
     {

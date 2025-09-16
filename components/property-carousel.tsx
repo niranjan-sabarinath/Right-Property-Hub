@@ -3,21 +3,10 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { motion, PanInfo, useAnimation } from 'framer-motion';
 import PropertyCard from './property-card';
+import type { Property } from '@/data/properties';
 
 interface PropertyCarouselProps {
-  properties: Array<{
-    id: string;
-    title: string;
-    price: number;
-    location: string;
-    bedrooms: number;
-    bathrooms: number;
-    area: number;
-    image: string;
-    type: string;
-    status: 'For Sale' | 'For Rent' | 'Sold';
-    featured?: boolean;
-  }>;
+  properties: Property[];
 }
 
 const PropertyCarousel: React.FC<PropertyCarouselProps> = ({ properties }) => {

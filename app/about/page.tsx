@@ -1,5 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import Navigation from '@/components/navigation';
 import Footer from '@/components/footer';
 import PageHeader from '@/components/page-header';
@@ -16,7 +17,9 @@ import {
   Star,
   Linkedin,
   Mail,
-  Phone
+  Phone,
+  GitCompare,
+  Info
 } from 'lucide-react';
 
 const values = [
@@ -84,170 +87,242 @@ const team = [
 const AboutPage = () => {
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navigation />
-
-      {/* Hero Section */}
       <PageHeader 
         title="About Right Property Hub"
-        subtitle="We're more than just a real estate company. We're your trusted partners in finding the perfect property, backed by years of experience, local expertise, and an unwavering commitment to excellence."
+        subtitle="Your Search Ends Here"
       />
 
-      {/* Story Section */}
-      <section className="py-20 bg-white">
+      {/* Introduction Section */}
+      <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-4xl font-bold text-gray-900 mb-6">Our Story</h2>
-              <div className="space-y-6 text-gray-700 leading-relaxed">
-                <p>
-                  Founded in 2008, Right Property Hub began with a simple yet powerful vision: to transform 
-                  the real estate experience by putting our clients first. What started as a small team of 
-                  passionate real estate professionals has grown into one of the region's most trusted property companies.
-                </p>
-                <p>
-                  Over the years, we've built our reputation on the foundation of integrity, expertise, and 
-                  exceptional service. We believe that buying or selling a property is one of life's most 
-                  important decisions, and we're honored to guide our clients through this journey.
-                </p>
-                <p>
-                  Today, we continue to innovate and evolve, embracing new technologies and market insights 
-                  while staying true to our core values of honesty, dedication, and results-driven service.
-                </p>
-              </div>
-            </div>
-            <div className="relative">
-              <div className="aspect-square rounded-2xl overflow-hidden">
-                <Image
-                  src="https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=800"
-                  alt="Right Property Hub Office"
-                  fill
-                  className="object-cover"
-                />
-              </div>
-            </div>
+          <div className="text-center max-w-4xl mx-auto mb-16">
+            <p className="text-lg text-gray-600 mb-8">
+              At Right Property Hub, we're dedicated to making your real estate journey simple, stress-free, and successful. We believe that finding your dream property and turning it into a home should be an exciting and seamless experience. That's why we bring all the essential services under one roof, providing a one-stop solution for every step of your property journey.
+            </p>
+            <p className="text-lg text-gray-600">
+              Our team of experts is committed to transparency and personalized service, ensuring you have the right guidance and support from the moment you start searching to the day you move in.
+            </p>
           </div>
         </div>
       </section>
 
       {/* Values Section */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Our Values</h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              The principles that guide everything we do
-            </p>
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Our Values</h2>
+            <div className="w-20 h-1 bg-primary mx-auto"></div>
           </div>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="bg-white p-8 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mb-4 mx-auto">
+                <Shield className="w-6 h-6 text-blue-600" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3 text-center">Trust and Transparency</h3>
+              <p className="text-gray-600 text-center">Clear communication, verified & approved projects, and ethical guidance at every step.</p>
+            </div>
+            
+            <div className="bg-white p-8 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 bg-green-50 rounded-full flex items-center justify-center mb-4 mx-auto">
+                <Heart className="w-6 h-6 text-green-600" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3 text-center">Client-First Service</h3>
+              <p className="text-gray-600 text-center">Personalized recommendations and seamless coordination across all services throughout the journey.</p>
+            </div>
+            
+            <div className="bg-white p-8 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 bg-purple-50 rounded-full flex items-center justify-center mb-4 mx-auto">
+                <Award className="w-6 h-6 text-purple-600" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3 text-center">Quality and Accountability</h3>
+              <p className="text-gray-600 text-center">Curated partners, measurable standards, and 100% client satisfaction.</p>
+            </div>
+          </div>
+        </div>
+      </section>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {values.map((value, index) => (
-              <Card key={index} className="text-center p-6 hover:shadow-lg transition-shadow">
-                <CardContent className="pt-6">
-                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <value.icon className="w-8 h-8 text-primary" />
-                  </div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-3">{value.title}</h3>
-                  <p className="text-gray-600 leading-relaxed">{value.description}</p>
-                </CardContent>
-              </Card>
-            ))}
+      {/* Vision & Mission Section */}
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-2 gap-12">
+            <div className="bg-blue-50 p-8 rounded-lg">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">Our Vision</h2>
+              <p className="text-gray-700">
+                To be the most trusted and comprehensive partner for every individual and family looking to buy, build, and beautify their home. We aim to simplify the complex world of real estate by offering end-to-end solutions that are accessible, efficient, and tailored to your needs.
+              </p>
+            </div>
+            
+            <div className="bg-gray-50 p-8 rounded-lg">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">Our Mission</h2>
+              <p className="text-gray-700 mb-4">
+                To deliver exceptional value by providing a complete suite of high-quality property services. We are committed to:
+              </p>
+              <ul className="space-y-2 text-gray-700">
+                <li className="flex items-start">
+                  <span className="text-primary mr-2">•</span>
+                  <span>Simplifying Home Buying with transparency and care</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-primary mr-2">•</span>
+                  <span>Designing Dream Spaces that reflect your style</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-primary mr-2">•</span>
+                  <span>Providing Financial Clarity for home loans</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-primary mr-2">•</span>
+                  <span>Building Lasting Relationships through professional service</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Services Section */}
+      <section className="py-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Our Services</h2>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">Comprehensive solutions for all your property needs</p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+              <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+                <Home className="w-5 h-5 text-blue-600" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Home Buying</h3>
+              <p className="text-gray-600 text-sm">Find your perfect property with expert guidance through every step of the purchase process.</p>
+            </div>
+            
+            <div className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+              <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                <div className="w-5 h-5 bg-green-600 rounded-sm transform rotate-45"></div>
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Home Interior</h3>
+              <p className="text-gray-600 text-sm">Transform your space with beautiful, functional interiors that reflect your personal style.</p>
+            </div>
+            
+            <div className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+              <div className="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center mb-4">
+                <TrendingUp className="w-5 h-5 text-yellow-600" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Home Loan Assistance</h3>
+              <p className="text-gray-600 text-sm">Navigate the home loan process with ease and secure the best terms for your needs.</p>
+            </div>
+            
+            <div className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+              <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center mb-4">
+                <div className="w-5 h-5 bg-purple-600 rounded-sm"></div>
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Architecture & Landscaping</h3>
+              <p className="text-gray-600 text-sm">Professional design services to enhance your property's structure and outdoor spaces.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Why Choose Us Section */}
+      <section className="py-16 bg-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl font-bold text-gray-900 mb-8">Why Choose Us?</h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="flex items-start">
+              <div className="flex-shrink-0 mt-1">
+                <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
+                  <svg className="w-3 h-3 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                </div>
+              </div>
+              <p className="ml-3 text-lg text-gray-700 text-left">One-stop solution for all property needs</p>
+            </div>
+            <div className="flex items-start">
+              <div className="flex-shrink-0 mt-1">
+                <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
+                  <svg className="w-3 h-3 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                </div>
+              </div>
+              <p className="ml-3 text-lg text-gray-700 text-left">Trusted expertise & transparent process</p>
+            </div>
+            <div className="flex items-start">
+              <div className="flex-shrink-0 mt-1">
+                <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
+                  <svg className="w-3 h-3 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                </div>
+              </div>
+              <p className="ml-3 text-lg text-gray-700 text-left">Personalized services to match your vision</p>
+            </div>
+            <div className="flex items-start">
+              <div className="flex-shrink-0 mt-1">
+                <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
+                  <svg className="w-3 h-3 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                </div>
+              </div>
+              <p className="ml-3 text-lg text-gray-700 text-left">Committed to customer satisfaction</p>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Team Section */}
-      <section className="py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Meet Our Team</h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Experienced professionals dedicated to your success
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {team.map((member, index) => (
-              <Card key={index} className="text-center hover:shadow-lg transition-shadow">
-                <CardContent className="pt-6">
-                  <div className="relative w-32 h-32 mx-auto mb-4">
-                    <Image
-                      src={member.image}
-                      alt={member.name}
-                      fill
-                      className="rounded-full object-cover"
-                    />
-                  </div>
-                  
-                  <h3 className="text-xl font-semibold text-gray-900 mb-1">{member.name}</h3>
-                  <p className="text-primary font-medium mb-3">{member.role}</p>
-                  <p className="text-gray-600 text-sm leading-relaxed mb-4">{member.bio}</p>
-                  
-                  <div className="space-y-3">
-                    
-                    <div className="flex justify-center space-x-2">
-                      <Button size="icon" variant="ghost" className="h-8 w-8">
-                        <Mail className="w-4 h-4" />
-                      </Button>
-                      <Button size="icon" variant="ghost" className="h-8 w-8">
-                        <Linkedin className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Awards & Recognition */}
       <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Awards & Recognition</h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Recognition for our commitment to excellence
-            </p>
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Meet Our Team</h2>
+            <p className="text-lg text-gray-600">The passionate professionals behind Right Property Hub</p>
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                year: '2023',
-                award: 'Top Real Estate Company',
-                organization: 'Regional Business Awards',
-                description: 'Recognized for outstanding service and client satisfaction'
-              },
-              {
-                year: '2022',
-                award: 'Excellence in Customer Service',
-                organization: 'Real Estate Association',
-                description: 'Awarded for consistently exceeding client expectations'
-              },
-              {
-                year: '2021',
-                award: 'Innovation in Technology',
-                organization: 'PropTech Awards',
-                description: 'Recognition for implementing cutting-edge property technology'
-              }
-            ].map((award, index) => (
-              <Card key={index} className="text-center p-6">
-                <CardContent className="pt-6">
-                  <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Award className="w-8 h-8 text-yellow-600" />
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {team.map((member, index) => (
+              <Card key={index} className="overflow-hidden transition-all hover:shadow-lg">
+                <div className="relative h-64 w-full">
+                  <Image
+                    src={member.image}
+                    alt={member.name}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                <CardHeader>
+                  <CardTitle className="text-xl">{member.name}</CardTitle>
+                  <p className="text-sm text-gray-600">{member.role}</p>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-gray-700 mb-4">{member.bio}</p>
+                  <div className="flex space-x-2 mb-4">
+                    {member.specialties.map((specialty, i) => (
+                      <Badge key={i} variant="outline" className="text-xs">
+                        {specialty}
+                      </Badge>
+                    ))}
                   </div>
-                  <div className="text-2xl font-bold text-primary mb-2">{award.year}</div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">{award.award}</h3>
-                  <p className="text-sm text-primary font-medium mb-2">{award.organization}</p>
-                  <p className="text-gray-600 text-sm">{award.description}</p>
+                  <div className="flex space-x-2">
+                    <Button variant="outline" size="icon" asChild>
+                      <a href={`mailto:${member.email}`}>
+                        <Mail className="h-4 w-4" />
+                      </a>
+                    </Button>
+                    <Button variant="outline" size="icon" asChild>
+                      <a href={member.linkedin} target="_blank" rel="noopener noreferrer">
+                        <Linkedin className="h-4 w-4" />
+                      </a>
+                    </Button>
+                  </div>
                 </CardContent>
               </Card>
             ))}
           </div>
         </div>
       </section>
-
-      <Footer />
     </div>
   );
 };
