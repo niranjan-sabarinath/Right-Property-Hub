@@ -1,8 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import Navigation from '@/components/navigation';
-import Footer from '@/components/footer';
 import PageHeader from '@/components/page-header';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -16,9 +14,6 @@ import {
   Mail, 
   Clock,
   Send,
-  MessageSquare,
-  Calendar,
-  Users
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -53,7 +48,7 @@ const ContactPage = () => {
   const officeLocations = [
     {
       name: 'India Office',
-      address: '123 Real Estate Avenue\nMumbai, MH 400001',
+      address: 'Srinagar colony,\n Banjarahills, Hyderabad',
       phone: '+91 9030225223',
       email: 'solutions@rightpropertyhub.com',
       hours: 'Mon-Sat: 9:00 AM - 8:00 PM\nSun: 10:00 AM - 6:00 PM',
@@ -62,7 +57,7 @@ const ContactPage = () => {
     },
     {
       name: 'Dubai Office',
-      address: '456 Business Bay\nDubai, UAE',
+      address: 'Karama, Dubai,\n UAE',
       phone: '+971 50 575 5424',
       email: 'dubai@rightpropertyhub.com',
       hours: 'Mon-Fri: 9:00 AM - 7:00 PM\nSat: 10:00 AM - 5:00 PM',
@@ -283,7 +278,7 @@ const ContactPage = () => {
                       <div className="mt-4 rounded-md overflow-hidden h-[200px] min-h-[200px] w-full">
                         {office.name === 'India Office' ? (
                           <iframe 
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d241316.64333236168!2d72.74110196605419!3d19.08252232377542!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c6306644edc1%3A0x5da4ed8f8d648c69!2sMumbai%2C%20Maharashtra!5e0!3m2!1sen!2sin!5v1234567890"
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1903.282873416022!2d78.43673333857045!3d17.432615545865566!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb90d10b0f93fd%3A0x63192c22c87b682b!2sSrinagar%20Colony%2C%20Imam%20Guda%2C%20Yousufguda%2C%20Hyderabad%2C%20Telangana%20500073!5e0!3m2!1sen!2sin!4v1758135469029!5m2!1sen!2sin"
                             width="100%"
                             height="100%"
                             style={{ border: 0 }}
@@ -295,7 +290,7 @@ const ContactPage = () => {
                           ></iframe>
                         ) : (
                           <iframe 
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d462560.30577598646!2d54.94755562500001!3d25.07575945!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f43496ad9c645%3A0xbde66e5084295162!2sDubai%20-%20United%20Arab%20Emirates!5e0!3m2!1sen!2sin!5v1234567890"
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14435.07871120322!2d55.29470120047468!3d25.244681442883202!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f42d7bf391ce5%3A0xc92c59be702d25dd!2sAl%20Karama%20-%20Dubai%20-%20United%20Arab%20Emirates!5e0!3m2!1sen!2sin!4v1758135581496!5m2!1sen!2sin"
                             width="100%"
                             height="100%"
                             style={{ border: 0 }}

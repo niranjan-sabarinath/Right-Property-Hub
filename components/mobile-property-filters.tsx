@@ -6,11 +6,24 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Filter, X } from 'lucide-react';
 import PropertyFilters from './property-filters';
 
-export default function MobilePropertyFilters({ onFiltersChange }: { onFiltersChange: (filters: any) => void }) {
+interface MobilePropertyFiltersProps {
+  filters: {
+    search: string;
+    priceRange: [number, number];
+    propertyType: string;
+    bedrooms: string;
+    bathrooms: string;
+    location: string;
+    status: string;
+  };
+  onFiltersChange: (filters: any) => void;
+}
+
+export default function MobilePropertyFilters({ filters, onFiltersChange }: MobilePropertyFiltersProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [filterCount, setFilterCount] = useState(0);
 
-  const handleFiltersChange = (filters: any) => {
+  const handleFiltersChange = (updatedFilters: any) => {
     // Count active filters
     const activeFilters = [
       filters.search ? 1 : 0,
@@ -23,7 +36,7 @@ export default function MobilePropertyFilters({ onFiltersChange }: { onFiltersCh
     ].reduce((a, b) => a + b, 0);
 
     setFilterCount(activeFilters);
-    onFiltersChange(filters);
+    onFiltersChange(updatedFilters);
   };
 
   return (
@@ -37,6 +50,7 @@ export default function MobilePropertyFilters({ onFiltersChange }: { onFiltersCh
       <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-[425px]">
         <div className="py-4">
           <PropertyFilters 
+            filters={filters}
             onFiltersChange={handleFiltersChange} 
             className="!border-0 !p-0 !shadow-none"
           />

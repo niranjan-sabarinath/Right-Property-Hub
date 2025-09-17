@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Slider } from "@/components/ui/slider"
 import { Search, Filter, X, ChevronDown, ChevronUp } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { parsePrice, formatPrice } from "@/lib/price-utils"
 
 interface FilterState {
   search: string
@@ -68,12 +69,9 @@ const PropertyFilters: React.FC<PropertyFiltersProps> = ({ filters, onFiltersCha
     onFiltersChange(resetFilters)
   }
 
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-      minimumFractionDigits: 0,
-    }).format(price)
+  const formatPriceRange = (price: number) => {
+    // Format price for the range display without currency symbol
+    return price.toLocaleString('en-IN');
   }
 
   const [isOpen, setIsOpen] = useState(true)
@@ -126,15 +124,15 @@ const PropertyFilters: React.FC<PropertyFiltersProps> = ({ filters, onFiltersCha
             <div className="flex justify-between items-center">
               <Label className="text-sm font-medium text-gray-700">Price Range</Label>
               <div className="text-sm font-medium text-gray-900">
-                {formatPrice(filters.priceRange[0])} - {formatPrice(filters.priceRange[1])}
+                {formatPriceRange(filters.priceRange[0])} - {formatPriceRange(filters.priceRange[1])} (Base Units)
               </div>
             </div>
             <Slider
               value={filters.priceRange}
               onValueChange={(value) => updateFilter("priceRange", value)}
-              max={2000000}
+              max={100000000} // 10 CR
               min={0}
-              step={25000}
+              step={100000} // 1 Lakh
               className="w-full [&>span:first-child]:h-1.5 [&>span:first-child]:bg-gray-200 [&>span:first-child]:[&>span]:bg-gray-900"
             />
           </div>
@@ -168,10 +166,8 @@ const PropertyFilters: React.FC<PropertyFiltersProps> = ({ filters, onFiltersCha
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all-locations">All Locations</SelectItem>
-                  <SelectItem value="Downtown">Downtown</SelectItem>
-                  <SelectItem value="Suburbs">Suburbs</SelectItem>
-                  <SelectItem value="Waterfront">Waterfront</SelectItem>
-                  <SelectItem value="Hills">Hills</SelectItem>
+                  <SelectItem value="India">India</SelectItem>
+                  <SelectItem value="Dubai">Dubai</SelectItem>
                 </SelectContent>
               </Select>
             </div>

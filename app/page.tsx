@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Search, Building, ArrowRight, ArrowLeft } from "lucide-react";
+import { parsePrice } from "@/lib/price-utils";
 import {
     motion,
     useInView,
@@ -158,57 +159,37 @@ const HomePage = () => {
                 (property) => property.type === filters.propertyType
             );
         }
-        if (filters.status && filters.status !== "all-status") {
-            filtered = filtered.filter(
-                (property) => property.status === filters.status
-            );
-        }
+
         if (filters.bedrooms && filters.bedrooms !== "any-bedrooms") {
+            const minBedrooms = parseInt(filters.bedrooms);
             filtered = filtered.filter(
-                (property) =>
-                    property.bedrooms >= Number.parseInt(filters.bedrooms)
+                (property) => property.bedrooms >= minBedrooms
             );
         }
+
         if (filters.bathrooms && filters.bathrooms !== "any-bathrooms") {
+            const minBathrooms = parseInt(filters.bathrooms);
             filtered = filtered.filter(
-                (property) =>
-                    property.bathrooms >= Number.parseInt(filters.bathrooms)
+                (property) => property.bathrooms >= minBathrooms
             );
         }
+
         if (filters.location && filters.location !== "all-locations") {
             filtered = filtered.filter(
-                (property) => property.location === filters.location
+                (property) =>
+                    property.location.toLowerCase() === filters.location.toLowerCase()
             );
         }
-        if (
-            filters.priceRange &&
-            Array.isArray(filters.priceRange) &&
-            filters.priceRange.length === 2 &&
-            (filters.priceRange[0] > 0 || filters.priceRange[1] < 2000000)
-        ) {
-            const parsePrice = (priceStr: string): number => {
-                if (!priceStr) return 0;
 
-                // Handle AED prices (e.g., "AED 1,800,000")
-                if (priceStr.includes("AED")) {
-                    return parseFloat(priceStr.replace(/[^0-9.]/g, ""));
-                }
+        if (filters.status && filters.status !== "all-status") {
+            filtered = filtered.filter(
+                (property) =>
+                    property.status.toLowerCase() === filters.status.toLowerCase()
+            );
+        }
 
-                // Handle Indian prices (e.g., "₹2.90 CR" or "₹40.00 L")
-                if (priceStr.includes("₹")) {
-                    const value = parseFloat(priceStr.replace(/[^0-9.]/g, ""));
-                    if (priceStr.includes("CR")) {
-                        return value * 10000000; // Convert crores to base units
-                    } else if (priceStr.includes("L")) {
-                        return value * 100000; // Convert lakhs to base units
-                    }
-                    return value;
-                }
-
-                // Default case for numeric strings
-                return parseFloat(priceStr);
-            };
-
+        // Apply price range filter using the parsePrice utility
+        if (filters.priceRange) {
             const [minPrice, maxPrice] = filters.priceRange;
 
             filtered = filtered.filter((property) => {
