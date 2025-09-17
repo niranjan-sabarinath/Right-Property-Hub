@@ -66,7 +66,6 @@ const testimonials = [
 ];
 
 const HomePage = () => {
-    const [searchTerm, setSearchTerm] = useState("");
     const [filteredProperties, setFilteredProperties] = useState(properties);
     const [currentPage, setCurrentPage] = useState(1);
     const propertiesPerPage = 6;
@@ -429,18 +428,25 @@ const HomePage = () => {
                                             type="text"
                                             placeholder="Search properties...."
                                             className="w-full pl-10 sm:pl-14 pr-24 sm:pr-28 py-3 sm:py-4 md:py-5 lg:py-6 bg-transparent border-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-white placeholder-white/70 text-sm sm:text-base"
-                                            value={searchTerm}
+                                            value={filters.search}
                                             onChange={(e) =>
-                                                setSearchTerm(e.target.value)
+                                                setFilters({
+                                                    ...filters,
+                                                    search: e.target.value,
+                                                })
                                             }
                                             onKeyDown={(e) => {
-                                                if (
-                                                    e.key === "Enter" &&
-                                                    searchTerm.trim()
-                                                ) {
-                                                    window.location.href = `/properties?search=${encodeURIComponent(
-                                                        searchTerm
-                                                    )}`;
+                                                if (e.key === "Enter") {
+                                                    const searchValue = filters.search.trim();
+                                                    if (searchValue) {
+                                                        // Scroll to properties section
+                                                        document.getElementById('properties-section')?.scrollIntoView({ behavior: 'smooth' });
+                                                        // Update the search term to trigger the filter
+                                                        setFilters(prev => ({
+                                                            ...prev,
+                                                            search: searchValue
+                                                        }));
+                                                    }
                                                 }
                                             }}
                                         />
@@ -450,9 +456,18 @@ const HomePage = () => {
                                             className="absolute right-[0.4rem] sm:right-[0.35rem] bg-white/20 backdrop-blur-md text-white hover:bg-white/30 transition-all duration-300 px-4 sm:px-6 py-1.5 sm:py-2 h-auto rounded-full text-xs sm:text-sm font-medium border border-white/20 hover:border-white/40 whitespace-nowrap"
                                         >
                                             <Link
-                                                href={`/properties?search=${encodeURIComponent(
-                                                    searchTerm
-                                                )}`}
+                                                href="#"
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    const searchValue = filters.search.trim();
+                                                    if (searchValue) {
+                                                        document.getElementById('properties-section')?.scrollIntoView({ behavior: 'smooth' });
+                                                        setFilters(prev => ({
+                                                            ...prev,
+                                                            search: searchValue
+                                                        }));
+                                                    }
+                                                }}
                                             >
                                                 <span className="hidden sm:inline">
                                                     Search
@@ -840,6 +855,7 @@ const HomePage = () => {
             {/* Property Listings with Filters */}
             <motion.section
                 ref={propertiesRef}
+                id="properties-section"
                 className="py-20 relative overflow-hidden"
                 initial={{ opacity: 0 }}
                 animate={propertiesInView ? { opacity: 1 } : { opacity: 0 }}
@@ -961,6 +977,7 @@ const HomePage = () => {
                             variants={slideUpVariants}
                         >
                             <PropertyFilters
+                                filters={filters}
                                 onFiltersChange={setFilters}
                                 className="sticky top-24"
                             />
@@ -986,7 +1003,7 @@ const HomePage = () => {
                                 variants={containerVariants}
                                 key={`page-${currentPage}`}
                             >
-                                <AnimatePresence mode="wait">
+                                <AnimatePresence>
                                     {currentProperties.map(
                                         (property, index) => (
                                             <motion.div

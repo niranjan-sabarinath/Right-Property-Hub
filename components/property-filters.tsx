@@ -20,26 +20,17 @@ interface FilterState {
 }
 
 interface PropertyFiltersProps {
+  filters: FilterState
   onFiltersChange: (filters: FilterState) => void
   className?: string
 }
 
-const PropertyFilters: React.FC<PropertyFiltersProps> = ({ onFiltersChange, className }) => {
-  const [filters, setFilters] = useState<FilterState>({
-    search: "",
-    priceRange: [0, 2000000],
-    propertyType: "all-types",
-    bedrooms: "any-bedrooms",
-    bathrooms: "any-bathrooms",
-    location: "all-locations",
-    status: "all-status",
-  })
+const PropertyFilters: React.FC<PropertyFiltersProps> = ({ filters, onFiltersChange, className }) => {
 
   const [activeFilters, setActiveFilters] = useState<string[]>([])
 
   const updateFilter = (key: keyof FilterState, value: any) => {
     const newFilters = { ...filters, [key]: value }
-    setFilters(newFilters)
     onFiltersChange(newFilters)
 
     // Update active filters
@@ -73,7 +64,6 @@ const PropertyFilters: React.FC<PropertyFiltersProps> = ({ onFiltersChange, clas
       location: "all-locations",
       status: "all-status",
     }
-    setFilters(resetFilters)
     setActiveFilters([])
     onFiltersChange(resetFilters)
   }
