@@ -115,8 +115,8 @@ const Footer = () => {
               >
                 <MapPin className="w-5 h-5 mt-0.5 text-gray-600 flex-shrink-0 md:hidden" />
                 <div className="flex flex-col">
-                  <p className="text-base font-medium text-gray-800">India: 123 Real Estate Ave, Mumbai</p>
-                  <p className="text-base font-medium text-gray-800 mt-2">Dubai: 456 Business Bay, Dubai</p>
+                  <p className="text-base font-medium text-gray-800">India: Srinagar colony, Banjarahills, Hyderabad</p>
+                  <p className="text-base font-medium text-gray-800 mt-2">Dubai: Karama, Dubai</p>
                 </div>
               </motion.div>
               <motion.div
