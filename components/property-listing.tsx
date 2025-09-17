@@ -135,13 +135,38 @@ const PropertyListing: React.FC<PropertyListingProps> = ({
             }
 
             // Filter by price range
-            const minPrice = parseInt(filters.minPrice);
-            if (!isNaN(minPrice) && property.price < minPrice) {
+            const parsePrice = (priceStr: string): number => {
+                if (!priceStr) return 0;
+                
+                // Handle AED prices (e.g., "AED 1,800,000")
+                if (priceStr.includes('AED')) {
+                    return parseFloat(priceStr.replace(/[^0-9.]/g, ''));
+                }
+                
+                // Handle Indian prices (e.g., "₹2.90 CR" or "₹40.00 L")
+                if (priceStr.includes('₹')) {
+                    const value = parseFloat(priceStr.replace(/[^0-9.]/g, ''));
+                    if (priceStr.includes('CR')) {
+                        return value * 10000000; // Convert crores to base units
+                    } else if (priceStr.includes('L')) {
+                        return value * 100000; // Convert lakhs to base units
+                    }
+                    return value;
+                }
+                
+                // Default case for numeric strings
+                return parseFloat(priceStr);
+            };
+            
+            const propertyPrice = parsePrice(property.price);
+            const minPrice = parsePrice(filters.minPrice);
+            const maxPrice = parsePrice(filters.maxPrice);
+            
+            if (minPrice > 0 && propertyPrice < minPrice) {
                 return false;
             }
-
-            const maxPrice = parseInt(filters.maxPrice);
-            if (!isNaN(maxPrice) && property.price > maxPrice) {
+            
+            if (maxPrice > 0 && propertyPrice > maxPrice) {
                 return false;
             }
 
@@ -158,13 +183,37 @@ const PropertyListing: React.FC<PropertyListingProps> = ({
     const sortedProperties = useMemo(() => {
         let result = [...filteredProperties];
 
+        // Parse price for sorting
+        const parsePriceForSort = (priceStr: string): number => {
+            if (!priceStr) return 0;
+            
+            // Handle AED prices (e.g., "AED 1,800,000")
+            if (priceStr.includes('AED')) {
+                return parseFloat(priceStr.replace(/[^0-9.]/g, ''));
+            }
+            
+            // Handle Indian prices (e.g., "₹2.90 CR" or "₹40.00 L")
+            if (priceStr.includes('₹')) {
+                const value = parseFloat(priceStr.replace(/[^0-9.]/g, ''));
+                if (priceStr.includes('CR')) {
+                    return value * 10000000; // Convert crores to base units
+                } else if (priceStr.includes('L')) {
+                    return value * 100000; // Convert lakhs to base units
+                }
+                return value;
+            }
+            
+            // Default case for numeric strings
+            return parseFloat(priceStr);
+        };
+
         // Apply sorting
         switch (filters.sort) {
             case "price-asc":
-                result.sort((a, b) => a.price - b.price);
+                result.sort((a, b) => parsePriceForSort(a.price) - parsePriceForSort(b.price));
                 break;
             case "price-desc":
-                result.sort((a, b) => b.price - a.price);
+                result.sort((a, b) => parsePriceForSort(b.price) - parsePriceForSort(a.price));
                 break;
             case "newest":
                 result.sort((a, b) => (b.yearBuilt || 0) - (a.yearBuilt || 0));

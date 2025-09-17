@@ -21,12 +21,21 @@ export interface PropertyCardProps {
   onCompareToggle?: (id: string) => void
 }
 
-const formatPrice = (price: number) => {
+const formatPrice = (price: string) => {
+  // If price is already formatted (contains letters), return as is
+  if (typeof price === 'string' && /[a-zA-Z]/.test(price)) {
+    return price;
+  }
+  
+  // Convert string to number if needed
+  const priceNum = typeof price === 'string' ? parseFloat(price.replace(/[^0-9.]/g, '')) : price;
+  
+  // Format as currency
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
     maximumFractionDigits: 0,
-  }).format(price)
+  }).format(priceNum);
 }
 
 const PropertyCard: React.FC<PropertyCardProps> = ({
@@ -105,7 +114,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
         {/* Price and Compare Button */}
         <div className="flex items-center justify-between pt-1">
           <span className="text-lg font-bold text-gray-900">
-            ${property.price.toLocaleString()}
+            {property.price}
             {property.status === 'For Rent' || property.status === 'Rented' ? (
               <span className="text-sm font-normal text-gray-500">/month</span>
             ) : null}
@@ -115,7 +124,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Link 
-                    href={`/properties/${property.id}`}
+                    href={`/properties/${property.type}/${property.id}`}
                     className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-colors hover:bg-gray-200 hover:text-primary"
                     onClick={(e) => e.stopPropagation()}
                   >
@@ -159,7 +168,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
   }
 
   return (
-    <Link href={`/properties/${property.id}`} className="block">
+    <Link href={`/properties/${property.type}/${property.id}`} className="block">
       {cardContent}
     </Link>
   )

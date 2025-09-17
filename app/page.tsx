@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Search, Building, ArrowRight } from "lucide-react";
+import { Search, Building, ArrowRight, ArrowLeft } from "lucide-react";
 import {
     motion,
     useInView,
@@ -48,6 +48,8 @@ const testimonials = [
 const HomePage = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [filteredProperties, setFilteredProperties] = useState(properties);
+    const [currentPage, setCurrentPage] = useState(1);
+    const propertiesPerPage = 6;
     const [filters, setFilters] = useState<{
         search: string;
         priceRange: [number, number];
@@ -66,6 +68,17 @@ const HomePage = () => {
         status: "all-status",
     });
     const [compareList, setCompareList] = useState<Array<Property>>([]);
+
+    // Calculate pagination
+    const indexOfLastProperty = currentPage * propertiesPerPage;
+    const indexOfFirstProperty = indexOfLastProperty - propertiesPerPage;
+    const currentProperties = filteredProperties.slice(indexOfFirstProperty, indexOfLastProperty);
+    const totalPages = Math.ceil(filteredProperties.length / propertiesPerPage);
+
+    // Change page
+    const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+    const nextPage = () => setCurrentPage(prev => Math.min(prev + 1, totalPages));
+    const prevPage = () => setCurrentPage(prev => Math.max(prev - 1, 1));
 
     const { scrollYProgress } = useScroll();
     const heroRef = useRef(null);
@@ -147,15 +160,38 @@ const HomePage = () => {
         if (
             filters.priceRange &&
             Array.isArray(filters.priceRange) &&
-            filters.priceRange.length === 2
+            filters.priceRange.length === 2 &&
+            (filters.priceRange[0] > 0 || filters.priceRange[1] < 2000000)
         ) {
-            if (filters.priceRange[0] > 0 || filters.priceRange[1] < 2000000) {
-                filtered = filtered.filter(
-                    (property) =>
-                        property.price >= filters.priceRange[0] &&
-                        property.price <= filters.priceRange[1]
-                );
-            }
+            const parsePrice = (priceStr: string): number => {
+                if (!priceStr) return 0;
+                
+                // Handle AED prices (e.g., "AED 1,800,000")
+                if (priceStr.includes('AED')) {
+                    return parseFloat(priceStr.replace(/[^0-9.]/g, ''));
+                }
+                
+                // Handle Indian prices (e.g., "₹2.90 CR" or "₹40.00 L")
+                if (priceStr.includes('₹')) {
+                    const value = parseFloat(priceStr.replace(/[^0-9.]/g, ''));
+                    if (priceStr.includes('CR')) {
+                        return value * 10000000; // Convert crores to base units
+                    } else if (priceStr.includes('L')) {
+                        return value * 100000; // Convert lakhs to base units
+                    }
+                    return value;
+                }
+                
+                // Default case for numeric strings
+                return parseFloat(priceStr);
+            };
+            
+            const [minPrice, maxPrice] = filters.priceRange;
+            
+            filtered = filtered.filter(property => {
+                const propertyPrice = parsePrice(property.price);
+                return propertyPrice >= minPrice && propertyPrice <= maxPrice;
+            });
         }
 
         setFilteredProperties(filtered);
@@ -924,9 +960,10 @@ const HomePage = () => {
                             <motion.div
                                 className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8"
                                 variants={containerVariants}
+                                key={`page-${currentPage}`}
                             >
-                                <AnimatePresence>
-                                    {filteredProperties.map(
+                                <AnimatePresence mode="wait">
+                                    {currentProperties.map(
                                         (property, index) => (
                                             <motion.div
                                                 key={property.id}
@@ -972,6 +1009,58 @@ const HomePage = () => {
                                     )}
                                 </AnimatePresence>
                             </motion.div>
+
+                            {/* Pagination Controls */}
+                            {totalPages > 1 && (
+                                <motion.div 
+                                    className="w-full mt-12"
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.3 }}
+                                >
+                                    <div className="flex flex-col sm:flex-row justify-center items-center gap-4 w-full">
+                                        {/* Previous Button - Full width on mobile, auto on larger screens */}
+                                        <button
+                                            onClick={prevPage}
+                                            disabled={currentPage === 1}
+                                            className={`w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-100 rounded-md ${currentPage === 1 ? 'text-gray-400 cursor-not-allowed' : 'text-primary hover:bg-gray-200'} transition-colors`}
+                                        >
+                                            <ArrowLeft className="w-4 h-4 flex-shrink-0" />
+                                            <span className="whitespace-nowrap">Previous</span>
+                                        </button>
+
+                                        {/* Page Numbers - Scrollable on mobile */}
+                                        <div className="w-full sm:w-auto overflow-x-auto py-2 sm:py-0">
+                                            <div className="flex items-center justify-center gap-1 sm:gap-2 min-w-max px-4 sm:px-0">
+                                                {Array.from({ length: totalPages }, (_, i) => i + 1).map((number) => (
+                                                    <button
+                                                        key={number}
+                                                        onClick={() => paginate(number)}
+                                                        className={`w-8 h-8 sm:w-10 sm:h-10 text-sm sm:text-base rounded-full flex-shrink-0 flex items-center justify-center ${currentPage === number ? 'bg-primary text-white' : 'text-gray-700 hover:bg-gray-100'}`}
+                                                    >
+                                                        {number}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        {/* Next Button - Full width on mobile, auto on larger screens */}
+                                        <button
+                                            onClick={nextPage}
+                                            disabled={currentPage === totalPages}
+                                            className={`w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-100 rounded-md ${currentPage === totalPages ? 'text-gray-400 cursor-not-allowed' : 'text-primary hover:bg-gray-200'} transition-colors`}
+                                        >
+                                            <span className="whitespace-nowrap">Next</span>
+                                            <ArrowRight className="w-4 h-4 flex-shrink-0" />
+                                        </button>
+                                    </div>
+                                    
+                                    {/* Page Info - Shows current page and total pages */}
+                                    <div className="text-center mt-4 text-sm text-gray-500">
+                                        Page {currentPage} of {totalPages}
+                                    </div>
+                                </motion.div>
+                            )}
 
                             {filteredProperties.length === 0 && (
                                 <motion.div
