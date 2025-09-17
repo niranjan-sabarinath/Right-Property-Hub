@@ -115,22 +115,10 @@ const BlogPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navigation />
-
-      {/* Hero Section */}
       <PageHeader 
         title="Real Estate Insights & Tips"
         subtitle="Stay informed with the latest real estate trends, market analysis, and expert advice to make smarter property decisions."
       >
-        <div className="max-w-md mx-auto mt-8">
-          <div className="relative">
-            <Search className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
-            <Input 
-              placeholder="Search articles..." 
-              className="pl-10 h-12 bg-white/80 backdrop-blur-sm border-gray-200 focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all duration-200"
-            />
-          </div>
-        </div>
       </PageHeader>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -311,19 +299,10 @@ const BlogPage = () => {
                   </Card>
                 ))}
               </div>
-
-              {/* Load More */}
-              <div className="text-center mt-12">
-                <Button variant="outline" size="lg">
-                  Load More Articles
-                </Button>
-              </div>
             </section>
           </div>
         </div>
       </div>
-
-      <Footer />
     </div>
   );
 };

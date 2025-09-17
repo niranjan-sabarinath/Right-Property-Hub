@@ -16,32 +16,52 @@ import PropertyCard from "@/components/property-card";
 import PropertyFilters from "@/components/property-filters";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { properties, getFeaturedProperties, type Property } from "@/data/properties";
+import {
+    properties,
+    getFeaturedProperties,
+    type Property,
+} from "@/data/properties";
 
 const testimonials = [
     {
-        name: "Sarah Johnson",
-        role: "Homebuyer",
+        name: "Aarav Sharma",
+        role: "NRI Homebuyer",
         content:
-            "Right Property Hub made my home buying experience seamless. Their team was professional, knowledgeable, and always available to answer my questions.",
-        rating: 5,
-        image: "https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=150",
-    },
-    {
-        name: "Michael Chen",
-        role: "Property Investor",
-        content:
-            "I've worked with many real estate agencies, but Right Property Hub stands out. They helped me find the perfect investment properties with great ROI.",
+            "As an NRI working in the US, I was skeptical about buying property in India. Right Property Hub's team made the entire process transparent and stress-free. Their virtual tours and legal assistance were exceptional!",
         rating: 5,
         image: "https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=150",
     },
     {
-        name: "Emily Rodriguez",
-        role: "First-time Seller",
+        name: "Ishita Patel",
+        role: "First-time Buyer",
         content:
-            "Selling my first property was stress-free thanks to their expert guidance. They got me a great price and handled everything professionally.",
+            "Found my dream 2BHK in Mumbai suburbs within my budget, thanks to Right Property Hub. Their agent understood my needs perfectly and negotiated a great deal. Couldn't be happier with my new home!",
         rating: 5,
         image: "https://images.pexels.com/photos/1181686/pexels-photo-1181686.jpeg?auto=compress&cs=tinysrgb&w=150",
+    },
+    {
+        name: "Rajiv Malhotra",
+        role: "Property Investor",
+        content:
+            "Their market analysis helped me identify high-growth areas in Bangalore. The team's local expertise and network of developers gave me access to pre-launch offers I wouldn't have found otherwise.",
+        rating: 5,
+        image: "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=150",
+    },
+    {
+        name: "Meera Iyer",
+        role: "Senior Citizen",
+        content:
+            "After my husband's retirement, we wanted to downsize to a smaller home. Right Property Hub found us a perfect senior-friendly apartment with all amenities. Their patience and understanding made this transition smooth.",
+        rating: 5,
+        image: "https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=150",
+    },
+    {
+        name: "Vikram & Priya Khanna",
+        role: "Young Couple",
+        content:
+            "We were first-time homebuyers with limited savings. The team helped us understand home loan options and found us a perfect starter home in Pune. Their end-to-end support was invaluable!",
+        rating: 5,
+        image: "https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=150",
     },
 ];
 
@@ -72,13 +92,17 @@ const HomePage = () => {
     // Calculate pagination
     const indexOfLastProperty = currentPage * propertiesPerPage;
     const indexOfFirstProperty = indexOfLastProperty - propertiesPerPage;
-    const currentProperties = filteredProperties.slice(indexOfFirstProperty, indexOfLastProperty);
+    const currentProperties = filteredProperties.slice(
+        indexOfFirstProperty,
+        indexOfLastProperty
+    );
     const totalPages = Math.ceil(filteredProperties.length / propertiesPerPage);
 
     // Change page
     const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
-    const nextPage = () => setCurrentPage(prev => Math.min(prev + 1, totalPages));
-    const prevPage = () => setCurrentPage(prev => Math.max(prev - 1, 1));
+    const nextPage = () =>
+        setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+    const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
 
     const { scrollYProgress } = useScroll();
     const heroRef = useRef(null);
@@ -165,30 +189,30 @@ const HomePage = () => {
         ) {
             const parsePrice = (priceStr: string): number => {
                 if (!priceStr) return 0;
-                
+
                 // Handle AED prices (e.g., "AED 1,800,000")
-                if (priceStr.includes('AED')) {
-                    return parseFloat(priceStr.replace(/[^0-9.]/g, ''));
+                if (priceStr.includes("AED")) {
+                    return parseFloat(priceStr.replace(/[^0-9.]/g, ""));
                 }
-                
+
                 // Handle Indian prices (e.g., "₹2.90 CR" or "₹40.00 L")
-                if (priceStr.includes('₹')) {
-                    const value = parseFloat(priceStr.replace(/[^0-9.]/g, ''));
-                    if (priceStr.includes('CR')) {
+                if (priceStr.includes("₹")) {
+                    const value = parseFloat(priceStr.replace(/[^0-9.]/g, ""));
+                    if (priceStr.includes("CR")) {
                         return value * 10000000; // Convert crores to base units
-                    } else if (priceStr.includes('L')) {
+                    } else if (priceStr.includes("L")) {
                         return value * 100000; // Convert lakhs to base units
                     }
                     return value;
                 }
-                
+
                 // Default case for numeric strings
                 return parseFloat(priceStr);
             };
-            
+
             const [minPrice, maxPrice] = filters.priceRange;
-            
-            filtered = filtered.filter(property => {
+
+            filtered = filtered.filter((property) => {
                 const propertyPrice = parsePrice(property.price);
                 return propertyPrice >= minPrice && propertyPrice <= maxPrice;
             });
@@ -507,7 +531,7 @@ const HomePage = () => {
                                 }}
                             >
                                 <Link
-                                    href="/properties"
+                                    href="/about"
                                     className="hidden sm:inline-flex group items-center underline mt-4 text-lg font-medium text-gray-900 hover:text-gray-600 transition-colors"
                                 >
                                     Get to Know Us
@@ -858,7 +882,7 @@ const HomePage = () => {
                                 whileHover={{ x: 10 }}
                             >
                                 <Link
-                                    href="/properties"
+                                    href="/properties/india"
                                     className="hidden sm:inline-flex group items-center underline mt-4 text-lg font-medium text-gray-900 hover:text-gray-600 transition-colors"
                                 >
                                     See our Marketplace
@@ -1012,7 +1036,7 @@ const HomePage = () => {
 
                             {/* Pagination Controls */}
                             {totalPages > 1 && (
-                                <motion.div 
+                                <motion.div
                                     className="w-full mt-12"
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
@@ -1023,20 +1047,36 @@ const HomePage = () => {
                                         <button
                                             onClick={prevPage}
                                             disabled={currentPage === 1}
-                                            className={`w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-100 rounded-md ${currentPage === 1 ? 'text-gray-400 cursor-not-allowed' : 'text-primary hover:bg-gray-200'} transition-colors`}
+                                            className={`w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-100 rounded-md ${
+                                                currentPage === 1
+                                                    ? "text-gray-400 cursor-not-allowed"
+                                                    : "text-primary hover:bg-gray-200"
+                                            } transition-colors`}
                                         >
                                             <ArrowLeft className="w-4 h-4 flex-shrink-0" />
-                                            <span className="whitespace-nowrap">Previous</span>
+                                            <span className="whitespace-nowrap">
+                                                Previous
+                                            </span>
                                         </button>
 
                                         {/* Page Numbers - Scrollable on mobile */}
                                         <div className="w-full sm:w-auto overflow-x-auto py-2 sm:py-0">
                                             <div className="flex items-center justify-center gap-1 sm:gap-2 min-w-max px-4 sm:px-0">
-                                                {Array.from({ length: totalPages }, (_, i) => i + 1).map((number) => (
+                                                {Array.from(
+                                                    { length: totalPages },
+                                                    (_, i) => i + 1
+                                                ).map((number) => (
                                                     <button
                                                         key={number}
-                                                        onClick={() => paginate(number)}
-                                                        className={`w-8 h-8 sm:w-10 sm:h-10 text-sm sm:text-base rounded-full flex-shrink-0 flex items-center justify-center ${currentPage === number ? 'bg-primary text-white' : 'text-gray-700 hover:bg-gray-100'}`}
+                                                        onClick={() =>
+                                                            paginate(number)
+                                                        }
+                                                        className={`w-8 h-8 sm:w-10 sm:h-10 text-sm sm:text-base rounded-full flex-shrink-0 flex items-center justify-center ${
+                                                            currentPage ===
+                                                            number
+                                                                ? "bg-primary text-white"
+                                                                : "text-gray-700 hover:bg-gray-100"
+                                                        }`}
                                                     >
                                                         {number}
                                                     </button>
@@ -1047,14 +1087,22 @@ const HomePage = () => {
                                         {/* Next Button - Full width on mobile, auto on larger screens */}
                                         <button
                                             onClick={nextPage}
-                                            disabled={currentPage === totalPages}
-                                            className={`w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-100 rounded-md ${currentPage === totalPages ? 'text-gray-400 cursor-not-allowed' : 'text-primary hover:bg-gray-200'} transition-colors`}
+                                            disabled={
+                                                currentPage === totalPages
+                                            }
+                                            className={`w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-100 rounded-md ${
+                                                currentPage === totalPages
+                                                    ? "text-gray-400 cursor-not-allowed"
+                                                    : "text-primary hover:bg-gray-200"
+                                            } transition-colors`}
                                         >
-                                            <span className="whitespace-nowrap">Next</span>
+                                            <span className="whitespace-nowrap">
+                                                Next
+                                            </span>
                                             <ArrowRight className="w-4 h-4 flex-shrink-0" />
                                         </button>
                                     </div>
-                                    
+
                                     {/* Page Info - Shows current page and total pages */}
                                     <div className="text-center mt-4 text-sm text-gray-500">
                                         Page {currentPage} of {totalPages}
@@ -1351,13 +1399,15 @@ const HomePage = () => {
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                         >
-                            <Button
-                                className="px-8 py-4 text-lg rounded-3xl bg-white text-gray-900 hover:bg-gray-100 transition-colors font-medium group"
-                                size="lg"
-                            >
-                                View Properties
-                                <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-                            </Button>
+                            <Link href="/properties/dubai">
+                                <Button
+                                    className="px-8 py-4 text-lg rounded-3xl bg-white text-gray-900 hover:bg-gray-100 transition-colors font-medium group"
+                                    size="lg"
+                                >
+                                    View Properties
+                                    <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+                                </Button>
+                            </Link>
                         </motion.div>
                     </motion.div>
                 </motion.div>

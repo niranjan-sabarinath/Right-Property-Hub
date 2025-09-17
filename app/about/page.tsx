@@ -273,56 +273,6 @@ const AboutPage = () => {
           </div>
         </div>
       </section>
-
-      {/* Team Section */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Meet Our Team</h2>
-            <p className="text-lg text-gray-600">The passionate professionals behind Right Property Hub</p>
-          </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {team.map((member, index) => (
-              <Card key={index} className="overflow-hidden transition-all hover:shadow-lg">
-                <div className="relative h-64 w-full">
-                  <Image
-                    src={member.image}
-                    alt={member.name}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <CardHeader>
-                  <CardTitle className="text-xl">{member.name}</CardTitle>
-                  <p className="text-sm text-gray-600">{member.role}</p>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-gray-700 mb-4">{member.bio}</p>
-                  <div className="flex space-x-2 mb-4">
-                    {member.specialties.map((specialty, i) => (
-                      <Badge key={i} variant="outline" className="text-xs">
-                        {specialty}
-                      </Badge>
-                    ))}
-                  </div>
-                  <div className="flex space-x-2">
-                    <Button variant="outline" size="icon" asChild>
-                      <a href={`mailto:${member.email}`}>
-                        <Mail className="h-4 w-4" />
-                      </a>
-                    </Button>
-                    <Button variant="outline" size="icon" asChild>
-                      <a href={member.linkedin} target="_blank" rel="noopener noreferrer">
-                        <Linkedin className="h-4 w-4" />
-                      </a>
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
     </div>
   );
 };

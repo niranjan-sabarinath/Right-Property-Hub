@@ -508,7 +508,7 @@ export default function TypePage({ params }: TypePageProps) {
           <div className="mt-12 text-center">
             <Button asChild size="lg">
               <a 
-                href="https://www.youtube.com/yourchannel" 
+                href="https://youtube.com/@rightpropertyhubrphub?si=0pm2aHwij-YGLlXR" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 bg-red-500 hover:bg-red-600"

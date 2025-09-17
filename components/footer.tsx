@@ -12,7 +12,6 @@ const Footer = () => {
     { icon: Facebook, url: "https://www.facebook.com/share/178YN4zHWH/?mibextid=wwXIfr" },
     { icon: Youtube, url: "https://youtube.com/@rightpropertyhubrphub?si=0pm2aHwij-YGLlXR" },
     { icon: Instagram, url: "https://www.instagram.com/right_property_hub?igsh=MW8ybDA0ZjB0c3M5bQ%3D%3D&utm_source=qr" },
-    { icon: Linkedin, url: "#" },
     { icon: Mail, url: "mailto:solutions@rightpropertyhub.com" },
   ]
 
