@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import PageHeader from '@/components/page-header';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -14,11 +14,12 @@ import {
   Mail, 
   Clock,
   Send,
+  Loader,
 } from 'lucide-react';
 import { toast } from 'sonner';
 
 const ContactPage = () => {
-  const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
@@ -27,19 +28,57 @@ const ContactPage = () => {
     inquiryType: ''
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [submitting, setSubmitting] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    // Here you would typically send the form data to your backend
-    toast.success('Thank you for your message! We\'ll get back to you within 24 hours.');
-    setFormData({
-      name: '',
-      email: '',
-      phone: '',
-      subject: '',
-      message: '',
-      inquiryType: ''
-    });
-  };
+    if (submitting) return;
+    setSubmitting(true);
+
+    try {
+      const formDataToSend = {
+        title: "Right Property Hub Contact Enquiry",
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        subject: formData.subject,
+        message: formData.message,
+        inquiry_type: formData.inquiryType,
+        form_source: "Contact Page"
+      };
+
+      const scriptURL = "https://script.google.com/macros/s/AKfycbyQM7LphryO6F07GJcheHWeRkqi7Wg1TjZerUXETD3EESgfRiRgpp2v57vh-jz_vYbIhw/exec";
+      
+      const response = await fetch(scriptURL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8",
+        },
+        body: JSON.stringify(formDataToSend),
+      });
+
+      if (response.ok) {
+        toast.success('Thank you for your message! We\'ll get back to you within 24 hours.');
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          subject: '',
+          message: '',
+          inquiryType: ''
+        });
+        formRef.current?.reset();
+      } else {
+        throw new Error('Failed to submit form');
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error('Failed to submit your message. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
+  }
 
   const handleChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -139,7 +178,7 @@ const ContactPage = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className='p-4'>
-                  <form onSubmit={handleSubmit} className="space-y-6">
+                  <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
                     <div className="grid grid-cols-1 gap-4">
                       <div>
                         <Label htmlFor="name">Full Name *</Label>
@@ -212,9 +251,23 @@ const ContactPage = () => {
                       </div>
                     </div>
 
-                    <Button type="submit" className="w-full" size="lg">
-                      <Send className="w-4 h-4 mr-2" />
-                      Send Message
+                    <Button 
+                      type="submit" 
+                      className="w-full" 
+                      size="lg"
+                      disabled={submitting}
+                    >
+                      {submitting ? (
+                        <>
+                          <Loader className="w-4 h-4 mr-2 animate-spin" />
+                          Sending...
+                        </>
+                      ) : (
+                        <>
+                          <Send className="w-4 h-4 mr-2" />
+                          Send Message
+                        </>
+                      )}
                     </Button>
                   </form>
                 </CardContent>
