@@ -297,7 +297,7 @@ const HomePage = () => {
   }
 
   // WhatsApp contact number (Indian number format without +, spaces, or dashes)
-  const whatsappNumber = '919999999999' // Replace with actual Indian phone number
+  const whatsappNumber = '+919030225223' // Replace with actual Indian phone number
   const whatsappUrl = `https://wa.me/${whatsappNumber}?text=Hello%20Right%20Property%20Hub,%20I'm%20interested%20in%20your%20properties`
 
   return (
