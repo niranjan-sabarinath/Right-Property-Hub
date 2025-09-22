@@ -9,7 +9,7 @@ import PropertyFilters from './property-filters';
 interface MobilePropertyFiltersProps {
   filters: {
     search: string;
-    priceRange: [number, number];
+    sortBy: 'price-high-low' | 'price-low-high' | 'none';
     propertyType: string;
     bedrooms: string;
     bathrooms: string;
@@ -32,7 +32,7 @@ export default function MobilePropertyFilters({ filters, onFiltersChange }: Mobi
       filters.bathrooms !== 'any-bathrooms' ? 1 : 0,
       filters.location !== 'all-locations' ? 1 : 0,
       filters.status !== 'all-status' ? 1 : 0,
-      filters.priceRange[0] > 0 || filters.priceRange[1] < 2000000 ? 1 : 0
+      filters.sortBy !== 'none' ? 1 : 0
     ].reduce((a, b) => a + b, 0);
 
     setFilterCount(activeFilters);

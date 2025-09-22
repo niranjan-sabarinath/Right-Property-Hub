@@ -8,11 +8,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Slider } from "@/components/ui/slider"
 import { Search, Filter, X, ChevronDown, ChevronUp } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { parsePrice, formatPrice } from "@/lib/price-utils"
+import { parsePrice, formatIndianPrice } from "@/lib/price-utils"
 
 interface FilterState {
   search: string
-  priceRange: [number, number]
+  sortBy: 'price-high-low' | 'price-low-high' | 'none'
   propertyType: string
   bedrooms: string
   bathrooms: string
@@ -45,11 +45,13 @@ const PropertyFilters: React.FC<PropertyFiltersProps> = ({ filters, onFiltersCha
       newActiveFilters.push(`Baths: ${newFilters.bathrooms}+`)
     if (newFilters.location && newFilters.location !== "all-locations")
       newActiveFilters.push(`Location: ${newFilters.location}`)
-    if (newFilters.status && newFilters.status !== "all-status") newActiveFilters.push(`Status: ${newFilters.status}`)
-    if (newFilters.priceRange[0] > 0 || newFilters.priceRange[1] < 2000000) {
-      newActiveFilters.push(
-        `Price: $${newFilters.priceRange[0].toLocaleString()} - $${newFilters.priceRange[1].toLocaleString()}`,
-      )
+    if (newFilters.status && newFilters.status !== "all-status") 
+      newActiveFilters.push(`Status: ${newFilters.status}`)
+    // Add sort filter to active filters if set
+    if (newFilters.sortBy === 'price-high-low') {
+      newActiveFilters.push('Price: High to Low')
+    } else if (newFilters.sortBy === 'price-low-high') {
+      newActiveFilters.push('Price: Low to High')
     }
 
     setActiveFilters(newActiveFilters)
@@ -58,7 +60,7 @@ const PropertyFilters: React.FC<PropertyFiltersProps> = ({ filters, onFiltersCha
   const clearFilters = () => {
     const resetFilters: FilterState = {
       search: "",
-      priceRange: [0, 2000000],
+      sortBy: 'none',
       propertyType: "all-types",
       bedrooms: "any-bedrooms",
       bathrooms: "any-bathrooms",
@@ -119,22 +121,22 @@ const PropertyFilters: React.FC<PropertyFiltersProps> = ({ filters, onFiltersCha
             </div>
           </div>
 
-          {/* Price Range */}
-          <div className="space-y-4">
-            <div className="flex justify-between items-center">
-              <Label className="text-sm font-medium text-gray-700">Price Range</Label>
-              <div className="text-sm font-medium text-gray-900">
-                {formatPriceRange(filters.priceRange[0])} - {formatPriceRange(filters.priceRange[1])} (Base Units)
-              </div>
-            </div>
-            <Slider
-              value={filters.priceRange}
-              onValueChange={(value) => updateFilter("priceRange", value)}
-              max={100000000} // 10 CR
-              min={0}
-              step={100000} // 1 Lakh
-              className="w-full [&>span:first-child]:h-1.5 [&>span:first-child]:bg-gray-200 [&>span:first-child]:[&>span]:bg-gray-900"
-            />
+          {/* Price Sort */}
+          <div className="space-y-2">
+            <Label className="text-sm font-medium text-gray-700">Sort By</Label>
+            <Select
+              value={filters.sortBy}
+              onValueChange={(value) => updateFilter('sortBy', value as 'price-high-low' | 'price-low-high' | 'none')}
+            >
+              <SelectTrigger className="h-11">
+                <SelectValue placeholder="Sort by price" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="none">Default</SelectItem>
+                <SelectItem value="price-high-low">Price: High to Low</SelectItem>
+                <SelectItem value="price-low-high">Price: Low to High</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
@@ -166,8 +168,8 @@ const PropertyFilters: React.FC<PropertyFiltersProps> = ({ filters, onFiltersCha
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all-locations">All Locations</SelectItem>
-                  <SelectItem value="India">India</SelectItem>
-                  <SelectItem value="Dubai">Dubai</SelectItem>
+                  <SelectItem value="india">India</SelectItem>
+                  <SelectItem value="dubai">Dubai</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -210,7 +212,7 @@ const PropertyFilters: React.FC<PropertyFiltersProps> = ({ filters, onFiltersCha
                         else if (filterKey === "baths") updateFilter("bathrooms", "any-bathrooms")
                         else if (filterKey === "location") updateFilter("location", "all-locations")
                         else if (filterKey === "status") updateFilter("status", "all-status")
-                        else if (filterKey === "price") updateFilter("priceRange", [0, 2000000])
+                        else if (filterKey === "price") updateFilter("sortBy", "none")
                       }}
                       className="ml-1.5 -mr-1 p-0.5 hover:bg-gray-200 rounded-full transition-colors"
                     >

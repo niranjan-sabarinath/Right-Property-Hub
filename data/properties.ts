@@ -58,7 +58,7 @@ export const properties: Property[] = [
     ],
     type: "residential",
     status: "For Sale",
-    featured: true,
+    featured: false,
     yearBuilt: 2024,
     amenities: [
       "BBQ Spaces",
@@ -109,7 +109,7 @@ export const properties: Property[] = [
     ],
     type: "residential",
     status: "For Sale",
-    featured: true,
+    featured: false,
     yearBuilt: 2026,
     amenities: [
       "BBQ Spaces",
@@ -290,7 +290,7 @@ export const properties: Property[] = [
     image: "/images/properties/mag-keturah-reserve/magketurah1-600x375.webp",
     type: "residential",
     status: "For Sale",
-    featured: true,
+    featured: false,
     yearBuilt: 2026,
     amenities: [
       "BBQ Spaces",
@@ -333,7 +333,7 @@ export const properties: Property[] = [
     image: "/images/properties/emaar-oria/oria1-600x375.jpg",
     type: "residential",
     status: "For Sale",
-    featured: true  ,
+    featured: false,
     yearBuilt: 2028,
     amenities: [
       "BBQ Spaces",
@@ -376,7 +376,7 @@ export const properties: Property[] = [
     image: "/images/properties/emaar-park-lane/parklane1-600x375.jpg",
     type: "residential",
     status: "For Sale",
-    featured: true,
+    featured: false,
     yearBuilt: 2028,
     amenities: [
       "Cycling Track",
@@ -421,7 +421,7 @@ export const properties: Property[] = [
     image: "/images/properties/emaar-mirage/mirage1-600x375.webp",
     type: "residential",
     status: "For Sale",
-    featured: true,
+    featured: false,
     yearBuilt: 2028,
     amenities: [
       "Clubhouse",
@@ -730,7 +730,7 @@ export const properties: Property[] = [
     image: "/images/properties/danube-diamondz/diamonds-min-600x375.jpg",
     type: "residential",
     status: "For Sale",
-    featured: true,
+    featured: false,
     yearBuilt: 2027,
     amenities: ["Aquatic gym", "Gym", "Infinity Pool", "Kids Play Area", "Rain Shower", "Sky Deck Yoga"],
     description:
@@ -887,7 +887,7 @@ export const properties: Property[] = [
     image: "/images/properties/aikaa-villas/main.jpg",
     type: "luxury",
     status: "For Sale",
-    featured: true,
+    featured: false,
     amenities: [
       "Air Conditioning",
       "Barbeque",
@@ -981,7 +981,7 @@ export const properties: Property[] = [
     image: "/images/properties/organo-kandawada/main.jpg",
     type: "luxury",
     status: "For Sale",
-    featured: true,
+    featured: false,
     amenities: [
       "Air Conditioning",
       "Barbeque",
@@ -1359,7 +1359,7 @@ export const properties: Property[] = [
     image: "/images/properties/urbanrise-galleria/main.jpg",
     type: "residential",
     status: "For Sale",
-    featured: false,
+    featured: true,
     amenities: [
       "Air Conditioning",
       "Barbeque",
@@ -1406,7 +1406,7 @@ export const properties: Property[] = [
     image: "/images/properties/shivam-elite/main.jpg",
     type: "residential",
     status: "For Sale",
-    featured: true,
+    featured: false,
     amenities: [
       "Air Conditioning",
       "Barbeque",
@@ -1453,7 +1453,7 @@ export const properties: Property[] = [
     image: "/images/properties/gar-amali/main.jpg",
     type: "residential",
     status: "For Sale",
-    featured: true,
+    featured: false,
     amenities: [
       "Air Conditioning",
       "Barbeque",
@@ -1556,5 +1556,13 @@ export const getPropertiesByLocation = (location: "india" | "dubai"): Property[]
 }
 
 export const getAllProperties = (): Property[] => {
-  return properties
-}
+  return [...properties];
+};
+
+export const getIndianProperties = (): Property[] => {
+  return properties.filter(property => 
+    property.propertyLocation === 'india' || 
+    (property.location && property.location.toLowerCase().includes('india')) ||
+    (property.price && (property.price.includes('₹') || property.price.toLowerCase().includes('cr') || property.price.toLowerCase().includes('l')))
+  );
+};

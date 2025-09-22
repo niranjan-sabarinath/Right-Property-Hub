@@ -35,6 +35,38 @@ interface PropertyDetailPageProps {
     };
 }
 
+// Helper function to determine if a property is in India or Dubai
+const getPropertyLocation = (property: Property): 'india' | 'dubai' => {
+  // First check the locationType if it exists
+  if (property.locationType) {
+    return property.locationType;
+  }
+  
+  // Fallback to checking the location string
+  if (property.location.toLowerCase().includes('dubai') || property.location.toLowerCase().includes('uae')) {
+    return 'dubai';
+  }
+  
+  // Default to India for any other case
+  return 'india';
+};
+
+// Office contact information
+const OFFICE_CONTACTS = {
+  india: {
+    phone: '+91 9030225223',
+    email: 'solutions@rightpropertyhub.com',
+    address: 'Srinagar colony, Banjarahills, Hyderabad',
+    hours: 'Mon-Sat: 9:00 AM - 8:00 PM, Sun: 10:00 AM - 6:00 PM'
+  },
+  dubai: {
+    phone: '+971 50 575 5424',
+    email: 'dubai@rightpropertyhub.com',
+    address: 'Karama, Dubai, UAE',
+    hours: 'Mon-Fri: 9:00 AM - 7:00 PM, Sat: 10:00 AM - 5:00 PM'
+  }
+};
+
 const PropertyDetailPage = ({ params }: PropertyDetailPageProps) => {
     const { type, id } = params;
     const [activeImage, setActiveImage] = useState(0);
@@ -59,9 +91,12 @@ const PropertyDetailPage = ({ params }: PropertyDetailPageProps) => {
         return null;
     }
 
-    // Get similar properties of the same type
+    // Get similar properties from the same location (excluding current property)
+    const propertyLocation = getPropertyLocation(property);
     const similarProperties = getPropertiesByType(effectiveType as string)
-        .filter((p) => p.id !== effectiveId) // Exclude current property
+        .filter((p) => p.type === property.type && 
+                      p.id !== property.id && 
+                      getPropertyLocation(p) === propertyLocation)
         .slice(0, 4); // Limit to 4 similar properties
 
     return (
@@ -402,30 +437,20 @@ const PropertyDetailPage = ({ params }: PropertyDetailPageProps) => {
 
                                         {/* Contact Info */}
                                         <div className="space-y-3 w-full">
-                                            <div className="flex items-center justify-center text-gray-700">
-                                                <Mail className="h-5 w-5 mr-2 text-primary" />
-                                                <a
-                                                    href="mailto:info@rightpropertyhub.com"
-                                                    className="hover:text-primary transition-colors"
-                                                >
-                                                    info@rightpropertyhub.com
-                                                </a>
+                                            <div className="flex items-center justify-center gap-2 text-gray-600">
+                                                <Mail className="w-5 h-5 text-primary" />
+                                                <span>{OFFICE_CONTACTS[propertyLocation].email}</span>
                                             </div>
-                                            <div className="flex items-center justify-center text-gray-700">
-                                                <Phone className="h-5 w-5 mr-2 text-primary" />
-                                                <a
-                                                    href="tel:+1234567890"
-                                                    className="hover:text-primary transition-colors"
-                                                >
-                                                    +1 (234) 567-890
-                                                </a>
+                                            <div className="flex items-center justify-center gap-2 text-gray-600">
+                                                <Phone className="w-5 h-5 text-primary" />
+                                                <span>{OFFICE_CONTACTS[propertyLocation].phone}</span>
                                             </div>
                                         </div>
 
                                         {/* Social Icons */}
                                         <div className="flex space-x-4 mt-4">
                                             <a
-                                                href="#"
+                                                href="https://www.facebook.com/share/178YN4zHWH/?mibextid=wwXIfr"
                                                 className="text-gray-500 hover:text-primary transition-colors"
                                                 aria-label="Facebook"
                                             >
@@ -438,25 +463,27 @@ const PropertyDetailPage = ({ params }: PropertyDetailPageProps) => {
                                                 </svg>
                                             </a>
                                             <a
-                                                href="#"
+                                                href="https://youtube.com/@rightpropertyhubrphub?si=0pm2aHwij-YGLlXR"
                                                 className="text-gray-500 hover:text-primary transition-colors"
-                                                aria-label="Twitter"
+                                                aria-label="Youtube"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
                                             >
                                                 <svg
                                                     className="h-6 w-6"
                                                     fill="currentColor"
                                                     viewBox="0 0 24 24"
                                                 >
-                                                    <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
+                                                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
                                                 </svg>
                                             </a>
                                             <a
-                                                href="#"
+                                                href="https://www.instagram.com/right_property_hub?igsh=MW8ybDA0ZjB0c3M5bQ%3D%3D&utm_source=qr"
                                                 className="text-gray-500 hover:text-primary transition-colors"
                                                 aria-label="Instagram"
                                             >
                                                 <svg
-                                                    className="h-6 w-6"
+                                                    className="h-5 w-5 mt-[1px]"
                                                     fill="currentColor"
                                                     viewBox="0 0 24 24"
                                                 >
@@ -464,12 +491,12 @@ const PropertyDetailPage = ({ params }: PropertyDetailPageProps) => {
                                                 </svg>
                                             </a>
                                             <a
-                                                href="#"
+                                                href="http://www.linkedin.com/in/right-property-hub-0533a6385"
                                                 className="text-gray-500 hover:text-primary transition-colors"
                                                 aria-label="LinkedIn"
                                             >
                                                 <svg
-                                                    className="h-6 w-6"
+                                                    className="h-5 w-5 mt-[1px]"
                                                     fill="currentColor"
                                                     viewBox="0 0 24 24"
                                                 >
