@@ -14,6 +14,41 @@ const Navigation = () => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const [isPropertiesOpen, setIsPropertiesOpen] = useState(false);
+    // Close dropdown when clicking outside or when route changes
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            const target = event.target as HTMLElement;
+            if (isPropertiesOpen && !target.closest('.relative')) {
+                setIsPropertiesOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [isPropertiesOpen]);
+
+    // Close dropdown when route changes
+    useEffect(() => {
+        const handleRouteChange = () => {
+            setIsPropertiesOpen(false);
+            setIsOpen(false);
+        };
+        
+        // Listen for route changes
+        const handleRouteStart = () => handleRouteChange();
+        
+        window.addEventListener('routeChangeStart', handleRouteStart);
+        window.addEventListener('popstate', handleRouteStart);
+        
+        return () => {
+            window.removeEventListener('routeChangeStart', handleRouteStart);
+            window.removeEventListener('popstate', handleRouteStart);
+        };
+    }, []);
+
     const pathname = usePathname();
 
     useEffect(() => {
@@ -57,6 +92,15 @@ const Navigation = () => {
                     <Link
                         href="/"
                         className="flex items-center space-x-3 group flex-shrink-0"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            setIsOpen(false);
+                            setIsPropertiesOpen(false);
+                            // Use window.location for navigation to ensure it works on home page
+                            if (window.location.pathname !== '/') {
+                                window.location.href = '/';
+                            }
+                        }}
                     >
                         <div className="relative transform group-hover:scale-105 transition-transform duration-200">
                             <Image
@@ -77,7 +121,7 @@ const Navigation = () => {
                             
                             if (item.isDropdown) {
                                 return (
-                                    <div key={item.label} className="relative group" onMouseEnter={() => !isOpen && setIsPropertiesOpen(true)} onMouseLeave={() => !isOpen && setIsPropertiesOpen(false)}>
+                                    <div key={item.label} className="relative">
                                         <button
                                             type="button"
                                             className={cn(
@@ -92,6 +136,8 @@ const Navigation = () => {
                                                 e.stopPropagation();
                                                 setIsPropertiesOpen(!isPropertiesOpen);
                                             }}
+                                            aria-expanded={isPropertiesOpen}
+                                            aria-haspopup="true"
                                         >
                                             {item.label}
                                             <ChevronDown className={`ml-1 h-4 w-4 transition-transform duration-200 ${isPropertiesOpen ? 'transform rotate-180' : ''}`} />
@@ -99,13 +145,19 @@ const Navigation = () => {
                                         
                                         {/* Dropdown Menu */}
                                         <motion.div 
-                                            initial={{ opacity: 0, y: 10 }}
-                                            animate={isPropertiesOpen ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+                                            initial={{ opacity: 0, y: 10, display: 'none' }}
+                                            animate={isPropertiesOpen ? { 
+                                                opacity: 1, 
+                                                y: 0, 
+                                                display: 'block',
+                                                transitionEnd: { display: 'block' }
+                                            } : { 
+                                                opacity: 0, 
+                                                y: 10,
+                                                transitionEnd: { display: 'none' }
+                                            }}
                                             transition={{ duration: 0.2, ease: 'easeOut' }}
-                                            className={cn(
-                                                "absolute left-0 mt-2 w-64 bg-white rounded-xl shadow-xl overflow-hidden border border-gray-100",
-                                                isPropertiesOpen ? 'block' : 'hidden'
-                                            )}
+                                            className="absolute left-0 mt-2 w-64 bg-white rounded-xl shadow-xl overflow-hidden border border-gray-100 z-50"
                                         >
                                             <div className="py-1.5">
                                                 {item.items.map((subItem, index) => (
@@ -118,11 +170,15 @@ const Navigation = () => {
                                                         <Link
                                                             href={subItem.href}
                                                             onClick={(e) => {
+                                                                e.preventDefault();
                                                                 setIsOpen(false);
+                                                                setIsPropertiesOpen(false);
+                                                                // Use window.location for navigation to ensure it works on home page
+                                                                window.location.href = subItem.href;
                                                             }}
                                                             className={cn(
                                                                 "block px-5 py-3 text-sm font-medium transition-all duration-200 flex items-center group w-full",
-                                                                "hover:bg-primary/5 hover:text-primary",
+                                                                "hover:bg-primary/5 hover:text-primary cursor-pointer",
                                                                 pathname === subItem.href 
                                                                     ? "text-primary bg-primary/5 font-semibold" 
                                                                     : "text-gray-700"
@@ -156,12 +212,14 @@ const Navigation = () => {
                                     <Link
                                         href={item.href}
                                         onClick={(e) => {
-                                            e.stopPropagation();
+                                            e.preventDefault();
                                             setIsOpen(false);
                                             setIsPropertiesOpen(false);
+                                            // Use window.location for navigation to ensure it works on home page
+                                            window.location.href = item.href;
                                         }}
                                         className={cn(
-                                            "relative px-3 py-2 text-sm font-medium transition-colors duration-200 rounded-full whitespace-nowrap block",
+                                            "relative px-3 py-2 text-sm font-medium transition-colors duration-200 rounded-full whitespace-nowrap block cursor-pointer",
                                             "hover:text-gray-900",
                                             isActive
                                                 ? "text-gray-900 font-semibold"
@@ -185,12 +243,14 @@ const Navigation = () => {
                             <Link
                                 href="/contact"
                                 onClick={(e) => {
-                                    e.stopPropagation();
+                                    e.preventDefault();
                                     setIsOpen(false);
                                     setIsPropertiesOpen(false);
+                                    // Use window.location for navigation to ensure it works on home page
+                                    window.location.href = '/contact';
                                 }}
                                 className={cn(
-                                    "flex items-center justify-center space-x-2 font-semibold text-sm transition-all duration-300",
+                                    "flex items-center justify-center space-x-2 font-semibold text-sm transition-all duration-300 cursor-pointer",
                                     isScrolled
                                         ? "bg-gray-900 text-white border-2 border-gray-900 hover:bg-gray-800 hover:border-gray-800"
                                         : "bg-gray-900 text-white border-2 border-gray-900 hover:bg-gray-800 hover:border-gray-800",
@@ -257,12 +317,15 @@ const Navigation = () => {
                                                             >
                                                                 <Link
                                                                     href={subItem.href}
-                                                                    onClick={() => {
+                                                                    onClick={(e) => {
+                                                                        e.preventDefault();
                                                                         setIsOpen(false);
                                                                         setIsPropertiesOpen(false);
+                                                                        // Use window.location for navigation to ensure it works on home page
+                                                                        window.location.href = subItem.href;
                                                                     }}
                                                                     className={cn(
-                                                                        "block px-4 py-2.5 text-sm rounded-lg transition-all duration-200 flex items-center",
+                                                                        "block px-4 py-2.5 text-sm rounded-lg transition-all duration-200 flex items-center cursor-pointer",
                                                                         "hover:bg-primary/5 hover:text-primary",
                                                                         pathname === subItem.href
                                                                             ? "text-primary bg-primary/5 font-semibold"
@@ -293,9 +356,15 @@ const Navigation = () => {
                                         <Link
                                             key={item.href}
                                             href={item.href}
-                                            onClick={() => setIsOpen(false)}
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                setIsOpen(false);
+                                                setIsPropertiesOpen(false);
+                                                // Use window.location for navigation to ensure it works on home page
+                                                window.location.href = item.href;
+                                            }}
                                             className={cn(
-                                                "flex items-center space-x-3 px-4 py-2 rounded-full transition-colors w-full",
+                                                "flex items-center space-x-3 px-4 py-2 rounded-full transition-colors w-full cursor-pointer",
                                                 "hover:bg-gray-100",
                                                 pathname === item.href
                                                     ? "bg-gray-100 text-gray-900 font-semibold"

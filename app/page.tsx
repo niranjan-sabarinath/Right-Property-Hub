@@ -300,6 +300,19 @@ const HomePage = () => {
   const whatsappNumber = '+919030225223' // Replace with actual Indian phone number
   const whatsappUrl = `https://wa.me/${whatsappNumber}?text=Hello%20Right%20Property%20Hub,%20I'm%20interested%20in%20your%20properties`
 
+  // Ensure all links work by preventing default behavior only when necessary
+  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    // Only prevent default if it's an anchor link on the same page
+    if (href.startsWith('#')) {
+      e.preventDefault();
+      const targetId = href.substring(1);
+      const targetElement = document.getElementById(targetId);
+      if (targetElement) {
+        targetElement.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  };
+
   return (
     <div className="min-h-screen font-gotham-light relative">
       {/* Global styles for WhatsApp button animations */}
@@ -316,6 +329,11 @@ const HomePage = () => {
         }
         .animate-ping-slow {
           animation: ping-slow 3s cubic-bezier(0, 0, 0.2, 1) infinite;
+        }
+        /* Ensure links are clickable */
+        a {
+          position: relative;
+          z-index: 10;
         }
       `}</style>
       {/* WhatsApp Floating Button */}
@@ -407,18 +425,26 @@ const HomePage = () => {
             </motion.p>
 
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-6 sm:mb-8 w-full">
-              <motion.div variants={itemVariants}>
+              <motion.div variants={itemVariants} className="w-full sm:w-auto">
                 <Link
                   href="/properties/india"
-                  className="w-[calc(100%-2rem)] md:w-fit bg-primary hover:bg-primary/90 text-primary-foreground font-medium py-3 px-6 rounded-lg transition-colors duration-200 shadow-md hover:shadow-lg block text-center"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.location.href = '/properties/india';
+                  }}
+                  className="w-full sm:w-auto text-center block bg-primary hover:bg-primary/90 text-primary-foreground font-medium py-3 px-6 rounded-lg transition-colors duration-200 shadow-md hover:shadow-lg"
                 >
                   Browse Properties
                 </Link>
               </motion.div>
-              <motion.div variants={itemVariants}>
+              <motion.div variants={itemVariants} className="w-full sm:w-auto">
                 <Link
                   href="/contact"
-                  className="w-[calc(100%-2rem)] md:w-fit border-2 border-primary text-primary hover:bg-primary/10 font-medium py-3 px-6 rounded-lg transition-colors duration-200 block text-center"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.location.href = '/contact';
+                  }}
+                  className="w-full sm:w-auto text-center block border-2 border-primary text-primary hover:bg-primary/10 font-medium py-3 px-6 rounded-lg transition-colors duration-200"
                 >
                   Contact Agent
                 </Link>
