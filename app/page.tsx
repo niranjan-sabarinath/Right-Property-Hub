@@ -3,9 +3,9 @@
 import { useState, useEffect, useRef } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { Search, Building, ArrowRight, ArrowLeft, MapPin, ChevronDown, IndianRupee, X } from "lucide-react"
+import { Search, Building, ArrowRight, ArrowLeft, MapPin, ChevronDown, IndianRupee, X, MessageCircle } from "lucide-react"
 import { parsePrice } from "@/lib/price-utils"
-import { motion, useInView, useScroll, useTransform, AnimatePresence } from "framer-motion"
+import { motion, useInView, useScroll, useTransform, AnimatePresence, AnimatePresence as AnimatePresenceMotion } from "framer-motion"
 import PropertyCarousel from "@/components/property-carousel"
 import PropertyCard from "@/components/property-card"
 import PropertyFilters from "@/components/property-filters"
@@ -296,104 +296,129 @@ const HomePage = () => {
     }
   }
 
+  // WhatsApp contact number (Indian number format without +, spaces, or dashes)
+  const whatsappNumber = '919999999999' // Replace with actual Indian phone number
+  const whatsappUrl = `https://wa.me/${whatsappNumber}?text=Hello%20Right%20Property%20Hub,%20I'm%20interested%20in%20your%20properties`
+
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen font-gotham-light relative">
+      {/* Global styles for WhatsApp button animations */}
+      <style jsx global>{`
+        @keyframes ping-slow {
+          0% {
+            transform: scale(1);
+            opacity: 0.8;
+          }
+          75%, 100% {
+            transform: scale(1.5);
+            opacity: 0;
+          }
+        }
+        .animate-ping-slow {
+          animation: ping-slow 3s cubic-bezier(0, 0, 0.2, 1) infinite;
+        }
+      `}</style>
+      {/* WhatsApp Floating Button */}
+      <div className="fixed bottom-8 right-8 z-50 group">
+        <a 
+          href={whatsappUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="relative flex items-center justify-center w-16 h-16 bg-[#25D366] text-white rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-110 transform-gpu"
+          aria-label="Chat with us on WhatsApp"
+        >
+          {/* Pulsing ring effect */}
+          <span className="absolute w-full h-full rounded-full bg-[#25D366] opacity-30 animate-ping-slow"></span>
+          
+          {/* Main icon */}
+          <MessageCircle className="w-8 h-8 relative z-10" fill="currentColor" />
+          
+          {/* Tooltip */}
+          <span className="absolute right-full mr-3 px-3 py-1.5 bg-gray-900 text-white text-sm font-medium rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+            Chat with us
+            <span className="absolute top-1/2 right-0 w-2 h-2 -mr-1 bg-gray-900 transform translate-x-1/2 -translate-y-1/2 rotate-45"></span>
+          </span>
+        </a>
+      </div>
       {/* Hero Section */}
       <motion.section
         ref={heroRef}
-        className="relative min-h-screen flex flex-col md:flex-row overflow-hidden md:p-2"
+        className="relative min-h-screen flex flex-col md:flex-row overflow-hidden"
         style={{ y: heroY, opacity: heroOpacity }}
       >
-        {/* Left Side - Light Background with Content */}
-        <div className="w-full md:w-1/2 max-sm:min-h-screen bg-gradient-to-br from-primary/5 to-background p-8 md:p-16 flex flex-col justify-center items-center pt-20 md:pt-32">
+        {/* Left Side - Social Icons */}
+        <div className="hidden md:flex flex-col items-center justify-center space-y-6 px-8 py-4 fixed left-10 top-3/4 transform -translate-y-1/2 z-10">
+          <a href="https://www.facebook.com/share/178YN4zHWH/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-primary transition-colors duration-200">
+            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path fillRule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clipRule="evenodd" />
+            </svg>
+          </a>
+          <a href="https://www.instagram.com/right_property_hub?igsh=MW8ybDA0ZjB0c3M5bQ%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-pink-600 transition-colors duration-200">
+            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path fillRule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.976.045-1.505.207-1.858.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.976.207 1.505.344 1.858.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" clipRule="evenodd" />
+            </svg>
+          </a>
+          <a href="https://youtube.com/@rightpropertyhubrphub?si=0pm2aHwij-YGLlXR" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-red-600 transition-colors duration-200">
+            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path fillRule="evenodd" d="M19.812 5.418c.861.23 1.538.907 1.768 1.768C21.998 8.746 22 12 22 12s0 3.255-.418 4.814a2.504 2.504 0 0 1-1.768 1.768c-1.56.419-7.814.419-7.814.419s-6.255 0-7.814-.419a2.505 2.505 0 0 1-1.768-1.768C2 15.255 2 12 2 12s0-3.255.417-4.814a2.507 2.507 0 0 1 1.768-1.768C5.744 5 11.998 5 11.998 5s6.255 0 7.814.418ZM15.194 12 10 15.19V8.809L15.194 12Z" clipRule="evenodd" />
+            </svg>
+          </a>
+        </div>
+
+        {/* Main Content Area */}
+        <div className="w-full md:w-3/5 min-h-screen bg-gradient-to-br from-primary/5 to-background px-6 sm:px-8 md:pl-16 lg:pl-24 xl:pl-32 2xl:pl-48 pr-4 sm:pr-8 md:pr-16 flex flex-col justify-center items-start pt-24 sm:pt-28 md:pt-32 lg:pt-40 relative overflow-hidden">
+          {/* Background Graphic Elements - High Contrast */}
+          <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
+            {/* Subtle dot pattern */}
+            <div className="absolute inset-0 opacity-20">
+              <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+                <pattern id="pattern-circles" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse" patternContentUnits="userSpaceOnUse">
+                  <circle id="pattern-circle" cx="1" cy="1" r="1" className="text-primary/40"></circle>
+                </pattern>
+                <rect width="100%" height="100%" fill="url(#pattern-circles)"></rect>
+              </svg>
+            </div>
+            {/* Subtle lines */}
+            <div className="absolute top-1/2 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent"></div>
+            <div className="absolute left-1/4 top-0 w-px h-full bg-gradient-to-b from-transparent via-primary/20 to-transparent"></div>
+          </div>
           <motion.div
-            className="max-w-2xl mx-auto"
+            className="w-full max-w-2xl mx-auto"
             variants={containerVariants}
             initial="hidden"
             animate={heroInView ? "visible" : "hidden"}
           >
+            <motion.div 
+              className="text-lg sm:text-xl tracking-widest text-gray-500 mb-4 sm:mb-6 font-gotham-light"
+              variants={textRevealVariants}
+            >
+              Right <span className="text-primary">Property</span> Hub
+            </motion.div>
             <motion.h1
-              className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight mb-6 font-coco-regular"
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl mb-6 font-orange-avenue leading-tight"
             >
               Find your Dream Home in <span className="text-primary">India</span>
             </motion.h1>
             <motion.p
-              className="text-lg text-muted-foreground mb-8 max-w-lg font-coco-regular"
+              className="text-base sm:text-lg text-muted-foreground mb-6 sm:mb-8 max-w-lg"
               variants={textRevealVariants}
             >
               Discover exclusive properties in prime locations across India. Get expert advice and personalized service to find your perfect home.
             </motion.p>
 
             <motion.div
-              className="space-y-4 mb-8"
-              variants={itemVariants}
-            >
-              <div className="flex items-center text-gray-700">
-                <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mr-3">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-blue-600"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </div>
-                <span>Premium Properties</span>
-              </div>
-              <div className="flex items-center text-gray-700">
-                <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mr-3">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-blue-600"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </div>
-                <span>Verified Listings</span>
-              </div>
-              <div className="flex items-center text-gray-700">
-                <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mr-3">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-blue-600"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </div>
-                <span>24/7 Customer Support</span>
-              </div>
-            </motion.div>
-
-            <motion.div
-              className="flex flex-col sm:flex-row gap-4 mb-8"
+              className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-6 sm:mb-8 w-full"
               variants={itemVariants}
             >
               <Link
                 href="/properties"
-                className="bg-primary hover:bg-primary/90 text-primary-foreground font-medium py-3 px-6 rounded-lg transition-colors duration-200 shadow-md hover:shadow-lg"
+                className="w-[calc(100%-2rem)] md:w-fit bg-primary hover:bg-primary/90 text-primary-foreground font-medium py-3 px-6 rounded-lg transition-colors duration-200 shadow-md hover:shadow-lg"
               >
                 Browse Properties
               </Link>
               <Link
                 href="/contact"
-                className="border-2 border-primary text-primary hover:bg-primary/10 font-medium py-3 px-6 rounded-lg transition-colors duration-200"
+                className="w-[calc(100%-2rem)] md:w-fit border-2 border-primary text-primary hover:bg-primary/10 font-medium py-3 px-6 rounded-lg transition-colors duration-200"
               >
                 Contact Agent
               </Link>
@@ -401,98 +426,18 @@ const HomePage = () => {
           </motion.div>
         </div>
 
-        {/* Right Side - Image Background with Search Overlay */}
-        <div className="w-full md:w-1/2 relative md:min-h-screen">
-          <div className="absolute inset-0">
-            <Image
-              src="https://png.pngtree.com/thumb_back/fh260/background/20250712/pngtree-stone-pathway-lined-with-red-flowers-and-greenery-leading-to-an-image_17612501.webp"
-              alt="Luxury home in India"
-              fill
-              className="object-cover"
-              priority
-            />
-            {/* <div className="absolute inset-0 bg-primary/90 mix-blend-multiply"></div> */}
-          </div>
-
-          {/* Search Overlay */}
-          <div className="relative z-10 h-full flex items-center justify-center p-4 md:p-8">
-            <motion.div
-              className="w-full max-w-sm bg-background/95 backdrop-blur-sm rounded-2xl shadow-xl p-6 border border-border/50"
-              variants={morphVariants}
-              initial="hidden"
-              animate={heroInView ? "visible" : "hidden"}
-              whileHover={{ scale: 1.01, boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)' }}
-              transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-            >
-              <form onSubmit={handleSearch} className="space-y-3">
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <MapPin className="h-5 w-5 text-muted-foreground" />
-                  </div>
-                  <input
-                    type="text"
-                    id="location"
-                    value={searchParams.location || ''}
-                    onChange={(e) => setSearchParams({ ...searchParams, location: e.target.value })}
-                    placeholder="Search by location, city, or landmark"
-                    className="w-full pl-10 pr-4 py-3 rounded-xl border border-border/50 bg-background/80 text-foreground focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none"
-                  />
-                  {searchParams.location && (
-                    <button
-                      type="button"
-                      onClick={() => setSearchParams({ ...searchParams, location: '' })}
-                      className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                    >
-                      <X className="h-4 w-4 text-muted-foreground hover:text-foreground" />
-                    </button>
-                  )}
-                </div>
-
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="relative">
-                    <select
-                      id="type"
-                      value={searchParams.type}
-                      onChange={(e) => setSearchParams({ ...searchParams, type: e.target.value })}
-                      className="w-full pl-3 pr-8 py-3 rounded-xl border border-border/50 bg-background/80 text-foreground focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none appearance-none"
-                      required
-                    >
-                      <option value="">Any Type</option>
-                      <option value="apartment">Apartment</option>
-                      <option value="villa">Villa</option>
-                      <option value="plot">Plot</option>
-                    </select>
-                    <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
-                  </div>
-
-                  <div className="relative">
-                    <select
-                      id="priceRange"
-                      value={searchParams.priceRange}
-                      onChange={(e) => setSearchParams({ ...searchParams, priceRange: e.target.value })}
-                      className="w-full pl-3 pr-8 py-3 rounded-xl border border-border/50 bg-background/80 text-foreground focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none appearance-none"
-                      required
-                    >
-                      <option value="">Any Price</option>
-                      <option value="0-50">Under ₹50L</option>
-                      <option value="50-100">₹50L - ₹1C</option>
-                      <option value="100-200">₹1C - ₹2C</option>
-                      <option value="200+">₹2C+</option>
-                    </select>
-                    <IndianRupee className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                    <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
-                  </div>
-                </div>
-
-                <button
-                  type="submit"
-                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium py-3.5 px-6 rounded-xl transition-all duration-200 flex items-center justify-center space-x-2 shadow-md hover:shadow-lg"
-                >
-                  <Search className="h-5 w-5" />
-                  <span>Search</span>
-                </button>
-              </form>
-            </motion.div>
+        {/* Right Side - Image (40% width) */}
+        <div className="w-full md:w-2/5 relative pt-20 md:pt-24 hidden md:block bg-gradient-to-br from-primary/5 to-background">
+          <div className="sticky top-20 md:top-24 h-[calc(100vh-5rem)] md:h-[calc(100vh-6rem)]">
+            <div className="relative w-full h-full">
+              <Image
+                src="https://images.pexels.com/photos/18729504/pexels-photo-18729504.jpeg?cs=srgb&dl=pexels-alex-gem-3927447-18729504.jpg&fm=jpg"
+                alt="Luxury home in India"
+                fill
+                className="object-cover"
+                priority
+              />
+            </div>
           </div>
         </div>
       </motion.section>
@@ -528,10 +473,10 @@ const HomePage = () => {
               variants={itemVariants}
             >
               <motion.h2
-                className="text-3xl md:text-6xl font-medium text-gray-900 font-coco-regular w-full md:w-auto"
+                className="text-3xl md:text-6xl font-medium text-gray-900 font-orange-avenue w-full md:w-auto"
                 variants={textRevealVariants}
               >
-                Discover Our Collection
+                Discover Our <span className="text-primary">Collection</span>
               </motion.h2>
               <motion.div
                 variants={itemVariants}
@@ -553,7 +498,7 @@ const HomePage = () => {
             </motion.div>
 
             <motion.p
-              className="text-base md:text-lg text-gray-600 md:max-w-xl lg:max-w-2xl font-coco-regular leading-6"
+              className="text-base md:text-lg text-gray-600 md:max-w-xl lg:max-w-2xl max-sm:text-center leading-6"
               variants={textRevealVariants}
             >
               Discover our handpicked selection of premium properties, designed to bring you closer to your dream home.
@@ -696,12 +641,12 @@ const HomePage = () => {
                   transition={{ delay: index * 0.15 + 0.3 }}
                 >
                   <h3
-                    className="text-lg font-coco-regular text-gray-900 group-hover:text-primary transition-colors"
+                    className="text-lg font-bold text-gray-900 group-hover:text-primary transition-colors"
                   >
                     {property.title}
                   </h3>
                   <p className="text-gray-600">
-                    <span className="text-sm font-coco-light">{property.location}</span>
+                    <span className="text-sm">{property.location}</span>
                   </p>
                 </motion.div>
               </motion.div>
@@ -738,7 +683,7 @@ const HomePage = () => {
               What We Do
             </motion.span>
             <motion.h2
-              className="text-3xl md:text-6xl font-medium text-gray-900 font-coco-regular"
+              className="text-3xl md:text-6xl text-gray-900 font-orange-avenue"
               variants={textRevealVariants}
             >
               Guiding you through every step of buying, selling, and living with confidence
@@ -770,7 +715,7 @@ const HomePage = () => {
                 whileHover={{ scale: 1.02 }}
               >
                 <Image
-                  src="https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&w=1200"
+                  src="/images/story.jpg"
                   alt="Luxury Property"
                   fill
                   className="object-cover"
@@ -787,7 +732,7 @@ const HomePage = () => {
                 transition={{ duration: 1, delay: 0.5 }}
               >
                 <motion.p
-                  className="text-gray-300 sm:mb-6 text-base md:text-lg lg:text-xl xl:text-2xl font-coco-light tracking-wide"
+                  className="text-gray-300 sm:mb-6 text-base md:text-lg lg:text-xl xl:text-2xl tracking-wide"
                   variants={textRevealVariants}
                 >
                   At Right Property Hub, we're dedicated to helping you find your dream property or get the best value
@@ -803,7 +748,7 @@ const HomePage = () => {
                 >
                   <Link
                     href="/about"
-                    className="mt-4 sm:mt-6 md:mt-8 inline-flex items-center bg-neutral-200 justify-center w-12 h-12 md:w-14 md:h-14 rounded-full border border-gray-600 hover:bg-white/10 transition-colors group"
+                    className="mt-4 inline-flex items-center bg-neutral-200 justify-center w-12 h-12 md:w-14 md:h-14 rounded-full border border-gray-600 hover:bg-white/10 transition-colors group"
                   >
                     <ArrowRight className="w-6 h-6 text-black group-hover:text-primary transition-colors" />
                   </Link>
@@ -818,7 +763,7 @@ const HomePage = () => {
       <motion.section
         ref={propertiesRef}
         id="properties-section"
-        className="py-20 relative overflow-hidden"
+        className="py-20 relative overflow-hidden bg-gray-50"
         initial={{ opacity: 0 }}
         animate={propertiesInView ? { opacity: 1 } : { opacity: 0 }}
         transition={{ duration: 1 }}
@@ -831,7 +776,7 @@ const HomePage = () => {
             animate={propertiesInView ? "visible" : "hidden"}
           >
             <motion.div
-              className="absolute -top-6 left-4 md:left-44 right-0 flex items-center z-0"
+              className="absolute -top-6 left-12 md:left-44 right-0 flex items-center z-0"
               initial={{ opacity: 0, x: -100 }}
               animate={propertiesInView ? { opacity: 0.3, x: 0 } : { opacity: 0, x: -100 }}
               transition={{ duration: 1.2, delay: 0.3 }}
@@ -846,10 +791,10 @@ const HomePage = () => {
               variants={itemVariants}
             >
               <motion.h2
-                className="text-3xl md:text-6xl font-medium text-gray-900 font-coco-regular"
+                className="text-3xl md:text-6xl font-medium text-gray-900 font-orange-avenue max-sm:text-center"
                 variants={textRevealVariants}
               >
-                Explore our premier spaces
+                Explore our <br className="md:hidden" /> <span className="text-primary">premier</span> spaces
               </motion.h2>
               <motion.div
                 variants={itemVariants}
@@ -866,7 +811,7 @@ const HomePage = () => {
             </motion.div>
 
             <motion.p
-              className="text-base md:text-lg text-gray-600 md:max-w-xl lg:max-w-2xl font-coco-regular leading-6"
+              className="text-base md:text-lg text-gray-600 md:max-w-xl lg:max-w-2xl leading-6 max-sm:text-center"
               variants={textRevealVariants}
             >
               Browse our complete collection of available properties and discover the perfect place that fits your
@@ -1092,7 +1037,7 @@ const HomePage = () => {
                 Testimonials
               </motion.span>
               <motion.h2
-                className="text-3xl md:text-5xl font-medium text-gray-900 mb-6 font-coco-regular"
+                className="text-3xl md:text-5xl font-medium text-gray-900 mb-6 font-orange-avenue"
                 variants={textRevealVariants}
               >
                 Discover what clients are saying about us
@@ -1164,7 +1109,7 @@ const HomePage = () => {
                       boxShadow: "0 20px 40px rgba(0,0,0,0.1)",
                     }}
                   >
-                    <p className="text-gray-600 leading-relaxed mb-6 font-coco-regular">"{testimonial.content}"</p>
+                    <p className="text-gray-600 leading-relaxed mb-6 ">"{testimonial.content}"</p>
                     <div className="flex items-center space-x-4 pt-8 border-t border-gray-100">
                       <motion.div
                         className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0"
@@ -1226,15 +1171,30 @@ const HomePage = () => {
                   },
                 }}
               >
-                {[...Array(3)].map((_, loop) => (
-                  <div key={loop} className="inline-flex items-center space-x-12 md:space-x-24 mr-12 md:mr-24">
-                    {["Client 1", "Client 2", "Client 3", "Client 4", "Client 5", "Client 6"].map((client, i) => (
+                {[...Array(2)].map((_, loop) => (
+                  <div key={loop} className="inline-flex items-center space-x-12 md:space-x-16 mr-12 md:mr-16">
+                    {[
+                      { name: "Prestige", logo: "/images/clients/prestige.png" },
+                      { name: "Brigade", logo: "/images/clients/brigade.png" },
+                      { name: "Godrej Properties", logo: "/images/clients/godrej.png" },
+                      { name: "SBI", logo: "/images/clients/sbi.png" },
+                      { name: "HDFC", logo: "/images/clients/hdfc.png" },
+                      { name: "ICICI", logo: "/images/clients/icici.png" }
+                    ].map((client, i) => (
                       <motion.div
                         key={`${i}-${loop}`}
-                        className="inline-flex items-center justify-center opacity-60 hover:opacity-100 transition-opacity duration-300"
+                        className="inline-flex items-center justify-center opacity-60 hover:opacity-100 transition-all duration-300"
                         whileHover={{ scale: 1.1 }}
                       >
-                        <span className="text-2xl md:text-3xl font-coco-light text-gray-700">{client}</span>
+                        <div className="relative h-12 w-32 md:h-16 md:w-40 flex items-center justify-center">
+                          <Image
+                            src={client.logo}
+                            alt={client.name}
+                            fill
+                            className="object-contain"
+                            sizes="(max-width: 768px) 120px, 160px"
+                          />
+                        </div>
                       </motion.div>
                     ))}
                   </div>
@@ -1272,7 +1232,7 @@ const HomePage = () => {
         >
           <motion.div className="space-y-8" variants={itemVariants}>
             <motion.h2
-              className="text-3xl md:text-6xl font-light text-white font-coco-regular"
+              className="text-3xl md:text-6xl font-light text-white font-orange-avenue"
               variants={textRevealVariants}
             >
               Ready to Make your Dream Property a Reality ?
@@ -1283,7 +1243,7 @@ const HomePage = () => {
             <motion.div variants={morphVariants} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Link href="/properties/dubai">
                 <Button
-                  className="px-8 py-4 text-lg rounded-3xl bg-white text-gray-900 hover:bg-gray-100 transition-colors font-medium group"
+                  className="px-5 sm:px-6 py-2.5 sm:py-3 bg-primary text-white rounded-md hover:bg-primary/90 transition-colors font-medium text-sm sm:text-base w-full sm:w-auto text-center"
                   size="lg"
                 >
                   View Properties

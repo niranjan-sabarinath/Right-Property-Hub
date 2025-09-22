@@ -9,11 +9,31 @@ import { containerVariants, itemVariants, socialVariants, textRevealVariants, lo
 const Footer = () => {
   const currentYear = new Date().getFullYear()
   const socialIcons = [
-    { icon: Facebook, url: "https://www.facebook.com/share/178YN4zHWH/?mibextid=wwXIfr" },
-    { icon: Youtube, url: "https://youtube.com/@rightpropertyhubrphub?si=0pm2aHwij-YGLlXR" },
-    { icon: Instagram, url: "https://www.instagram.com/right_property_hub?igsh=MW8ybDA0ZjB0c3M5bQ%3D%3D&utm_source=qr" },
-    { icon: Linkedin, url: "http://www.linkedin.com/in/right-property-hub-0533a6385" },
-    { icon: Mail, url: "mailto:solutions@rightpropertyhub.com" },
+    { 
+      icon: Facebook, 
+      url: "https://www.facebook.com/share/178YN4zHWH/?mibextid=wwXIfr",
+      hoverClass: "hover:bg-[#1877F2] hover:text-white" // Facebook blue
+    },
+    { 
+      icon: Youtube, 
+      url: "https://youtube.com/@rightpropertyhubrphub?si=0pm2aHwij-YGLlXR",
+      hoverClass: "hover:bg-[#FF0000] hover:text-white" // YouTube red
+    },
+    { 
+      icon: Instagram, 
+      url: "https://www.instagram.com/right_property_hub?igsh=MW8ybDA0ZjB0c3M5bQ%3D%3D&utm_source=qr",
+      hoverClass: "hover:bg-gradient-to-r hover:from-[#833AB4] hover:via-[#FD1D1D] hover:to-[#FCB045] hover:text-white" // Instagram gradient
+    },
+    { 
+      icon: Linkedin, 
+      url: "http://www.linkedin.com/in/right-property-hub-0533a6385",
+      hoverClass: "hover:bg-[#0077B5] hover:text-white" // LinkedIn blue
+    },
+    { 
+      icon: Mail, 
+      url: "mailto:solutions@rightpropertyhub.com",
+      hoverClass: "hover:bg-[#EA4335] hover:text-white" // Gmail red
+    },
   ]
 
   const navLinks = [
@@ -89,10 +109,10 @@ const Footer = () => {
         <div className="flex flex-col space-y-8 md:space-y-0 md:flex-row justify-between items-start">
           {/* Quote */}
           <motion.div className="w-full md:w-2/3" variants={textRevealVariants}>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-coco-light text-gray-900 leading-tight">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-orange-avenue text-gray-900">
               Your perfect property journey starts with{" "}
               <motion.span
-                className="font-coco-regular"
+                className="text-primary"
                 whileHover={{
                   color: "#3b82f6",
                   transition: { duration: 0.3 },
@@ -213,17 +233,19 @@ const Footer = () => {
               {/* Social Icons */}
               <div className="w-full md:flex-1">
                 <div className="flex justify-center md:justify-end items-center space-x-4 sm:space-x-6">
-                  {socialIcons.map(({ icon: Icon, url }, index) => (
+                  {socialIcons.map(({ icon: Icon, url, hoverClass }, index) => (
                     <motion.a
                       key={index}
                       href={url}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       custom={index}
                       variants={socialVariants}
                       initial="hidden"
                       animate="visible"
                       whileHover="hover"
                       whileTap={{ scale: 0.9 }}
-                      className="text-gray-400 hover:text-gray-900 transition-colors"
+                      className={`text-gray-700 transition-colors rounded-full p-2 ${hoverClass}`}
                       aria-label={`Social media link ${index + 1}`}
                     >
                       <Icon className="w-4 h-4 sm:w-5 sm:h-5" />

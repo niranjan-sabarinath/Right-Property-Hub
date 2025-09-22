@@ -86,9 +86,9 @@ const team = [
 
 const AboutPage = () => {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 font-gotham-light">
       <PageHeader 
-        title="About Right Property Hub"
+        title="Right Property Hub"
         subtitle="Your Search Ends Here"
       />
 

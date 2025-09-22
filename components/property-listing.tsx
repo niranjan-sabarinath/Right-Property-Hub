@@ -236,8 +236,8 @@ const PropertyListing: React.FC<PropertyListingProps> = ({
                 <div className="container px-4 sm:px-6 lg:px-8 mx-auto">
                     {/* Page Header */}
                     <div className="text-center mb-4">
-                        <h1 className="text-3xl md:text-5xl font-coco-regular tracking-tight text-foreground mb-3">
-                            Properties in <span className="capitalize">{propProperties[0]?.locationType}</span>
+                        <h1 className="text-3xl md:text-5xl font-orange-avenue tracking-tight text-foreground mb-3">
+                            Properties in <span className="capitalize text-primary">{propProperties[0]?.locationType}</span>
                         </h1>
                         <p className="text-lg text-gray-600">
                             Discover our selection of premium properties

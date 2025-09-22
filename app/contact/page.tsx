@@ -133,7 +133,7 @@ const ContactPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 font-gotham-light">
       <PageHeader 
         title="Get in Touch"
         subtitle="Have questions? We're here to help. Contact us today and our team will get back to you as soon as possible."

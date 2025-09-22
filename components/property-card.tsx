@@ -96,7 +96,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
           <div className="h-4 w-px bg-gray-200" />
           <div className="flex items-center">
             <Square className="mr-1.5 h-3.5 w-3.5 text-gray-500" />
-            <span className="text-sm font-medium text-gray-700">{property.area} sq ft</span>
+            <span className="text-sm font-medium text-gray-700">{property.area}</span>
           </div>
         </div>
 

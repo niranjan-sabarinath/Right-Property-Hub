@@ -61,7 +61,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
           className="max-w-3xl mx-auto text-center"
         >
           <motion.h1 
-            className="text-4xl md:text-5xl lg:text-6xl font-coco-regular text-gray-900 leading-tight"
+            className="text-4xl md:text-5xl lg:text-6xl font-orange-avenue text-gray-900"
           >
             {title}
           </motion.h1>
