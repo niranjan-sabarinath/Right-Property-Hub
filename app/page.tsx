@@ -406,23 +406,24 @@ const HomePage = () => {
               Discover exclusive properties in prime locations across India. Get expert advice and personalized service to find your perfect home.
             </motion.p>
 
-            <motion.div
-              className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-6 sm:mb-8 w-full"
-              variants={itemVariants}
-            >
-              <Link
-                href="/properties"
-                className="w-[calc(100%-2rem)] md:w-fit bg-primary hover:bg-primary/90 text-primary-foreground font-medium py-3 px-6 rounded-lg transition-colors duration-200 shadow-md hover:shadow-lg"
-              >
-                Browse Properties
-              </Link>
-              <Link
-                href="/contact"
-                className="w-[calc(100%-2rem)] md:w-fit border-2 border-primary text-primary hover:bg-primary/10 font-medium py-3 px-6 rounded-lg transition-colors duration-200"
-              >
-                Contact Agent
-              </Link>
-            </motion.div>
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-6 sm:mb-8 w-full">
+              <motion.div variants={itemVariants}>
+                <Link
+                  href="/properties/india"
+                  className="w-[calc(100%-2rem)] md:w-fit bg-primary hover:bg-primary/90 text-primary-foreground font-medium py-3 px-6 rounded-lg transition-colors duration-200 shadow-md hover:shadow-lg block text-center"
+                >
+                  Browse Properties
+                </Link>
+              </motion.div>
+              <motion.div variants={itemVariants}>
+                <Link
+                  href="/contact"
+                  className="w-[calc(100%-2rem)] md:w-fit border-2 border-primary text-primary hover:bg-primary/10 font-medium py-3 px-6 rounded-lg transition-colors duration-200 block text-center"
+                >
+                  Contact Agent
+                </Link>
+              </motion.div>
+            </div>
           </motion.div>
         </div>
 

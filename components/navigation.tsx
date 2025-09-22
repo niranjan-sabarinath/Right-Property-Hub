@@ -47,6 +47,9 @@ const Navigation = () => {
                     ? "glass-effect shadow-lg py-0"
                     : "bg-transparent py-0"
             )}
+            style={{
+                pointerEvents: 'auto' // Ensure pointer events are enabled
+            }}
         >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-20 w-full">
@@ -76,6 +79,7 @@ const Navigation = () => {
                                 return (
                                     <div key={item.label} className="relative group" onMouseEnter={() => !isOpen && setIsPropertiesOpen(true)} onMouseLeave={() => !isOpen && setIsPropertiesOpen(false)}>
                                         <button
+                                            type="button"
                                             className={cn(
                                                 "flex items-center px-3 py-1 text-sm font-medium transition-colors duration-200 rounded-full whitespace-nowrap",
                                                 "hover:text-gray-900 focus:outline-none",
@@ -83,7 +87,11 @@ const Navigation = () => {
                                                     ? "text-gray-900 font-semibold"
                                                     : "text-gray-600"
                                             )}
-                                            onClick={() => setIsPropertiesOpen(!isPropertiesOpen)}
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                e.stopPropagation();
+                                                setIsPropertiesOpen(!isPropertiesOpen);
+                                            }}
                                         >
                                             {item.label}
                                             <ChevronDown className={`ml-1 h-4 w-4 transition-transform duration-200 ${isPropertiesOpen ? 'transform rotate-180' : ''}`} />
@@ -109,8 +117,11 @@ const Navigation = () => {
                                                     >
                                                         <Link
                                                             href={subItem.href}
+                                                            onClick={(e) => {
+                                                                setIsOpen(false);
+                                                            }}
                                                             className={cn(
-                                                                "block px-5 py-3 text-sm font-medium transition-all duration-200 flex items-center group",
+                                                                "block px-5 py-3 text-sm font-medium transition-all duration-200 flex items-center group w-full",
                                                                 "hover:bg-primary/5 hover:text-primary",
                                                                 pathname === subItem.href 
                                                                     ? "text-primary bg-primary/5 font-semibold" 
@@ -141,38 +152,56 @@ const Navigation = () => {
                             if (!item.href) return null;
                             
                             return (
-                                <Link
-                                    key={item.href}
-                                    href={item.href}
-                                    className={cn(
-                                        "relative px-3 py-2 text-sm font-medium transition-colors duration-200 rounded-full whitespace-nowrap",
-                                        "hover:text-gray-900",
-                                        isActive
-                                            ? "text-gray-900 font-semibold"
-                                            : "text-gray-600"
-                                    )}
-                                >
-                                    {item.label}
-                                </Link>
+                                <div key={item.href} className="relative group">
+                                    <Link
+                                        href={item.href}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setIsOpen(false);
+                                            setIsPropertiesOpen(false);
+                                        }}
+                                        className={cn(
+                                            "relative px-3 py-2 text-sm font-medium transition-colors duration-200 rounded-full whitespace-nowrap block",
+                                            "hover:text-gray-900",
+                                            isActive
+                                                ? "text-gray-900 font-semibold"
+                                                : "text-gray-600"
+                                        )}
+                                    >
+                                        {item.label}
+                                        <span className={cn(
+                                            "absolute -bottom-1 left-3 right-3 h-0.5 bg-primary transition-all duration-300 transform scale-x-0 group-hover:scale-x-100",
+                                            isActive ? 'scale-x-100' : ''
+                                        )}></span>
+                                    </Link>
+                                </div>
                             );
                         })}
                     </div>
 
                     {/* CTA Link - Pushed to the right */}
                     <div className="hidden md:flex ml-auto">
-                        <Link
-                            href="/contact"
-                            className={cn(
-                                "flex items-center uppercase space-x-2 font-semibold text-sm transition-colors duration-200",
-                                isScrolled
-                                    ? "bg-gray-900 text-white border-2 border-gray-900 hover:bg-gray-800 hover:border-gray-800"
-                                    : "bg-gray-900 text-white border-2 border-gray-900 hover:bg-gray-800 hover:border-gray-800",
-                                "px-4 py-1.5 rounded-full transition-all duration-300 shadow-md hover:shadow-lg"
-                            )}
-                        >
-                            <span>Get in Touch</span>
-                            <ArrowRight className="w-4 h-4" />
-                        </Link>
+                        <div className="relative group">
+                            <Link
+                                href="/contact"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setIsOpen(false);
+                                    setIsPropertiesOpen(false);
+                                }}
+                                className={cn(
+                                    "flex items-center justify-center space-x-2 font-semibold text-sm transition-all duration-300",
+                                    isScrolled
+                                        ? "bg-gray-900 text-white border-2 border-gray-900 hover:bg-gray-800 hover:border-gray-800"
+                                        : "bg-gray-900 text-white border-2 border-gray-900 hover:bg-gray-800 hover:border-gray-800",
+                                    "px-4 py-1.5 rounded-full shadow-md hover:shadow-lg relative overflow-hidden group"
+                                )}
+                            >
+                                <span className="relative z-10">Get in Touch</span>
+                                <ArrowRight className="w-4 h-4 relative z-10 group-hover:translate-x-1 transition-transform duration-200" />
+                                <span className="absolute inset-0 bg-gray-800 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+                            </Link>
+                        </div>
                     </div>
 
                     {/* Mobile Menu - Moved to the right */}
