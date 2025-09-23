@@ -229,6 +229,22 @@ const AboutPage = () => {
       <section className="py-16 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold text-gray-900 mb-8">Why Choose Us?</h2>
+          
+          {/* Trust & Certification Badge */}
+          <div className="bg-blue-50 border border-blue-100 rounded-lg p-4 mb-12 max-w-2xl mx-auto">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <div className="flex-shrink-0 bg-white p-3 rounded-full shadow-sm">
+                <Shield className="w-8 h-8 text-blue-600" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-1">Trusted & Certified</h3>
+                <p className="text-gray-600 text-sm">
+                  RERA Certified: <span className="font-medium">A02500004422</span>
+                </p>
+              </div>
+            </div>
+          </div>
+          
           <div className="grid md:grid-cols-2 gap-6">
             <div className="flex items-start">
               <div className="flex-shrink-0 mt-1">

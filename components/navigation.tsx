@@ -66,7 +66,7 @@ const Navigation = () => {
             icon: Building,
             isDropdown: true,
             items: [
-                { href: "/properties/india", label: "Indian Properties" },
+                { href: "/properties/india", label: "India Properties" },
                 { href: "/properties/dubai", label: "Dubai Properties" }
             ]
         },
@@ -106,9 +106,9 @@ const Navigation = () => {
                             <Image
                                 src="/images/logo.png"
                                 alt="Right Property Hub Logo"
-                                height={120}
-                                width={120}
-                                className="object-contain"
+                                height={140}
+                                width={140}
+                                className=""
                                 priority
                             />
                         </div>

@@ -17,7 +17,6 @@ import { Property } from "@/data/properties";
 export interface PropertyListingProps {
     filters?: {
         status: string;
-        type: 'residential' | 'commercial' | 'vacation' | 'luxury' | 'all';
         minPrice: string;
         maxPrice: string;
         bedrooms: string;
@@ -31,7 +30,6 @@ export interface PropertyListingProps {
 const PropertyListing: React.FC<PropertyListingProps> = ({
     filters: initialFilters = {
         status: "all",
-        type: "all",
         minPrice: "",
         maxPrice: "",
         bedrooms: "all",
@@ -48,7 +46,6 @@ const PropertyListing: React.FC<PropertyListingProps> = ({
     const [selectedProperties, setSelectedProperties] = useState<string[]>([]);
     const [filters, setFilters] = useState({
         status: initialFilters.status || "all",
-        type: initialFilters.type || "all",
         bedrooms: initialFilters.bedrooms || "all",
         sort: initialFilters.sort || "featured",
         minPrice: initialFilters.minPrice || "",
@@ -57,6 +54,46 @@ const PropertyListing: React.FC<PropertyListingProps> = ({
 
     // Use provided properties or fallback to sample data
     const [properties, setProperties] = useState<Property[]>(propProperties || []);
+
+    // Parse price string to number, handling various formats
+    const parsePrice = (price: string | number): number => {
+        if (typeof price === 'number') return price;
+        if (!price) return 0;
+        
+        // Handle price ranges (take the first price)
+        const priceStr = price.split('–')[0].trim();
+        
+        // Check for Indian currency format (₹)
+        if (priceStr.includes('₹')) {
+            // Handle crores (CR, Cr, cr)
+            if (priceStr.toLowerCase().includes('cr')) {
+                const value = priceStr.replace(/[^0-9.]/g, '');
+                return parseFloat(value) * 10000000; // Convert crores to base units
+            }
+            // Handle lakhs (L, Lacs, lacs)
+            else if (priceStr.toLowerCase().includes('l')) {
+                const value = priceStr.replace(/[^0-9.]/g, '');
+                return parseFloat(value) * 100000; // Convert lakhs to base units
+            }
+            // Handle regular numbers with commas
+            else {
+                return parseFloat(priceStr.replace(/[^0-9.]/g, '')) || 0;
+            }
+        }
+        // Handle AED format (AED 1,800,000)
+        else if (priceStr.includes('AED')) {
+            return parseFloat(priceStr.replace(/[^0-9.]/g, '')) || 0;
+        }
+        // Handle plain numbers
+        else {
+            return parseFloat(priceStr.replace(/[^0-9.]/g, '')) || 0;
+        }
+    };
+    
+    // Special function for sorting that handles all price formats consistently
+    const parsePriceForSort = (price: string | number): number => {
+        return parsePrice(price);
+    };
 
     // Update properties if prop changes
     useEffect(() => {
@@ -92,13 +129,8 @@ const PropertyListing: React.FC<PropertyListingProps> = ({
     // Utility function to update filters while preserving all required fields
     const updateFilters = (updates: Partial<typeof filters>) => {
         setFilters(prev => ({
-            status: prev.status,
-            type: prev.type,
-            bedrooms: prev.bedrooms,
-            sort: prev.sort,
-            minPrice: prev.minPrice,
-            maxPrice: prev.maxPrice,
-            ...updates
+            ...prev,
+            ...updates,
         }));
     };
 
@@ -121,8 +153,16 @@ const PropertyListing: React.FC<PropertyListingProps> = ({
                 return false;
             }
 
-            // Filter by type if not 'all'
-            if (filters.type !== "all" && property.type !== filters.type) {
+            // Filter by price range
+            const propertyPrice = parsePrice(property.price);
+            const minPrice = filters.minPrice ? parseFloat(filters.minPrice) * 10000000 : 0; // Convert CR to base units
+            const maxPrice = filters.maxPrice ? parseFloat(filters.maxPrice) * 10000000 : Number.MAX_SAFE_INTEGER; // Convert CR to base units
+            
+            // Debug logging (can be removed after verification)
+            console.log('Property:', property.title, 'Price:', propertyPrice, 'Min:', minPrice, 'Max:', maxPrice, 'Passes:', propertyPrice >= minPrice && propertyPrice <= maxPrice);
+            
+            // Check if property price is within the selected range
+            if (propertyPrice < minPrice || propertyPrice > maxPrice) {
                 return false;
             }
 
@@ -132,42 +172,6 @@ const PropertyListing: React.FC<PropertyListingProps> = ({
                 if (property.bedrooms < bedrooms) {
                     return false;
                 }
-            }
-
-            // Filter by price range
-            const parsePrice = (priceStr: string): number => {
-                if (!priceStr) return 0;
-                
-                // Handle AED prices (e.g., "AED 1,800,000")
-                if (priceStr.includes('AED')) {
-                    return parseFloat(priceStr.replace(/[^0-9.]/g, ''));
-                }
-                
-                // Handle Indian prices (e.g., "₹2.90 CR" or "₹40.00 L")
-                if (priceStr.includes('₹')) {
-                    const value = parseFloat(priceStr.replace(/[^0-9.]/g, ''));
-                    if (priceStr.includes('CR')) {
-                        return value * 10000000; // Convert crores to base units
-                    } else if (priceStr.includes('L')) {
-                        return value * 100000; // Convert lakhs to base units
-                    }
-                    return value;
-                }
-                
-                // Default case for numeric strings
-                return parseFloat(priceStr);
-            };
-            
-            const propertyPrice = parsePrice(property.price);
-            const minPrice = parsePrice(filters.minPrice);
-            const maxPrice = parsePrice(filters.maxPrice);
-            
-            if (minPrice > 0 && propertyPrice < minPrice) {
-                return false;
-            }
-            
-            if (maxPrice > 0 && propertyPrice > maxPrice) {
-                return false;
             }
 
             // Filter by location if provided
@@ -298,26 +302,56 @@ const PropertyListing: React.FC<PropertyListingProps> = ({
                     </div>
 
                     {/* Filter controls */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-12 p-6 rounded-xl border border-gray-200 bg-gray-100">
-                        <div className="space-y-1.5">
-                            <label className="text-sm font-medium text-muted-foreground">
-                                Property Type
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                        {/* Min Price Filter */}
+                        <div className="space-y-1">
+                            <label className="text-sm font-medium text-gray-700 block" htmlFor="min-price">
+                                Min Price (₹ In CR)
                             </label>
-                            <Select
-                                value={filters.type}
-                                onValueChange={(value) => updateFilters({ type: value as any })}
-                            >
-                                <SelectTrigger className="h-10">
-                                    <SelectValue placeholder="Select type" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="all">All Types</SelectItem>
-                                    <SelectItem value="residential">Residential</SelectItem>
-                                    <SelectItem value="commercial">Commercial</SelectItem>
-                                    <SelectItem value="vacation">Vacation</SelectItem>
-                                    <SelectItem value="luxury">Luxury</SelectItem>
-                                </SelectContent>
-                            </Select>
+                            <input
+                                type="number"
+                                id="min-price"
+                                step="0.01"
+                                min="0"
+                                value={filters.minPrice}
+                                onChange={(e) => {
+                                    const value = e.target.value;
+                                    // Only allow numbers and one decimal point
+                                    if (value === '' || /^\d*\.?\d*$/.test(value)) {
+                                        updateFilters({ 
+                                            minPrice: value,
+                                            // Reset max price if it's less than min price
+                                            ...(filters.maxPrice && parseFloat(filters.maxPrice) < parseFloat(value) ? { maxPrice: '' } : {})
+                                        });
+                                    }
+                                }}
+                                placeholder="0.00"
+                                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                            />
+                        </div>
+
+                        {/* Max Price Filter */}
+                        <div className="space-y-1">
+                            <label className="text-sm font-medium text-gray-700 block" htmlFor="max-price">
+                                Max Price (₹ In CR)
+                            </label>
+                            <input
+                                type="number"
+                                id="max-price"
+                                step="0.01"
+                                min={filters.minPrice || '0'}
+                                value={filters.maxPrice}
+                                onChange={(e) => {
+                                    const value = e.target.value;
+                                    // Only allow numbers and one decimal point
+                                    if (value === '' || /^\d*\.?\d*$/.test(value)) {
+                                        updateFilters({ maxPrice: value });
+                                    }
+                                }}
+                                placeholder="Any"
+                                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                disabled={!filters.minPrice}
+                            />
                         </div>
 
                         <div className="space-y-1.5">
@@ -368,11 +402,10 @@ const PropertyListing: React.FC<PropertyListingProps> = ({
                                 onClick={() => {
                                     updateFilters({
                                         status: "all",
-                                        type: "all",
                                         bedrooms: "all",
                                         sort: "featured",
                                         minPrice: "",
-                                        maxPrice: ""
+                                        maxPrice: "",
                                     });
                                 }}
                             >
@@ -433,11 +466,10 @@ const PropertyListing: React.FC<PropertyListingProps> = ({
                                     onClick={() => {
                                         updateFilters({
                                             status: "all",
-                                            type: "all",
                                             bedrooms: "all",
                                             sort: "featured",
                                             minPrice: "",
-                                            maxPrice: ""
+                                            maxPrice: "",
                                         });
                                     }}
                                 >

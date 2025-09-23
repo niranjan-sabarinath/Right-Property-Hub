@@ -58,10 +58,22 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
     onCompare?.(property)
   }
 
-  const cardContent = (
-    <div className="group w-full bg-white rounded-t-lg">
+  const handleCardClick = (e: React.MouseEvent) => {
+    // Only navigate if the click was not on a button or link
+    const target = e.target as HTMLElement;
+    if (target.closest('button, a, [role="button"]')) {
+      return;
+    }
+    window.location.href = `/properties/${property.type}/${property.id}`;
+  };
+
+  return (
+    <div 
+      className="group w-full bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 cursor-pointer"
+      onClick={handleCardClick}
+    >
       {/* Image with status badge */}
-      <div className="relative mb-3 h-64 w-full overflow-hidden rounded-t-lg">
+      <div className="relative h-64 w-full overflow-hidden">
         <Image
           src={property.image}
           alt={property.title}
@@ -86,7 +98,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
       </div>
 
       {/* Property details */}
-      <div className="space-y-1 p-3">
+      <div className="space-y-1 p-4">
         {/* Bedrooms and Area */}
         <div className="flex items-center space-x-4 text-sm text-gray-600">
           <div className="flex items-center">
@@ -111,9 +123,9 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
           <span className="line-clamp-1">{property.location}</span>
         </div>
 
-        {/* Price and Compare Button */}
-        <div className="flex items-center justify-between pt-1">
-          <span className="text-lg font-bold text-gray-900">
+        {/* Price and Action Buttons */}
+        <div className="flex items-center justify-between pt-2">
+          <span className="font-bold text-gray-900">
             {property.price}
             {property.status === 'For Rent' || property.status === 'Rented' ? (
               <span className="text-sm font-normal text-gray-500">/month</span>
@@ -140,16 +152,19 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
               <Tooltip>
                 <TooltipTrigger asChild>
                   <button 
-                    onClick={handleCompareClick}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleCompareClick(e);
+                    }}
                     className={cn(
-                      'flex h-8 w-8 items-center justify-center rounded-full transition-colors bg-gray-100 text-gray-600 hover:text-primary',
-                      isSelected && 'text-primary hover:bg-primary/10'
+                      'flex h-8 w-8 items-center justify-center rounded-full transition-colors',
+                      isSelected 
+                        ? 'text-primary bg-primary/10 hover:bg-primary/20' 
+                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-primary'
                     )}
+                    aria-label={isSelected ? 'Remove from compare' : 'Add to compare'}
                   >
                     <GitCompare className="h-4 w-4" />
-                    <span className="sr-only">
-                      {isSelected ? 'Remove from compare' : 'Add to compare'}
-                    </span>
                   </button>
                 </TooltipTrigger>
                 <TooltipContent>
@@ -161,16 +176,6 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
         </div>
       </div>
     </div>
-  )
-
-  if (compareMode) {
-    return cardContent
-  }
-
-  return (
-    <Link href={`/properties/${property.type}/${property.id}`} className="block">
-      {cardContent}
-    </Link>
   )
 }
 

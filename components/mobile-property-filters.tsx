@@ -5,34 +5,31 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Filter, X } from 'lucide-react';
 import PropertyFilters from './property-filters';
+import { FilterState } from '@/types';
 
 interface MobilePropertyFiltersProps {
-  filters: {
-    search: string;
-    sortBy: 'price-high-low' | 'price-low-high' | 'none';
-    propertyType: string;
-    bedrooms: string;
-    bathrooms: string;
-    location: string;
-    status: string;
-  };
-  onFiltersChange: (filters: any) => void;
+  filters: FilterState;
+  onFiltersChange: React.Dispatch<React.SetStateAction<FilterState>>;
 }
 
 export default function MobilePropertyFilters({ filters, onFiltersChange }: MobilePropertyFiltersProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [filterCount, setFilterCount] = useState(0);
 
-  const handleFiltersChange = (updatedFilters: any) => {
-    // Count active filters
+  const handleFiltersChange = (updatedFilters: React.SetStateAction<FilterState>) => {
+    // Count active filters based on the current filters
+    const currentFilters = typeof updatedFilters === 'function' 
+      ? updatedFilters(filters) 
+      : updatedFilters;
+      
     const activeFilters = [
-      filters.search ? 1 : 0,
-      filters.propertyType !== 'all-types' ? 1 : 0,
-      filters.bedrooms !== 'any-bedrooms' ? 1 : 0,
-      filters.bathrooms !== 'any-bathrooms' ? 1 : 0,
-      filters.location !== 'all-locations' ? 1 : 0,
-      filters.status !== 'all-status' ? 1 : 0,
-      filters.sortBy !== 'none' ? 1 : 0
+      currentFilters.search ? 1 : 0,
+      currentFilters.propertyType !== 'all-types' ? 1 : 0,
+      currentFilters.bedrooms !== 'any-bedrooms' ? 1 : 0,
+      currentFilters.bathrooms !== 'any-bathrooms' ? 1 : 0,
+      currentFilters.location !== 'all-locations' ? 1 : 0,
+      currentFilters.status !== 'all-status' ? 1 : 0,
+      currentFilters.sortBy !== 'none' ? 1 : 0
     ].reduce((a, b) => a + b, 0);
 
     setFilterCount(activeFilters);

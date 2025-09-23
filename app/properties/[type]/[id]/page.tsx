@@ -437,10 +437,12 @@ const PropertyDetailPage = ({ params }: PropertyDetailPageProps) => {
 
                                         {/* Contact Info */}
                                         <div className="space-y-3 w-full">
-                                            <div className="flex items-center justify-center gap-2 text-gray-600">
-                                                <Mail className="w-5 h-5 text-primary" />
-                                                <span>{OFFICE_CONTACTS[propertyLocation].email}</span>
-                                            </div>
+                                            {propertyLocation === 'india' && (
+                                                <div className="flex items-center justify-center gap-2 text-gray-600">
+                                                    <Mail className="w-5 h-5 text-primary" />
+                                                    <span>{OFFICE_CONTACTS[propertyLocation].email}</span>
+                                                </div>
+                                            )}
                                             <div className="flex items-center justify-center gap-2 text-gray-600">
                                                 <Phone className="w-5 h-5 text-primary" />
                                                 <span>{OFFICE_CONTACTS[propertyLocation].phone}</span>

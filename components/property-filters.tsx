@@ -9,20 +9,11 @@ import { Slider } from "@/components/ui/slider"
 import { Search, Filter, X, ChevronDown, ChevronUp } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { parsePrice, formatIndianPrice } from "@/lib/price-utils"
-
-interface FilterState {
-  search: string
-  sortBy: 'price-high-low' | 'price-low-high' | 'none'
-  propertyType: string
-  bedrooms: string
-  bathrooms: string
-  location: string
-  status: string
-}
+import { FilterState } from "@/types"
 
 interface PropertyFiltersProps {
   filters: FilterState
-  onFiltersChange: (filters: FilterState) => void
+  onFiltersChange: React.Dispatch<React.SetStateAction<FilterState>>
   className?: string
 }
 
@@ -66,6 +57,10 @@ const PropertyFilters: React.FC<PropertyFiltersProps> = ({ filters, onFiltersCha
       bathrooms: "any-bathrooms",
       location: "all-locations",
       status: "all-status",
+      minArea: "",
+      maxArea: "",
+      minPrice: "",
+      maxPrice: ""
     }
     setActiveFilters([])
     onFiltersChange(resetFilters)

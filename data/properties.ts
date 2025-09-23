@@ -831,13 +831,13 @@ export const properties: Property[] = [
   {
     id: "34",
     title: "Prestige Clairemont",
-    price: "₹4.50 Cr", 
+    price: "₹4.50 CR", 
     location: "Kokapet, Neopolis, Hyderabad, India",
     propertyLocation: "india",
     bedrooms: 3,
     bathrooms: 3,
     area: "2944 sq ft",
-    image: "https://images.pexels.com/photos/164558/pexels-photo-164558.jpeg?auto=compress&cs=tinysrgb&w=600",
+    image: "/images/properties/prestige-clairemont/main.jpg",
     type: "residential",
     status: "For Sale",
     featured: false,
@@ -879,7 +879,7 @@ export const properties: Property[] = [
   {
     id: "35",
     title: "Simchah Acasa",
-    price: "₹3.50 Cr", 
+    price: "₹3.50 CR", 
     location: "Kokapet, Hyderabad, India",
     propertyLocation: "india",
     bedrooms: 3,
@@ -928,7 +928,7 @@ export const properties: Property[] = [
   {
     id: "36",
     title: "Prestige Rainbow Waters",
-    price: "₹5.70 Cr", 
+    price: "₹5.70 CR", 
     location: "Raidurg, Hyderabad, India",
     propertyLocation: "india",
     bedrooms: 4,
@@ -977,7 +977,7 @@ export const properties: Property[] = [
   {
     id: "37",
     title: "Brigade Gateway - Neopolis",
-    price: "₹4.80 Cr – ₹5.90 Cr",
+    price: "₹4.80 CR – ₹5.90 CR",
     location: "Kokapet, Hyderabad, India",
     propertyLocation: "india",
     bedrooms: 4,
@@ -1028,7 +1028,7 @@ export const properties: Property[] = [
   {
     id: "19",
     title: "Indis VB City",
-    price: "₹55.00 L",
+    price: "₹0.55 CR",
     location: "Kompally | Bollarum, India",
     propertyLocation: "india",
     bedrooms: 2,
@@ -1547,7 +1547,7 @@ export const properties: Property[] = [
   {
     id: "30",
     title: "Urbanrise Galleria Gardens",
-    price: "₹40.00 L",
+    price: "₹0.40 CR",
     location: "Shadnagar, Hyderabad, India",
     propertyLocation: "india",
     bedrooms: 0, // Open plots - no bedrooms

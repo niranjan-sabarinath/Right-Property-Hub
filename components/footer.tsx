@@ -40,7 +40,7 @@ const Footer = () => {
     { href: "/", label: "Home" },
     { href: "/properties", label: "Properties" },
     { href: "/about", label: "About" },
-    { href: "/blog", label: "Insights" },
+    { href: "/blog", label: "Blog" },
     { href: "/contact", label: "Contact" },
   ]
 
@@ -137,7 +137,6 @@ const Footer = () => {
                 <MapPin className="w-5 h-5 mt-0.5 text-gray-600 flex-shrink-0 md:hidden" />
                 <div className="flex flex-col">
                   <p className="text-base font-medium text-gray-800">India: Srinagar colony, Banjarahills, Hyderabad</p>
-                  <p className="text-base font-medium text-gray-800 mt-2">Dubai: Karama, Dubai</p>
                 </div>
               </motion.div>
               <motion.div
@@ -218,13 +217,13 @@ const Footer = () => {
                 animate="visible"
                 whileHover="hover"
               >
-                <Link href="/" className="block w-20 md:w-24 lg:w-28">
+                <Link href="/">
                   <Image
                     src="/images/logo.png"
                     alt="Right Property Hub"
-                    width={112}
-                    height={56}
-                    className="w-full h-auto"
+                    width={190}
+                    height={150}
+                    className=""
                     priority
                   />
                 </Link>
@@ -267,8 +266,9 @@ const Footer = () => {
         viewport={{ once: true }}
       >
         <div className="flex flex-col space-y-4 sm:space-y-0 sm:flex-row justify-between items-center text-xs sm:text-sm text-gray-500">
-          <motion.div className="text-center sm:text-left" whileHover={{ scale: 1.02 }}>
+          <motion.div className="text-center sm:text-left space-y-2" whileHover={{ scale: 1.02 }}>
             <p>&copy; {currentYear} Right Property Hub. All rights reserved.</p>
+            <p className="text-xs text-gray-500">RERA Certified: A02500004422</p>
           </motion.div>
           <div className="flex flex-wrap justify-center items-center gap-3 sm:gap-6">
             <motion.div whileHover={{ x: -3 }}>

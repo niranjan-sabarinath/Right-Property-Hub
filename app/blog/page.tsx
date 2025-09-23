@@ -1,3 +1,5 @@
+"use client"
+
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -12,23 +14,40 @@ import {
   Calendar, 
   User, 
   Clock, 
-  ArrowRight,
   Search,
   TrendingUp,
   Home,
   DollarSign,
-  BookOpen
+  BookOpen,
+  LucideIcon
 } from 'lucide-react';
 
-const blogPosts = [
+interface BlogPost {
+  id: string;
+  title: string;
+  content: string;
+  image: string;
+  category: string;
+  author: string;
+  date: string;
+  readTime: string;
+  featured?: boolean;
+}
+
+interface Category {
+  name: string;
+  count: number;
+  icon: LucideIcon;
+}
+
+const blogPosts: BlogPost[] = [
   {
     id: '1',
     title: '2024 Real Estate Market Trends: What Buyers Need to Know',
-    excerpt: 'Discover the latest trends shaping the real estate market in 2024, from interest rates to emerging neighborhoods.',
-    content: 'The real estate market in 2024 is showing interesting patterns...',
-    image: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=800',
+    content: 'The real estate market in 2024 is showing interesting patterns with shifting buyer preferences and market dynamics. As we move through the year, several key trends are emerging that potential buyers should be aware of. Interest rates, while higher than in previous years, have stabilized, creating a more predictable environment for homebuyers. Emerging neighborhoods are gaining popularity as buyers seek better value and more space. The demand for sustainable and energy-efficient homes continues to grow, with many buyers prioritizing green features and smart home technology. Additionally, the work-from-home trend has led to increased interest in properties with dedicated home office spaces and outdoor living areas. Understanding these trends can help buyers make informed decisions in the current market.',
+    image: '/images/properties/prestige-rainbow/main.webp',
     category: 'Market Trends',
-    author: 'Sarah Johnson',
+    author: 'Priya Sharma',
     date: '2024-01-15',
     readTime: '8 min read',
     featured: true
@@ -36,22 +55,20 @@ const blogPosts = [
   {
     id: '2',
     title: 'First-Time Homebuyer\'s Complete Guide',
-    excerpt: 'Everything you need to know about buying your first home, from getting pre-approved to closing day.',
-    content: 'Buying your first home is an exciting milestone...',
-    image: 'https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&w=800',
+    content: 'Buying your first home is an exciting milestone that requires careful planning and preparation. Start by checking your credit score and saving for a down payment, typically 10-20% of the home\'s price. Get pre-approved for a mortgage to understand your budget and show sellers you\'re a serious buyer. Work with an experienced real estate agent who understands the local market and can guide you through the process. When house hunting, consider both your current needs and future plans, and don\'t forget to factor in additional costs like property taxes, insurance, and maintenance. The home inspection is a crucial step to identify any potential issues before finalizing the purchase. Finally, be prepared for closing costs, which typically range from 2-5% of the home\'s price. With the right preparation and guidance, you can navigate the homebuying process with confidence.',
+    image: '/images/properties/indis-vb-city/main.jpg',
     category: 'Buying Guide',
-    author: 'Michael Chen',
+    author: 'Rahul Kapoor',
     date: '2024-01-12',
     readTime: '12 min read'
   },
   {
     id: '3',
     title: 'Investment Properties: Building Wealth Through Real Estate',
-    excerpt: 'Learn how to evaluate investment properties and build a profitable real estate portfolio.',
-    content: 'Real estate investment can be a powerful wealth-building strategy...',
-    image: 'https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=800',
+    content: 'Real estate investment can be a powerful wealth-building strategy when approached with knowledge and careful planning. Successful investors focus on location, looking for areas with strong job growth, good schools, and amenities. The 1% rule is a helpful guideline - the monthly rent should be at least 1% of the purchase price to ensure positive cash flow. Consider different investment strategies, such as buy-and-hold rentals, house flipping, or vacation rentals, each with its own risk and reward profile. Financing options for investment properties differ from primary residences, with typically higher down payment requirements and interest rates. Don\'t forget to factor in property management costs, maintenance, and potential vacancy periods when calculating returns. Building a diversified real estate portfolio over time can provide both ongoing rental income and long-term appreciation, making it a cornerstone of many successful investment strategies.',
+    image: '/images/properties/aikaa-villas/main.jpg',
     category: 'Investment',
-    author: 'Emily Rodriguez',
+    author: 'Ananya Patel',
     date: '2024-01-10',
     readTime: '10 min read',
     featured: true
@@ -59,52 +76,58 @@ const blogPosts = [
   {
     id: '4',
     title: 'Home Staging Tips That Actually Sell Houses',
-    excerpt: 'Professional staging tips to help your property sell faster and for a better price.',
-    content: 'Home staging is one of the most effective ways to sell your property...',
-    image: 'https://images.pexels.com/photos/2029667/pexels-photo-2029667.jpeg?auto=compress&cs=tinysrgb&w=800',
+    content: 'Home staging is one of the most effective ways to make your property more appealing to potential buyers and sell it faster, often for a higher price. Start by decluttering and depersonalizing the space to help buyers envision themselves living there. Focus on creating a neutral, inviting atmosphere with a fresh coat of paint in light, neutral colors. Arrange furniture to maximize space and highlight the home\'s best features. Good lighting is essential - open curtains, clean windows, and add lamps to brighten dark corners. In the kitchen and bathrooms, ensure all surfaces are spotless and consider minor updates like new hardware or a fresh backsplash. Curb appeal matters too, so maintain the lawn, add potted plants, and ensure the front entrance is welcoming. Professional staging can yield a significant return on investment, with staged homes typically selling faster and for more money than unstaged ones.',
+    image: '/images/properties/dsr-skymarq/main.jpg',
     category: 'Selling Tips',
-    author: 'David Park',
+    author: 'Arjun Reddy',
     date: '2024-01-08',
     readTime: '6 min read'
   },
   {
     id: '5',
     title: 'Understanding Mortgage Options in 2024',
-    excerpt: 'A comprehensive guide to different mortgage types and how to choose the right one for your situation.',
-    content: 'With various mortgage options available, choosing the right one...',
-    image: 'https://images.pexels.com/photos/1571468/pexels-photo-1571468.jpeg?auto=compress&cs=tinysrgb&w=800',
+    content: 'With various mortgage options available, choosing the right one is crucial for your financial future. Conventional loans typically require good credit (680+) and a 20% down payment to avoid private mortgage insurance (PMI). FHA loans, backed by the Federal Housing Administration, are popular among first-time buyers as they allow lower down payments (as low as 3.5%) and more flexible credit requirements. VA loans offer excellent benefits for veterans and active military, including no down payment and no PMI. Adjustable-rate mortgages (ARMs) may offer lower initial rates but come with the risk of future rate increases. Fixed-rate mortgages provide stability with consistent payments over the life of the loan. In 2024, consider factors like how long you plan to stay in the home, your financial stability, and interest rate trends when selecting a mortgage. Consulting with a mortgage professional can help you navigate these options and find the best fit for your situation.',
+    image: '/images/properties/vaishnaoi-southwoods/main.jpg',
     category: 'Financing',
-    author: 'Sarah Johnson',
+    author: 'Priya Sharma',
     date: '2024-01-05',
     readTime: '9 min read'
   },
   {
     id: '6',
     title: 'The Rise of Smart Homes: Technology Meets Real Estate',
-    excerpt: 'How smart home technology is changing property values and buyer expectations.',
-    content: 'Smart home technology is becoming increasingly important...',
-    image: 'https://images.pexels.com/photos/1571453/pexels-photo-1571453.jpeg?auto=compress&cs=tinysrgb&w=800',
+    content: 'Smart home technology is becoming increasingly important in today\'s real estate market, with many buyers considering it a must-have feature. Modern smart homes offer convenience, security, and energy efficiency through integrated systems that can be controlled via smartphone or voice commands. Popular features include smart thermostats that learn your schedule, smart lighting systems, video doorbells, and integrated security systems. These technologies not only enhance daily living but can also lead to significant energy savings and insurance discounts. When selling, smart home features can increase your home\'s value and appeal to tech-savvy buyers. However, it\'s important to choose systems that are widely compatible and easy to use, as overly complex systems might deter some potential buyers. As technology continues to evolve, we can expect even more innovative smart home solutions that will further transform how we live and interact with our living spaces.',
+    image: '/images/properties/msn-realty/main.jpg',
     category: 'Technology',
-    author: 'Michael Chen',
+    author: 'Rahul Kapoor',
     date: '2024-01-03',
     readTime: '7 min read'
   }
 ];
 
-const categories = [
+const categories: Category[] = [
   { name: 'All Posts', count: blogPosts.length, icon: BookOpen },
-  { name: 'Market Trends', count: 1, icon: TrendingUp },
-  { name: 'Buying Guide', count: 1, icon: Home },
-  { name: 'Investment', count: 1, icon: DollarSign },
-  { name: 'Selling Tips', count: 1, icon: ArrowRight },
-  { name: 'Financing', count: 1, icon: DollarSign },
-  { name: 'Technology', count: 1, icon: TrendingUp }
+  { name: 'Market Trends', count: blogPosts.filter((p: BlogPost) => p.category === 'Market Trends').length, icon: TrendingUp },
+  { name: 'Buying Guide', count: blogPosts.filter((p: BlogPost) => p.category === 'Buying Guide').length, icon: Home },
+  { name: 'Investment', count: blogPosts.filter((p: BlogPost) => p.category === 'Investment').length, icon: DollarSign },
+  { name: 'Selling Tips', count: blogPosts.filter((p: BlogPost) => p.category === 'Selling Tips').length, icon: Home },
+  { name: 'Financing', count: blogPosts.filter((p: BlogPost) => p.category === 'Financing').length, icon: DollarSign },
+  { name: 'Technology', count: blogPosts.filter((p: BlogPost) => p.category === 'Technology').length, icon: TrendingUp }
 ];
 
 const featuredPosts = blogPosts.filter(post => post.featured);
 const recentPosts = blogPosts.slice(0, 3);
 
 const BlogPage = () => {
+  const [expandedPosts, setExpandedPosts] = React.useState<{[key: string]: boolean}>({});
+
+  const toggleExpand = (postId: string) => {
+    setExpandedPosts(prev => ({
+      ...prev,
+      [postId]: !prev[postId]
+    }));
+  };
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -164,11 +187,9 @@ const BlogPage = () => {
                       />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <Link href={`/blog/${post.id}`}>
-                        <h4 className="text-sm font-medium line-clamp-2 hover:text-primary transition-colors">
-                          {post.title}
-                        </h4>
-                      </Link>
+                      <h4 className="text-sm font-medium line-clamp-2">
+                        {post.title}
+                      </h4>
                       <p className="text-xs text-gray-500 mt-1">
                         {formatDate(post.date)}
                       </p>
@@ -202,14 +223,22 @@ const BlogPage = () => {
                       <Badge variant="secondary" className="mb-3 text-white">
                         {post.category}
                       </Badge>
-                      <Link href={`/blog/${post.id}`}>
-                        <h3 className="text-xl font-semibold text-gray-900 mb-2 hover:text-primary transition-colors line-clamp-2">
-                          {post.title}
-                        </h3>
-                      </Link>
-                      <p className="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-3">
-                        {post.excerpt}
-                      </p>
+                      <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                        {post.title}
+                      </h3>
+                      <div className="relative">
+                        <div 
+                          className={`text-gray-600 text-sm leading-relaxed overflow-hidden transition-all duration-300 ${expandedPosts[post.id] ? 'max-h-full' : 'max-h-24'}`}
+                        >
+                          {post.content}
+                        </div>
+                        <button 
+                          onClick={() => toggleExpand(post.id)}
+                          className="text-primary hover:underline text-sm font-medium mb-2 focus:outline-none"
+                        >
+                          {expandedPosts[post.id] ? 'Show Less' : 'Read More...'}
+                        </button>
+                      </div>
                       
                       <div className="flex items-center justify-between text-sm text-gray-500">
                         <div className="flex items-center space-x-4">
@@ -260,38 +289,37 @@ const BlogPage = () => {
                           {post.category}
                         </Badge>
                         
-                        <Link href={`/blog/${post.id}`}>
-                          <h3 className="text-xl font-semibold text-gray-900 mb-2 hover:text-primary transition-colors">
-                            {post.title}
-                          </h3>
-                        </Link>
+                        <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                          {post.title}
+                        </h3>
                         
-                        <p className="text-gray-600 leading-relaxed mb-4 line-clamp-2">
-                          {post.excerpt}
-                        </p>
-                        
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-4 text-sm text-gray-500">
-                            <div className="flex items-center space-x-1">
-                              <User className="w-4 h-4" />
-                              <span>{post.author}</span>
-                            </div>
-                            <div className="flex items-center space-x-1">
-                              <Calendar className="w-4 h-4" />
-                              <span>{formatDate(post.date)}</span>
-                            </div>
-                            <div className="flex items-center space-x-1">
-                              <Clock className="w-4 h-4" />
-                              <span>{post.readTime}</span>
-                            </div>
+                        <div className="relative">
+                          <div 
+                            className={`text-gray-600 leading-relaxed mb-4 overflow-hidden transition-all duration-300 ${expandedPosts[post.id] ? 'max-h-full' : 'max-h-24'}`}
+                          >
+                            {post.content}
                           </div>
-                          
-                          <Button variant="ghost" size="sm" asChild>
-                            <Link href={`/blog/${post.id}`}>
-                              Read More
-                              <ArrowRight className="w-4 h-4 ml-1" />
-                            </Link>
-                          </Button>
+                          <button 
+                            onClick={() => toggleExpand(post.id)}
+                            className="text-primary hover:underline text-sm font-medium mt-2 focus:outline-none"
+                          >
+                            {expandedPosts[post.id] ? 'Show Less' : 'Read More'}
+                          </button>
+                        </div>
+                        
+                        <div className="flex items-center space-x-4 text-sm text-gray-500 pt-2 border-t border-gray-100 mt-4">
+                          <div className="flex items-center space-x-1">
+                            <User className="w-4 h-4" />
+                            <span>{post.author}</span>
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            <Calendar className="w-4 h-4" />
+                            <span>{formatDate(post.date)}</span>
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            <Clock className="w-4 h-4" />
+                            <span>{post.readTime}</span>
+                          </div>
                         </div>
                       </CardContent>
                     </div>
