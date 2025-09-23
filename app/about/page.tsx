@@ -92,6 +92,59 @@ const AboutPage = () => {
         subtitle="Your Search Ends Here"
       />
 
+      {/* Founder's Vision & Mission */}
+      <section className="py-16 bg-gradient-to-br from-primary/5 to-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+            <div className="grid md:grid-cols-2 gap-8">
+              {/* Founder's Image */}
+              <div className="relative h-96 md:h-auto">
+                <Image
+                  src="/images/founder.jpg"
+                  alt="Founder - Right Property Hub"
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              </div>
+              
+              {/* Founder's Message */}
+              <div className="p-4 py-8 md:p-12 flex flex-col justify-center">
+                <div className="mb-6">
+                  <h3 className="text-sm font-semibold text-primary uppercase tracking-wider mb-2">
+                    RAVALI Vision & Mission
+                  </h3>
+                  <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+                    Founder, Right Property Hub
+                  </h2>
+                  <p className="text-gray-600 mb-6">
+                    A woman entrepreneur with a post graduate and a deep-rooted passion for helping people make smart and confident real estate investments.
+                  </p>
+                </div>
+                
+                <div className="space-y-4">
+                  <p className="text-gray-700">
+                    I founded Right Property Hub with one goal in mind: to provide people with pure, trustworthy, and lifetime property services that go beyond just buying a home.
+                  </p>
+                  <p className="text-gray-700">
+                    I believe in quality over quantity, transparency over transactions, and in relationships that last a lifetime. With a proven track record of helping clients find the right property at the right price, in the right location, I proudly stand as a woman making mark in the real estate industry.
+                  </p>
+                  <p className="text-gray-700">
+                    As a homemaker at heart, I know how important it is to find a place that feels like home - clean, organized, beautiful and secure.
+                  </p>
+                  <p className="text-primary font-semibold text-lg mt-6">
+                    #YOUR SEARCH ENDS HERE
+                  </p>
+                  <p className="text-gray-700 font-medium">
+                    I don't just help you buy a property - I help you build a future.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Introduction Section */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
