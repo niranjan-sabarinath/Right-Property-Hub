@@ -198,12 +198,12 @@ const Footer = () => {
                       animate="visible"
                       whileHover="hover"
                     >
-                      <Link
+                      <a
                         href={href}
                         className="text-xs sm:text-sm text-gray-700 hover:text-gray-900 transition-colors font-medium"
                       >
                         {label}
-                      </Link>
+                      </a>
                     </motion.div>
                   ))}
                 </nav>

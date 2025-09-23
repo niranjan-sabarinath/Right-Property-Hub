@@ -4,14 +4,11 @@ import { useState, useEffect, useRef } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { Search, Building, ArrowRight, ArrowLeft, MapPin, ChevronDown, IndianRupee, X, MessageCircle } from "lucide-react"
-import { parsePrice } from "@/lib/price-utils"
 import { motion, useInView, useScroll, useTransform, AnimatePresence, AnimatePresence as AnimatePresenceMotion } from "framer-motion"
 import PropertyCarousel from "@/components/property-carousel"
 import PropertyCard from "@/components/property-card"
 import { FilterState } from "@/types"
 import PropertyFilters from "@/components/property-filters"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { getFeaturedProperties, getIndianProperties, type Property } from "@/data/properties"
 
 const testimonials = [
@@ -21,7 +18,7 @@ const testimonials = [
     content:
       "As an NRI working in the US, I was skeptical about buying property in India. Right Property Hub's team made the entire process transparent and stress-free. Their virtual tours and legal assistance were exceptional!",
     rating: 5,
-    image: "https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=150",
+    image: "https://ui-avatars.com/api/?name=Aarav+Sharma&background=random&color=fff&size=150",
   },
   {
     name: "Ishita Patel",
@@ -29,7 +26,7 @@ const testimonials = [
     content:
       "Found my dream 2BHK in Mumbai suburbs within my budget, thanks to Right Property Hub. Their agent understood my needs perfectly and negotiated a great deal. Couldn't be happier with my new home!",
     rating: 5,
-    image: "https://images.pexels.com/photos/1181686/pexels-photo-1181686.jpeg?auto=compress&cs=tinysrgb&w=150",
+    image: "https://ui-avatars.com/api/?name=Ishita+Patel&background=random&color=fff&size=150",
   },
   {
     name: "Rajiv Malhotra",
@@ -37,7 +34,7 @@ const testimonials = [
     content:
       "Their market analysis helped me identify high-growth areas in Bangalore. The team's local expertise and network of developers gave me access to pre-launch offers I wouldn't have found otherwise.",
     rating: 5,
-    image: "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=150",
+    image: "https://ui-avatars.com/api/?name=Rajiv+Malhotra&background=random&color=fff&size=150",
   },
   {
     name: "Meera Iyer",
@@ -45,7 +42,7 @@ const testimonials = [
     content:
       "After my husband's retirement, we wanted to downsize to a smaller home. Right Property Hub found us a perfect senior-friendly apartment with all amenities. Their patience and understanding made this transition smooth.",
     rating: 5,
-    image: "https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=150",
+    image: "https://ui-avatars.com/api/?name=Meera+Iyer&background=random&color=fff&size=150",
   },
   {
     name: "Vikram & Priya Khanna",
@@ -53,7 +50,7 @@ const testimonials = [
     content:
       "We were first-time homebuyers with limited savings. The team helped us understand home loan options and found us a perfect starter home in Pune. Their end-to-end support was invaluable!",
     rating: 5,
-    image: "https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=150",
+    image: "https://ui-avatars.com/api/?name=Vikram+Khanna&background=random&color=fff&size=150",
   },
 ]
 
@@ -497,7 +494,7 @@ const HomePage = () => {
                   }}
                   className="w-full sm:w-auto text-center block border-2 border-primary text-primary hover:bg-primary/10 font-medium py-3 px-6 rounded-lg transition-colors duration-200"
                 >
-                  Contact Agent
+                  Contact Us
                 </Link>
               </motion.div>
             </div>
@@ -824,12 +821,12 @@ const HomePage = () => {
                   whileHover={{ scale: 1.1, rotate: 5 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <Link
+                  <a
                     href="/about"
                     className="mt-4 inline-flex items-center bg-neutral-200 justify-center w-12 h-12 md:w-14 md:h-14 rounded-full border border-gray-600 hover:bg-white/10 transition-colors group"
                   >
                     <ArrowRight className="w-6 h-6 text-black group-hover:text-primary transition-colors" />
-                  </Link>
+                  </a>
                 </motion.div>
               </motion.div>
             </div>
@@ -1215,7 +1212,7 @@ const HomePage = () => {
       </motion.section>
 
       {/* Client Logos Marquee */}
-      <section className="py-12 bg-white border-t border-b border-gray-100">
+      <section className="py-12 bg-gray-50 border-t border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             className="mb-8 text-center"
@@ -1230,7 +1227,7 @@ const HomePage = () => {
             >
               Our Clients
             </motion.span>
-            <h3 className="text-2xl md:text-3xl font-medium text-gray-900 font-coco-light">
+            <h3 className="text-2xl md:text-3xl font-medium text-gray-900 font-orange-avenue">
               Trusted by the best in the business
             </h3>
           </motion.div>

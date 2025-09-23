@@ -28,14 +28,10 @@ const PropertyFilters: React.FC<PropertyFiltersProps> = ({ filters, onFiltersCha
     // Update active filters
     const newActiveFilters = []
     if (newFilters.search) newActiveFilters.push(`Search: ${newFilters.search}`)
-    if (newFilters.propertyType && newFilters.propertyType !== "all-types")
-      newActiveFilters.push(`Type: ${newFilters.propertyType}`)
     if (newFilters.bedrooms && newFilters.bedrooms !== "any-bedrooms")
       newActiveFilters.push(`Beds: ${newFilters.bedrooms}+`)
     if (newFilters.bathrooms && newFilters.bathrooms !== "any-bathrooms")
       newActiveFilters.push(`Baths: ${newFilters.bathrooms}+`)
-    if (newFilters.location && newFilters.location !== "all-locations")
-      newActiveFilters.push(`Location: ${newFilters.location}`)
     if (newFilters.status && newFilters.status !== "all-status") 
       newActiveFilters.push(`Status: ${newFilters.status}`)
     // Add sort filter to active filters if set
@@ -52,10 +48,10 @@ const PropertyFilters: React.FC<PropertyFiltersProps> = ({ filters, onFiltersCha
     const resetFilters: FilterState = {
       search: "",
       sortBy: 'none',
-      propertyType: "all-types",
+      propertyType: "all",
+      location: "",
       bedrooms: "any-bedrooms",
       bathrooms: "any-bathrooms",
-      location: "all-locations",
       status: "all-status",
       minArea: "",
       maxArea: "",
@@ -132,42 +128,6 @@ const PropertyFilters: React.FC<PropertyFiltersProps> = ({ filters, onFiltersCha
                 <SelectItem value="price-low-high">Price: Low to High</SelectItem>
               </SelectContent>
             </Select>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            {/* Property Type */}
-            <div className="space-y-2">
-              <Label className="text-sm font-medium text-gray-700">Property Type</Label>
-              <Select value={filters.propertyType} onValueChange={(value) => updateFilter("propertyType", value)}>
-                <SelectTrigger className="h-11">
-                  <SelectValue placeholder="Type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all-types">All Types</SelectItem>
-                  <SelectItem value="House">House</SelectItem>
-                  <SelectItem value="Apartment">Apartment</SelectItem>
-                  <SelectItem value="Condo">Condo</SelectItem>
-                  <SelectItem value="Townhouse">Townhouse</SelectItem>
-                  <SelectItem value="Villa">Villa</SelectItem>
-                  <SelectItem value="Studio">Studio</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Location */}
-            <div className="space-y-2">
-              <Label className="text-sm font-medium text-gray-700">Location</Label>
-              <Select value={filters.location} onValueChange={(value) => updateFilter("location", value)}>
-                <SelectTrigger className="h-11">
-                  <SelectValue placeholder="Location" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all-locations">All Locations</SelectItem>
-                  <SelectItem value="india">India</SelectItem>
-                  <SelectItem value="dubai">Dubai</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
           </div>
 
           {/* Status */}

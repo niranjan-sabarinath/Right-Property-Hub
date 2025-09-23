@@ -135,14 +135,14 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Link 
+                  <a 
                     href={`/properties/${property.type}/${property.id}`}
                     className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-colors hover:bg-gray-200 hover:text-primary"
                     onClick={(e) => e.stopPropagation()}
                   >
                     <Info className="h-4 w-4" />
                     <span className="sr-only">View property details</span>
-                  </Link>
+                  </a>
                 </TooltipTrigger>
                 <TooltipContent>
                   <p>View Details</p>
