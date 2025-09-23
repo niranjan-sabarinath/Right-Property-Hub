@@ -24,7 +24,7 @@ const ContactPage = () => {
         phone: "",
         subject: "",
         message: "",
-        inquiryType: "",
+        budgetToInvest: "",
     });
 
     const [submitting, setSubmitting] = useState(false);
@@ -43,12 +43,12 @@ const ContactPage = () => {
                 phone: formData.phone,
                 subject: formData.subject,
                 message: formData.message,
-                inquiry_type: formData.inquiryType,
+                budgetToInvest: formData.budgetToInvest,
                 form_source: "Contact Page",
             };
 
             const scriptURL =
-                "https://script.google.com/macros/s/AKfycbyQM7LphryO6F07GJcheHWeRkqi7Wg1TjZerUXETD3EESgfRiRgpp2v57vh-jz_vYbIhw/exec";
+                "https://script.google.com/macros/s/AKfycbwNfcED3ynKQ33SjphmIiUMnuEnZ2PNCGvJfe2tggDUpDxpVRxnQn7PqheW1gjymQ03qw/exec";
 
             const response = await fetch(scriptURL, {
                 method: "POST",
@@ -68,7 +68,7 @@ const ContactPage = () => {
                     phone: "",
                     subject: "",
                     message: "",
-                    inquiryType: "",
+                    budgetToInvest: "",
                 });
                 formRef.current?.reset();
             } else {
@@ -235,7 +235,7 @@ const ContactPage = () => {
                                             </div>
                                             <div>
                                                 <Label htmlFor="phone">
-                                                    Phone Number
+                                                    Phone *
                                                 </Label>
                                                 <Input
                                                     id="phone"
@@ -247,43 +247,39 @@ const ContactPage = () => {
                                                             e.target.value
                                                         )
                                                     }
+                                                    required
                                                     className="mt-1"
                                                 />
                                             </div>
                                             <div>
-                                                <Label htmlFor="inquiryType">
-                                                    Inquiry Type
+                                                <Label htmlFor="budgetToInvest">
+                                                    Budget to Invest *
                                                 </Label>
                                                 <Select
-                                                    value={formData.inquiryType}
+                                                    required
+                                                    value={formData.budgetToInvest}
                                                     onValueChange={(value) =>
                                                         handleChange(
-                                                            "inquiryType",
+                                                            "budgetToInvest",
                                                             value
                                                         )
                                                     }
                                                 >
                                                     <SelectTrigger className="mt-1">
-                                                        <SelectValue placeholder="Select inquiry type" />
+                                                        <SelectValue placeholder="Select budget range" />
                                                     </SelectTrigger>
                                                     <SelectContent>
-                                                        <SelectItem value="buying">
-                                                            Buying Property
+                                                        <SelectItem value="1-2">
+                                                            1 to 2 Cr.
                                                         </SelectItem>
-                                                        <SelectItem value="selling">
-                                                            Selling Property
+                                                        <SelectItem value="2-3">
+                                                            2 to 3 Cr.
                                                         </SelectItem>
-                                                        <SelectItem value="renting">
-                                                            Renting Property
+                                                        <SelectItem value="3-4">
+                                                            3 to 4 Cr.
                                                         </SelectItem>
-                                                        <SelectItem value="investment">
-                                                            Investment Advice
-                                                        </SelectItem>
-                                                        <SelectItem value="valuation">
-                                                            Property Valuation
-                                                        </SelectItem>
-                                                        <SelectItem value="general">
-                                                            General Inquiry
+                                                        <SelectItem value="5+">
+                                                            5 Cr. And above
                                                         </SelectItem>
                                                     </SelectContent>
                                                 </Select>
