@@ -113,14 +113,14 @@ const AboutPage = () => {
               
               {/* Founder's Message */}
               <div className="w-full md:w-7/12 lg:w-3/5 p-6 md:p-8 lg:p-12 flex flex-col justify-center">
-                <div className="mb-6">
+                <div className="mb-4">
                   <h3 className="text-sm font-semibold text-primary uppercase tracking-wider mb-2">
                     RAVALI Vision & Mission
                   </h3>
                   <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
                     Founder, Right Property Hub
                   </h2>
-                  <p className="text-gray-600 mb-6">
+                  <p className="text-gray-600">
                     A woman entrepreneur with a post graduate and a deep-rooted passion for helping people make smart and confident real estate investments.
                   </p>
                 </div>
@@ -132,7 +132,8 @@ const AboutPage = () => {
                   <p>
                     I believe in quality over quantity, transparency over transactions, and in relationships that last a lifetime. With a proven track record of helping clients find the right property at the right price, in the right location, I proudly stand as a woman making mark in the real estate industry.
                   </p>
-                  <p>
+                  <p className="text-primary text-lg font-bold tracking-wider">#YourSearchEndsHere</p>
+                  <p className='italic'>
                     I don't just help you buy a property - I help you build a future.
                   </p>
                 </div>
