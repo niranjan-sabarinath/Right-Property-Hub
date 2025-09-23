@@ -319,9 +319,9 @@ export default function TypePage({ params }: TypePageProps) {
                                         <input
                                             type="range"
                                             id="propertyPrice"
-                                            min="1000000"
-                                            max="50000000"
-                                            step="100000"
+                                            min="100000"
+                                            max="10000000"
+                                            step="10000"
                                             value={propertyPrice}
                                             onChange={handlePropertyPriceChange}
                                             className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary"
@@ -330,6 +330,7 @@ export default function TypePage({ params }: TypePageProps) {
                                             <span>10L</span>
                                             <span>25L</span>
                                             <span>50L</span>
+                                            <span>75L</span>
                                             <span>1Cr+</span>
                                         </div>
                                     </div>
