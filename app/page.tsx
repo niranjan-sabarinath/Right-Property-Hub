@@ -609,10 +609,10 @@ const HomePage = () => {
                             service to find your perfect home.
                         </motion.p>
 
-                        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-6 sm:mb-8 w-full">
+                        <div className="flex flex-col items-center sm:flex-row gap-3 sm:gap-4 mb-6 sm:mb-8 w-full">
                             <motion.div
                                 variants={itemVariants}
-                                className="w-full sm:w-auto"
+                                className="w-full max-sm:w-[calc(100%-2rem)] sm:w-auto"
                             >
                                 <Link
                                     href="/properties/india"
@@ -628,7 +628,7 @@ const HomePage = () => {
                             </motion.div>
                             <motion.div
                                 variants={itemVariants}
-                                className="w-full sm:w-auto"
+                                className="w-full max-sm:w-[calc(100%-2rem)] sm:w-auto"
                             >
                                 <Link
                                     href="/contact"
