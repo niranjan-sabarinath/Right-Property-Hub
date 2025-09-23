@@ -96,20 +96,23 @@ const AboutPage = () => {
       <section className="py-16 bg-gradient-to-br from-primary/5 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-            <div className="grid md:grid-cols-2 gap-8">
-              {/* Founder's Image */}
-              <div className="relative h-96 md:h-auto">
-                <Image
-                  src="/images/founder.jpg"
-                  alt="Founder - Right Property Hub"
-                  fill
-                  className="object-cover"
-                  priority
-                />
+            <div className="flex flex-col md:flex-row">
+              {/* Founder's Image - 75% height */}
+              <div className="w-full md:w-5/12 lg:w-2/5 relative py-6 md:py-8 flex items-center">
+                <div className="aspect-[2/2.25] w-full max-w-[350px] mx-auto">
+                  <Image
+                    src="/images/founder.jpg"
+                    alt="Founder - Right Property Hub"
+                    fill
+                    className="object-cover"
+                    priority
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 40vw, 30vw"
+                  />
+                </div>
               </div>
               
               {/* Founder's Message */}
-              <div className="p-4 py-8 md:p-12 flex flex-col justify-center">
+              <div className="w-full md:w-7/12 lg:w-3/5 p-6 md:p-8 lg:p-12 flex flex-col justify-center">
                 <div className="mb-6">
                   <h3 className="text-sm font-semibold text-primary uppercase tracking-wider mb-2">
                     RAVALI Vision & Mission
@@ -122,20 +125,14 @@ const AboutPage = () => {
                   </p>
                 </div>
                 
-                <div className="space-y-4">
-                  <p className="text-gray-700">
+                <div className="space-y-4 text-gray-700">
+                  <p>
                     I founded Right Property Hub with one goal in mind: to provide people with pure, trustworthy, and lifetime property services that go beyond just buying a home.
                   </p>
-                  <p className="text-gray-700">
+                  <p>
                     I believe in quality over quantity, transparency over transactions, and in relationships that last a lifetime. With a proven track record of helping clients find the right property at the right price, in the right location, I proudly stand as a woman making mark in the real estate industry.
                   </p>
-                  <p className="text-gray-700">
-                    As a homemaker at heart, I know how important it is to find a place that feels like home - clean, organized, beautiful and secure.
-                  </p>
-                  <p className="text-primary font-semibold text-lg mt-6">
-                    #YOUR SEARCH ENDS HERE
-                  </p>
-                  <p className="text-gray-700 font-medium">
+                  <p>
                     I don't just help you buy a property - I help you build a future.
                   </p>
                 </div>

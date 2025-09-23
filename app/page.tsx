@@ -456,7 +456,7 @@ const HomePage = () => {
             {/* Hero Section */}
             <motion.section
                 ref={heroRef}
-                className="relative min-h-screen flex flex-col md:flex-row overflow-hidden"
+                className="relative flex flex-col md:flex-row overflow-hidden"
                 style={{ y: heroY, opacity: heroOpacity }}
             >
                 {/* Left Side - Social Icons */}
@@ -536,7 +536,7 @@ const HomePage = () => {
                 </div>
 
                 {/* Main Content Area */}
-                <div className="w-full md:w-3/5 min-h-screen bg-gradient-to-br from-primary/5 to-background px-4 sm:px-8 md:pl-16 lg:pl-24 xl:pl-32 2xl:pl-48 pr-4 sm:pr-8  flex flex-col justify-center items-start pt-24 sm:pt-28 md:pt-32 lg:pt-40 relative overflow-hidden">
+                <div className="w-full md:w-3/5 min-h-screen bg-gradient-to-br from-primary/5 to-background px-4 sm:px-8 md:pl-16 lg:pl-24 xl:pl-32 2xl:pl-48 pr-4 sm:pr-8 flex flex-col justify-center items-start pt-24 sm:pt-28 md:pt-32 lg:pt-40 relative overflow-hidden">
                     {/* Background Graphic Elements - High Contrast */}
                     <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
                         {/* Subtle dot pattern */}
@@ -646,16 +646,19 @@ const HomePage = () => {
                 </div>
 
                 {/* Right Side - Image (40% width) */}
-                <div className="w-full md:w-2/5 relative pt-20 md:pt-24 hidden md:block bg-gradient-to-br from-primary/5 to-background">
-                    <div className="sticky top-20 md:top-24 h-[calc(100vh-5rem)] md:h-[calc(100vh-6rem)]">
+                <div className="w-full md:w-2/5 relative pt-0 md:pt-24 bg-gradient-to-br from-primary/5 to-background">
+                    <div className="md:sticky md:top-24 h-[40vh] md:h-[calc(100vh-6rem)]">
                         <div className="relative w-full h-full">
                             <Image
                                 src="/images/3.jpg"
                                 alt="Luxury home in India"
                                 fill
-                                className="object-cover"
+                                className="object-cover md:object-cover object-center"
                                 priority
+                                sizes="(max-width: 768px) 100vw, 50vw"
                             />
+                            {/* Gradient overlay for mobile */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/30 to-transparent md:hidden" />
                         </div>
                     </div>
                 </div>
