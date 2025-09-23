@@ -87,7 +87,7 @@ const Navigation = () => {
             }}
         >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex items-center justify-between h-24 w-full">
+                <div className="flex items-center justify-between h-32 w-full">
                     {/* Logo */}
                     <Link
                         href="/"
@@ -106,9 +106,9 @@ const Navigation = () => {
                             <Image
                                 src="/images/logo.png"
                                 alt="Right Property Hub Logo"
-                                height={170}
-                                width={170}
-                                className=""
+                                height={180}
+                                width={180}
+                                className="h-16 w-auto md:h-32"
                                 priority
                             />
                         </div>
