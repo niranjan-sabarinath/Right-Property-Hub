@@ -565,14 +565,13 @@ const HomePage = () => {
                   damping: 30,
                 }}
               >
-                <Link
+                <a
                   href="/about"
-                  onClick={(e) => handleLinkClick(e, '/about')}
                   className="hidden sm:inline-flex group items-center underline mt-4 text-lg font-medium text-gray-900 hover:text-gray-600 transition-colors"
                 >
                   Get to Know Us
                   <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                </Link>
+                </a>
               </motion.div>
             </motion.div>
 
@@ -879,14 +878,13 @@ const HomePage = () => {
                 variants={itemVariants}
                 whileHover={{ x: 10 }}
               >
-                <Link
-                  href="/properties"
-                  onClick={(e) => handleLinkClick(e, '/properties')}
+                <a
+                  href="/properties/india"
                   className="hidden sm:inline-flex group items-center underline mt-4 text-lg font-medium text-gray-900 hover:text-gray-600 transition-colors"
                 >
-                  View Properties
+                  See our Marketplace
                   <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                </Link>
+                </a>
               </motion.div>
             </motion.div>
 
@@ -1321,7 +1319,7 @@ const HomePage = () => {
               Explore a curated selection that aligns with your vision and goals.
             </motion.p>
             <motion.div variants={morphVariants} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="w-full flex justify-center sm:w-auto">
-              <Link 
+              <a 
                 href="/properties/india" 
                 className="block w-fit"
               >
@@ -1329,7 +1327,7 @@ const HomePage = () => {
                   View Properties
                   <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
                 </div>
-              </Link>
+              </a>
             </motion.div>
           </motion.div>
         </motion.div>
