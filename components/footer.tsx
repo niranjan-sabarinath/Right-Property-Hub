@@ -217,7 +217,7 @@ const Footer = () => {
                 animate="visible"
                 whileHover="hover"
               >
-                <Link href="/">
+                <a href="/">
                   <Image
                     src="/images/logo.png"
                     alt="Right Property Hub"
@@ -226,7 +226,7 @@ const Footer = () => {
                     className=""
                     priority
                   />
-                </Link>
+                </a>
               </motion.div>
 
               {/* Social Icons */}
@@ -272,14 +272,14 @@ const Footer = () => {
           </motion.div>
           <div className="flex flex-wrap justify-center items-center gap-3 sm:gap-6">
             <motion.div whileHover={{ x: -3 }}>
-              <Link href="/privacy" className="hover:text-gray-900 transition-colors whitespace-nowrap">
+              <a href="/privacy" className="hover:text-gray-900 transition-colors whitespace-nowrap">
                 Privacy Policy
-              </Link>
+              </a>
             </motion.div>
             <motion.div whileHover={{ x: -3 }}>
-              <Link href="/terms" className="hover:text-gray-900 transition-colors whitespace-nowrap">
+              <a href="/terms" className="hover:text-gray-900 transition-colors whitespace-nowrap">
                 Terms of Service
-              </Link>
+              </a>
             </motion.div>
           </div>
         </div>
