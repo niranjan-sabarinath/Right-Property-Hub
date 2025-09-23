@@ -112,7 +112,7 @@ const AboutPage = () => {
               </div>
               
               {/* Founder's Message */}
-              <div className="w-full md:w-7/12 lg:w-3/5 p-6 md:p-8 lg:p-12 flex flex-col justify-center">
+              <div className="w-full md:w-7/12 lg:w-3/5 p-4 py-8 md:p-8 lg:p-12 flex flex-col justify-center">
                 <div className="mb-4">
                   <h3 className="text-sm font-semibold text-primary uppercase tracking-wider mb-2">
                     RAVALI Vision & Mission
