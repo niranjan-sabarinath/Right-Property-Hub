@@ -93,7 +93,7 @@ const AboutPage = () => {
       />
 
       {/* Founder's Vision & Mission */}
-      <section className="py-16 bg-gradient-to-br from-primary/5 to-white">
+      <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
             <div className="flex flex-col md:flex-row">

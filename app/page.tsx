@@ -579,14 +579,14 @@ const HomePage = () => {
                         initial="hidden"
                         animate={heroInView ? "visible" : "hidden"}
                     >
-                        <motion.div
+                        <motion.h1
                             className="text-lg sm:text-xl tracking-widest text-gray-500 mb-4 sm:mb-6 font-gotham-light"
                             variants={textRevealVariants}
                         >
                             Right <span className="text-primary">Property</span>{" "}
                             Hub
-                        </motion.div>
-                        <motion.h1 className="text-3xl sm:text-4xl md:text-5xl flex flex-col gap-1 md:gap-2 lg:text-6xl xl:text-6xl mb-6 font-orange-avenue">
+                        </motion.h1>
+                        <motion.h2 className="text-3xl sm:text-4xl md:text-5xl flex flex-col gap-1 md:gap-2 lg:text-6xl xl:text-6xl mb-6 font-orange-avenue">
                             <span>
                                 A place for{" "}
                                 <span className="text-primary">Today</span>,
@@ -599,7 +599,7 @@ const HomePage = () => {
                                 Home for a{" "}
                                 <span className="text-primary">Lifetime</span>.
                             </span>
-                        </motion.h1>
+                        </motion.h2>
                         <motion.p
                             className="text-base sm:text-lg text-muted-foreground mb-6 sm:mb-8 max-w-lg"
                             variants={textRevealVariants}
