@@ -85,12 +85,25 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ]
 
   // Individual property pages
-  const propertyPages = properties.map((property) => ({
-    url: `${baseUrl}/properties/${property.type}/${property.id}`,
-    lastModified: property.updatedAt ? new Date(property.updatedAt) : new Date(),
-    changeFrequency: 'weekly' as const,
-    priority: property.featured ? 0.9 : 0.7,
-  }))
+  const propertyPages = properties.map((property) => {
+    let lastModified = new Date();
+    
+    // Safely parse updatedAt property
+    if (property.updatedAt && property.updatedAt.trim() !== '') {
+      const parsedDate = new Date(property.updatedAt);
+      // Check if the date is valid
+      if (!isNaN(parsedDate.getTime())) {
+        lastModified = parsedDate;
+      }
+    }
+    
+    return {
+      url: `${baseUrl}/properties/${property.type}/${property.id}`,
+      lastModified,
+      changeFrequency: 'weekly' as const,
+      priority: property.featured ? 0.9 : 0.7,
+    };
+  })
 
   return [...staticPages, ...propertyCategories, ...propertyPages]
 }
