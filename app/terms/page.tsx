@@ -155,7 +155,7 @@ const TermsOfServicePage = () => {
                       </p>
                       <p className="flex items-center">
                         <Phone className="w-5 h-5 mr-2 text-primary" />
-                        India: +91 9030225223 | Dubai: +971 50 575 5424
+                        +1 (615) 880-0775
                       </p>
                     </div>
                   </div>

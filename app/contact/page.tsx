@@ -88,9 +88,9 @@ const ContactPage = () => {
 
     const officeLocations = [
         {
-            name: "India Office",
-            address: "Srinagar colony, Banjarahills, Hyderabad",
-            phone: "+91 9030225223",
+            name: "Company Office",
+            address: "Houston, USA",
+            phone: "+1 (615) 880-0775",
             email: "solutions@rightpropertyhub.com",
             hours: "Mon-Sat: 9:00 AM - 8:00 PM\nSun: 10:00 AM - 6:00 PM",
             lat: "19.0760",
@@ -105,12 +105,11 @@ const ContactPage = () => {
             description: "Speak directly with our team",
             value: (
                 <div className="flex flex-col">
-                    <div>India: +91 9030225223</div>
-                    <div>Dubai: +971 50 575 5424</div>
+                    <div>+1 (615) 880-0775</div>
                 </div>
             ),
             action: "Call Now",
-            actionLink: "tel:+919030225223",
+            actionLink: "tel:+16158800775",
         },
         {
             icon: Mail,
@@ -124,7 +123,7 @@ const ContactPage = () => {
             icon: MapPin,
             title: "Visit Us",
             description: "Schedule a property visit",
-            value: "Hyderabad",
+            value: "Houston, USA",
             action: "View Locations",
             actionLink: "https://maps.app.goo.gl/CZptruZu5idZYQnJ6",
         },
@@ -416,10 +415,8 @@ const ContactPage = () => {
 
                                             {/* Map for this location */}
                                             <div className="mt-4 rounded-md overflow-hidden h-[250px] w-full">
-                                                {office.name ===
-                                                "India Office" ? (
                                                     <iframe
-                                                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1903.282873416022!2d78.43673333857045!3d17.432615545865566!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb90d10b0f93fd%3A0x63192c22c87b682b!2sSrinagar%20Colony%2C%20Imam%20Guda%2C%20Yousufguda%2C%20Hyderabad%2C%20Telangana%20500073!5e0!3m2!1sen!2sin!4v1758135469029!5m2!1sen!2sin"
+                                                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d443006.829588406!2d-95.79084602097161!3d29.835685714329006!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8640b8b4488d8501%3A0xca0d02def365053b!2sHouston%2C%20TX%2C%20USA!5e0!3m2!1sen!2sin!4v1765549731939!5m2!1sen!2sin"
                                                         width="100%"
                                                         height="100%"
                                                         style={{ border: 0 }}
@@ -429,19 +426,6 @@ const ContactPage = () => {
                                                         title="Mumbai Office Location"
                                                         className="w-full h-full"
                                                     ></iframe>
-                                                ) : (
-                                                    <iframe
-                                                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14435.07871120322!2d55.29470120047468!3d25.244681442883202!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f42d7bf391ce5%3A0xc92c59be702d25dd!2sAl%20Karama%20-%20Dubai%20-%20United%20Arab%20Emirates!5e0!3m2!1sen!2sin!4v1758135581496!5m2!1sen!2sin"
-                                                        width="100%"
-                                                        height="100%"
-                                                        style={{ border: 0 }}
-                                                        allowFullScreen
-                                                        loading="lazy"
-                                                        referrerPolicy="no-referrer-when-downgrade"
-                                                        title="Dubai Office Location"
-                                                        className="w-full h-full"
-                                                    ></iframe>
-                                                )}
                                             </div>
                                         </CardContent>
                                     </Card>

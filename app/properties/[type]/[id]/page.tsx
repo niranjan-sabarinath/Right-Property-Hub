@@ -54,13 +54,13 @@ const getPropertyLocation = (property: Property): 'india' | 'dubai' => {
 // Office contact information
 const OFFICE_CONTACTS = {
   india: {
-    phone: '+91 9030225223',
+    phone: '+1 (615) 880-0775',
     email: 'solutions@rightpropertyhub.com',
-    address: 'Srinagar colony, Banjarahills, Hyderabad',
+    address: 'Houston, USA',
     hours: 'Mon-Sat: 9:00 AM - 8:00 PM, Sun: 10:00 AM - 6:00 PM'
   },
   dubai: {
-    phone: '+971 50 575 5424',
+    phone: '+1 (615) 880-0775',
     email: 'dubai@rightpropertyhub.com',
     address: 'Karama, Dubai, UAE',
     hours: 'Mon-Fri: 9:00 AM - 7:00 PM, Sat: 10:00 AM - 5:00 PM'

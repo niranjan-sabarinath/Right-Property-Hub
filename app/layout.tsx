@@ -108,15 +108,13 @@ export default function RootLayout({
         "url": "https://rightpropertyhub.com",
         "logo": "https://rightpropertyhub.com/images/logo.png",
         "image": "https://rightpropertyhub.com/images/logo.png",
-        "telephone": ["+91 9030225223", "+971 50 575 5424"],
+        "telephone": ["+1 (615) 880-0775"],
         "email": "solutions@rightpropertyhub.com",
         "address": [
             {
                 "@type": "PostalAddress",
-                "addressLocality": "Hyderabad",
-                "addressRegion": "Telangana",
-                "addressCountry": "India",
-                "streetAddress": "Srinagar colony, Banjarahills, Hyderabad"
+                "addressRegion": "Houston",
+                "addressCountry": "USA",
             },
             {
                 "@type": "PostalAddress", 

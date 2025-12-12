@@ -136,7 +136,7 @@ const Footer = () => {
               >
                 <MapPin className="w-5 h-5 mt-0.5 text-gray-600 flex-shrink-0 md:hidden" />
                 <div className="flex flex-col">
-                  <p className="text-base font-medium text-gray-800">India: Srinagar colony, Banjarahills, Hyderabad</p>
+                  <p className="text-base font-medium text-gray-800">Houston, USA</p>
                 </div>
               </motion.div>
               <motion.div
@@ -150,23 +150,10 @@ const Footer = () => {
                 >
                   <Phone className="w-4 h-4 text-gray-600 flex-shrink-0" />
                   <a
-                    href="tel:+919030225223"
+                    href="tel:+16158800775"
                     className="text-sm text-gray-700 hover:text-gray-900 font-medium transition-colors"
                   >
-                    India: +91 9030225223
-                  </a>
-                </motion.div>
-                <motion.div 
-                  className="flex items-center space-x-2 md:justify-end"
-                  whileHover={{ x: -5 }}
-                  transition={{ type: "spring", stiffness: 300, delay: 0.1 }}
-                >
-                  <Phone className="w-4 h-4 text-gray-600 flex-shrink-0" />
-                  <a
-                    href="tel:+971505755424"
-                    className="text-sm text-gray-700 hover:text-gray-900 font-medium transition-colors"
-                  >
-                    Dubai: +971 50 575 5424
+                    +1 (615) 880-0775
                   </a>
                 </motion.div>
               </motion.div>
