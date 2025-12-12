@@ -92,12 +92,11 @@ const AboutPage = () => {
         subtitle="Your Search Ends Here"
       />
 
-      {/* Founder's Vision & Mission */}
+      {/* Founder's Vision & Mission
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
             <div className="flex flex-col md:flex-row">
-              {/* Founder's Image - 75% height */}
               <div className="w-full md:w-5/12 lg:w-2/5 relative py-6 md:py-8 flex items-center">
                 <div className="aspect-[2/2.25] w-full max-w-[350px] mx-auto">
                   <Image
@@ -111,7 +110,6 @@ const AboutPage = () => {
                 </div>
               </div>
               
-              {/* Founder's Message */}
               <div className="w-full md:w-7/12 lg:w-3/5 p-4 py-8 md:p-8 lg:p-12 flex flex-col justify-center">
                 <div className="mb-4">
                   <h3 className="text-sm font-semibold text-primary uppercase tracking-wider mb-2">
@@ -141,12 +139,12 @@ const AboutPage = () => {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Introduction Section */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-4xl mx-auto mb-16">
+          <div className="text-center max-w-4xl mx-auto">
             <p className="text-lg text-gray-600 mb-8">
               At Right Property Hub, we're dedicated to making your real estate journey simple, stress-free, and successful. We believe that finding your dream property and turning it into a home should be an exciting and seamless experience. That's why we bring all the essential services under one roof, providing a one-stop solution for every step of your property journey.
             </p>
