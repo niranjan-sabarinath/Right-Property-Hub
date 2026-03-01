@@ -3,7 +3,7 @@ export interface Property {
   title: string;
   price: string;
   location: string;
-  propertyLocation?: 'dubai' | 'india'; // Optional field to specify if property is in Dubai or India
+  propertyLocation?: 'dubai' | 'india'; 
   bedrooms: number;
   bathrooms: number;
   area: number | string;
@@ -42,7 +42,89 @@ export const propertyTypes = [
 ];
 
 export const properties: Property[] = [
+  
   // Dubai Properties
+  {
+    id: "34",
+    title: "BREEZ by Danube",
+    price: "From AED 1,375,000",
+    location: "Maritime City, Dubai",
+    propertyLocation: "dubai",
+    bedrooms: 4, 
+    bathrooms: 4, 
+    area: "368 to 1,769", 
+    image: "/images/properties/breez-danube/main.png",
+    images: [],
+    type: "residential", 
+    status: "For Sale",
+    featured: true,
+    yearBuilt: 2028, 
+    amenities: [
+      "Infinity Pool",
+      "Kid's Splash Pool",
+      "Outdoor Gym",
+      "Padel Court",
+      "Cinema",
+      "BBQ Area"
+    ],
+    description: "BREEZ by Danube is a premium waterfront 60-floor unique residential project in MARITIME CITY. It brings FULLY FURNISHED, OCEANFRONT HOMES with over 40+ RESORT STYLE AMENITIES.",
+    address: {
+      street: "Maritime City",
+      city: "Dubai",
+      state: "Dubai",
+      zipCode: "",
+      country: "UAE"
+    },
+    agent: {
+      name: "Danube Properties",
+      phone: "+971 800 57 57",
+      email: "info@danubeproperties.com",
+      image: "https://randomuser.me/api/portraits/men/8.jpg"
+    },
+    locationType: "dubai",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: "35",
+    title: "BAYZ 102",
+    price: "Price on Request", 
+    location: "Business Bay, Dubai",
+    propertyLocation: "dubai",
+    bedrooms: 4,
+    bathrooms: 4,
+    area: "Varies",
+    image: "/images/properties/bayz-danube/main.png",
+    images: [],
+    type: "residential",
+    status: "For Sale",
+    featured: true,
+    yearBuilt: 2028,
+    amenities: [
+      "Helipad",
+      "Aquatic Gym",
+      "Skyview Cinema",
+      "Business Centre",
+      "Skyline Pool"
+    ],
+    description: "BAYZ 102 sets new standards in modern luxury with 102 LEVELS OF LUXURY IN BUSINESS BAY. The property features an exclusive helipad, private pools in your apartment, and premium Italian DOLCE VITA furniture.",
+    address: {
+      street: "Business Bay",
+      city: "Dubai",
+      state: "Dubai",
+      zipCode: "",
+      country: "UAE"
+    },
+    agent: {
+      name: "Danube Properties",
+      phone: "+971 800 57 57",
+      email: "info@danubeproperties.ae",
+      image: "https://randomuser.me/api/portraits/men/9.jpg"
+    },
+    locationType: "dubai",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
   {
     id: "1",
     title: "MAG Marriott",
