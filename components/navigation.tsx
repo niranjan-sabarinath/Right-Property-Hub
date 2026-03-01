@@ -24,7 +24,7 @@ const Navigation = () => {
         };
 
         document.addEventListener('mousedown', handleClickOutside);
-        
+
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
@@ -36,13 +36,13 @@ const Navigation = () => {
             setIsPropertiesOpen(false);
             setIsOpen(false);
         };
-        
+
         // Listen for route changes
         const handleRouteStart = () => handleRouteChange();
-        
+
         window.addEventListener('routeChangeStart', handleRouteStart);
         window.addEventListener('popstate', handleRouteStart);
-        
+
         return () => {
             window.removeEventListener('routeChangeStart', handleRouteStart);
             window.removeEventListener('popstate', handleRouteStart);
@@ -61,8 +61,8 @@ const Navigation = () => {
 
     const navItems = [
         { href: "/", label: "DISCOVER", icon: Home },
-        { 
-            label: "PROPERTIES", 
+        {
+            label: "PROPERTIES",
             icon: Building,
             isDropdown: true,
             items: [
@@ -74,11 +74,14 @@ const Navigation = () => {
         { href: "/blog", label: "INSIGHTS", icon: BookOpen },
     ];
 
+    // On property detail pages, always show white/glass nav background
+    const isPropertyDetailPage = /^\/properties\/[^/]+\/[^/]+/.test(pathname);
+
     return (
         <nav
             className={cn(
                 "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-                isScrolled
+                (isScrolled || isPropertyDetailPage)
                     ? "glass-effect shadow-lg py-0"
                     : "bg-transparent py-0"
             )}
@@ -118,7 +121,7 @@ const Navigation = () => {
                     <div className="hidden md:flex items-center space-x-8 ml-20">
                         {navItems.map((item) => {
                             const isActive = item.href ? pathname === item.href : pathname.startsWith('/properties/');
-                            
+
                             if (item.isDropdown) {
                                 return (
                                     <div key={item.label} className="relative">
@@ -142,17 +145,17 @@ const Navigation = () => {
                                             {item.label}
                                             <ChevronDown className={`ml-1 h-4 w-4 transition-transform duration-200 ${isPropertiesOpen ? 'transform rotate-180' : ''}`} />
                                         </button>
-                                        
+
                                         {/* Dropdown Menu */}
-                                        <motion.div 
+                                        <motion.div
                                             initial={{ opacity: 0, y: 10, display: 'none' }}
-                                            animate={isPropertiesOpen ? { 
-                                                opacity: 1, 
-                                                y: 0, 
+                                            animate={isPropertiesOpen ? {
+                                                opacity: 1,
+                                                y: 0,
                                                 display: 'block',
                                                 transitionEnd: { display: 'block' }
-                                            } : { 
-                                                opacity: 0, 
+                                            } : {
+                                                opacity: 0,
                                                 y: 10,
                                                 transitionEnd: { display: 'none' }
                                             }}
@@ -179,8 +182,8 @@ const Navigation = () => {
                                                             className={cn(
                                                                 "block px-5 py-3 text-sm font-medium transition-all duration-200 flex items-center group w-full",
                                                                 "hover:bg-primary/5 hover:text-primary cursor-pointer",
-                                                                pathname === subItem.href 
-                                                                    ? "text-primary bg-primary/5 font-semibold" 
+                                                                pathname === subItem.href
+                                                                    ? "text-primary bg-primary/5 font-semibold"
                                                                     : "text-gray-700"
                                                             )}
                                                         >
@@ -203,10 +206,10 @@ const Navigation = () => {
                                     </div>
                                 );
                             }
-                            
+
                             // Only render Link if href is defined
                             if (!item.href) return null;
-                            
+
                             return (
                                 <div key={item.href} className="relative group">
                                     <Link
@@ -276,118 +279,118 @@ const Navigation = () => {
                                     <Menu className="h-6 w-6" />
                                 </Button>
                             </SheetTrigger>
-                        <SheetContent side="right" className="w-80">
-                            <div className="flex flex-col space-y-6 mt-8">
-                                {navItems.flatMap((item) => {
-                                    if (item.isDropdown) {
-                                        return [
-                                            <div key={item.label} className="w-full">
-                                                <button
-                                                    onClick={() => setIsPropertiesOpen(!isPropertiesOpen)}
-                                                    className={cn(
-                                                        "w-full flex items-center justify-between px-4 py-2 text-left rounded-full transition-colors",
-                                                        "hover:bg-gray-100 focus:outline-none",
-                                                        pathname.startsWith('/properties/')
-                                                            ? "bg-gray-100 text-gray-900 font-semibold"
-                                                            : "text-gray-600"
-                                                    )}
-                                                >
-                                                    <div className="flex items-center space-x-3">
-                                                        <item.icon className="w-5 h-5" />
-                                                        <span className="font-medium">{item.label}</span>
-                                                    </div>
-                                                    <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isPropertiesOpen ? 'transform rotate-180' : ''}`} />
-                                                </button>
-                                                
-                                                {isPropertiesOpen && (
-                                                    <motion.div 
-                                                        initial={{ opacity: 0, height: 0 }}
-                                                        animate={{ opacity: 1, height: 'auto' }}
-                                                        exit={{ opacity: 0, height: 0 }}
-                                                        transition={{ duration: 0.2 }}
-                                                        className="pl-8 mt-1 space-y-0.5 overflow-hidden"
+                            <SheetContent side="right" className="w-80">
+                                <div className="flex flex-col space-y-6 mt-8">
+                                    {navItems.flatMap((item) => {
+                                        if (item.isDropdown) {
+                                            return [
+                                                <div key={item.label} className="w-full">
+                                                    <button
+                                                        onClick={() => setIsPropertiesOpen(!isPropertiesOpen)}
+                                                        className={cn(
+                                                            "w-full flex items-center justify-between px-4 py-2 text-left rounded-full transition-colors",
+                                                            "hover:bg-gray-100 focus:outline-none",
+                                                            pathname.startsWith('/properties/')
+                                                                ? "bg-gray-100 text-gray-900 font-semibold"
+                                                                : "text-gray-600"
+                                                        )}
                                                     >
-                                                        {item.items.map((subItem, index) => (
-                                                            <motion.div
-                                                                key={subItem.href}
-                                                                initial={{ x: -10, opacity: 0 }}
-                                                                animate={{ x: 0, opacity: 1 }}
-                                                                transition={{ delay: 0.05 * index, duration: 0.2 }}
-                                                                className="w-full"
-                                                            >
-                                                                <Link
-                                                                    href={subItem.href}
-                                                                    onClick={(e) => {
-                                                                        e.preventDefault();
-                                                                        setIsOpen(false);
-                                                                        setIsPropertiesOpen(false);
-                                                                        // Use window.location for navigation to ensure it works on home page
-                                                                        window.location.href = subItem.href;
-                                                                    }}
-                                                                    className={cn(
-                                                                        "block px-4 py-2.5 text-sm rounded-lg transition-all duration-200 flex items-center cursor-pointer",
-                                                                        "hover:bg-primary/5 hover:text-primary",
-                                                                        pathname === subItem.href
-                                                                            ? "text-primary bg-primary/5 font-semibold"
-                                                                            : "text-gray-600"
-                                                                    )}
+                                                        <div className="flex items-center space-x-3">
+                                                            <item.icon className="w-5 h-5" />
+                                                            <span className="font-medium">{item.label}</span>
+                                                        </div>
+                                                        <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isPropertiesOpen ? 'transform rotate-180' : ''}`} />
+                                                    </button>
+
+                                                    {isPropertiesOpen && (
+                                                        <motion.div
+                                                            initial={{ opacity: 0, height: 0 }}
+                                                            animate={{ opacity: 1, height: 'auto' }}
+                                                            exit={{ opacity: 0, height: 0 }}
+                                                            transition={{ duration: 0.2 }}
+                                                            className="pl-8 mt-1 space-y-0.5 overflow-hidden"
+                                                        >
+                                                            {item.items.map((subItem, index) => (
+                                                                <motion.div
+                                                                    key={subItem.href}
+                                                                    initial={{ x: -10, opacity: 0 }}
+                                                                    animate={{ x: 0, opacity: 1 }}
+                                                                    transition={{ delay: 0.05 * index, duration: 0.2 }}
+                                                                    className="w-full"
                                                                 >
-                                                                    <span className="relative">
-                                                                        {subItem.label}
-                                                                        <span className={cn(
-                                                                            "absolute -bottom-0.5 left-0 w-0 h-0.5 bg-primary transition-all duration-300",
-                                                                            pathname === subItem.href ? 'w-full' : 'group-hover:w-full'
-                                                                        )}></span>
-                                                                    </span>
-                                                                    <ArrowRight className="ml-2 h-3.5 w-3.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
-                                                                </Link>
-                                                            </motion.div>
-                                                        ))}
-                                                    </motion.div>
+                                                                    <Link
+                                                                        href={subItem.href}
+                                                                        onClick={(e) => {
+                                                                            e.preventDefault();
+                                                                            setIsOpen(false);
+                                                                            setIsPropertiesOpen(false);
+                                                                            // Use window.location for navigation to ensure it works on home page
+                                                                            window.location.href = subItem.href;
+                                                                        }}
+                                                                        className={cn(
+                                                                            "block px-4 py-2.5 text-sm rounded-lg transition-all duration-200 flex items-center cursor-pointer",
+                                                                            "hover:bg-primary/5 hover:text-primary",
+                                                                            pathname === subItem.href
+                                                                                ? "text-primary bg-primary/5 font-semibold"
+                                                                                : "text-gray-600"
+                                                                        )}
+                                                                    >
+                                                                        <span className="relative">
+                                                                            {subItem.label}
+                                                                            <span className={cn(
+                                                                                "absolute -bottom-0.5 left-0 w-0 h-0.5 bg-primary transition-all duration-300",
+                                                                                pathname === subItem.href ? 'w-full' : 'group-hover:w-full'
+                                                                            )}></span>
+                                                                        </span>
+                                                                        <ArrowRight className="ml-2 h-3.5 w-3.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                                                                    </Link>
+                                                                </motion.div>
+                                                            ))}
+                                                        </motion.div>
+                                                    )}
+                                                </div>
+                                            ];
+                                        }
+
+                                        // Only render Link if href is defined
+                                        if (!item.href) return null;
+
+                                        return [
+                                            <Link
+                                                key={item.href}
+                                                href={item.href}
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    setIsOpen(false);
+                                                    setIsPropertiesOpen(false);
+                                                    // Use window.location for navigation to ensure it works on home page
+                                                    window.location.href = item.href;
+                                                }}
+                                                className={cn(
+                                                    "flex items-center space-x-3 px-4 py-2 rounded-full transition-colors w-full cursor-pointer",
+                                                    "hover:bg-gray-100",
+                                                    pathname === item.href
+                                                        ? "bg-gray-100 text-gray-900 font-semibold"
+                                                        : "text-gray-600"
                                                 )}
-                                            </div>
+                                            >
+                                                <item.icon className="w-5 h-5" />
+                                                <span className="font-medium">
+                                                    {item.label}
+                                                </span>
+                                            </Link>
                                         ];
-                                    }
-                                    
-                                    // Only render Link if href is defined
-                                    if (!item.href) return null;
-                                    
-                                    return [
-                                        <Link
-                                            key={item.href}
-                                            href={item.href}
-                                            onClick={(e) => {
-                                                e.preventDefault();
-                                                setIsOpen(false);
-                                                setIsPropertiesOpen(false);
-                                                // Use window.location for navigation to ensure it works on home page
-                                                window.location.href = item.href;
-                                            }}
-                                            className={cn(
-                                                "flex items-center space-x-3 px-4 py-2 rounded-full transition-colors w-full cursor-pointer",
-                                                "hover:bg-gray-100",
-                                                pathname === item.href
-                                                    ? "bg-gray-100 text-gray-900 font-semibold"
-                                                    : "text-gray-600"
-                                            )}
-                                        >
-                                            <item.icon className="w-5 h-5" />
-                                            <span className="font-medium">
-                                                {item.label}
-                                            </span>
-                                        </Link>
-                                    ];
-                                })}
-                                <Link
-                                    href="/contact"
-                                    onClick={() => setIsOpen(false)}
-                                    className="flex items-center space-x-2 mx-4 text-gray-900 font-bold hover:text-primary transition-colors duration-200"
-                                >
-                                    <span>Get in Touch</span>
-                                    <ArrowRight className="w-4 h-4" />
-                                </Link>
-                            </div>
-                        </SheetContent>
+                                    })}
+                                    <Link
+                                        href="/contact"
+                                        onClick={() => setIsOpen(false)}
+                                        className="flex items-center space-x-2 mx-4 text-gray-900 font-bold hover:text-primary transition-colors duration-200"
+                                    >
+                                        <span>Get in Touch</span>
+                                        <ArrowRight className="w-4 h-4" />
+                                    </Link>
+                                </div>
+                            </SheetContent>
                         </Sheet>
                     </div>
                 </div>

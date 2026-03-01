@@ -1,17 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import Navigation from "@/components/navigation";
-import Footer from "@/components/footer";
+import { motion } from "framer-motion";
 import PropertyCard from "@/components/property-card";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
 import {
     MapPin,
     Bed,
@@ -20,561 +15,812 @@ import {
     Phone,
     Mail,
     Heart,
-    ArrowLeft,
+    Calendar,
+    Car,
+    Home,
+    ChevronRight,
+    Share2,
+    Check,
+    Facebook,
+    Youtube,
+    Instagram,
+    Linkedin,
 } from "lucide-react";
 import {
     getPropertyById,
-    getPropertiesByType,
+    getPropertiesByLocation,
     type Property,
 } from "@/data/properties";
 
-interface PropertyDetailPageProps {
-    params: {
-        type: string;
-        id: string;
-    };
-}
-
-// Helper function to determine if a property is in India or Dubai
-const getPropertyLocation = (property: Property): 'india' | 'dubai' => {
-  // First check the locationType if it exists
-  if (property.locationType) {
-    return property.locationType;
-  }
-  
-  // Fallback to checking the location string
-  if (property.location.toLowerCase().includes('dubai') || property.location.toLowerCase().includes('uae')) {
-    return 'dubai';
-  }
-  
-  // Default to India for any other case
-  return 'india';
+// ─── Animation Variants ────────────────────────────────────────────────
+const fadeInUp = {
+    hidden: { opacity: 0, y: 24 },
+    visible: (delay: number = 0) => ({
+        opacity: 1,
+        y: 0,
+        transition: { type: "spring" as const, stiffness: 80, damping: 18, delay },
+    }),
 };
 
-// Office contact information
+const staggerContainer = {
+    hidden: { opacity: 1 },
+    visible: {
+        opacity: 1,
+        transition: { staggerChildren: 0.07, delayChildren: 0.1 },
+    },
+};
+
+const fadeInScale = {
+    hidden: { opacity: 0, scale: 0.92 },
+    visible: {
+        opacity: 1,
+        scale: 1,
+        transition: { type: "spring" as const, stiffness: 100, damping: 20 },
+    },
+};
+
+// ─── Helper ─────────────────────────────────────────────────────────────
+const getPropertyLocation = (property: Property): "india" | "dubai" => {
+    if (property.locationType) return property.locationType;
+    if (
+        property.location.toLowerCase().includes("dubai") ||
+        property.location.toLowerCase().includes("uae")
+    )
+        return "dubai";
+    return "india";
+};
+
 const OFFICE_CONTACTS = {
-  india: {
-    phone: '+1 (615) 880-0775',
-    email: 'solutions@rightpropertyhub.com',
-    address: 'Houston, USA',
-    hours: 'Mon-Sat: 9:00 AM - 8:00 PM, Sun: 10:00 AM - 6:00 PM'
-  },
-  dubai: {
-    phone: '+1 (615) 880-0775',
-    email: 'dubai@rightpropertyhub.com',
-    address: 'Karama, Dubai, UAE',
-    hours: 'Mon-Fri: 9:00 AM - 7:00 PM, Sat: 10:00 AM - 5:00 PM'
-  }
+    india: {
+        phone: "+1 (615) 880-0775",
+        email: "solutions@rightpropertyhub.com",
+        hours: "Mon-Sat: 9 AM – 8 PM, Sun: 10 AM – 6 PM",
+    },
+    dubai: {
+        phone: "+1 (615) 880-0775",
+        email: "dubai@rightpropertyhub.com",
+        hours: "Mon-Fri: 9 AM – 7 PM, Sat: 10 AM – 5 PM",
+    },
 };
+
+const SOCIAL_LINKS = [
+    {
+        label: "Facebook",
+        href: "https://www.facebook.com/share/178YN4zHWH/?mibextid=wwXIfr",
+        Icon: Facebook,
+    },
+    {
+        label: "YouTube",
+        href: "https://youtube.com/@rightpropertyhubrphub?si=0pm2aHwij-YGLlXR",
+        Icon: Youtube,
+    },
+    {
+        label: "Instagram",
+        href: "https://www.instagram.com/right_property_hub?igsh=MW8ybDA0ZjB0c3M5bQ%3D%3D&utm_source=qr",
+        Icon: Instagram,
+    },
+    {
+        label: "LinkedIn",
+        href: "http://www.linkedin.com/in/right-property-hub-0533a6385",
+        Icon: Linkedin,
+    },
+];
+
+// ─── Status Color Map ────────────────────────────────────────────────────
+const statusStyle: Record<string, string> = {
+    "For Sale": "bg-emerald-500/90 text-white",
+    "For Rent": "bg-blue-500/90 text-white",
+    Sold: "bg-red-500/90 text-white",
+    Rented: "bg-purple-500/90 text-white",
+};
+
+// ─── Component ──────────────────────────────────────────────────────────
+interface PropertyDetailPageProps {
+    params: { type: string; id: string };
+}
 
 const PropertyDetailPage = ({ params }: PropertyDetailPageProps) => {
     const { type, id } = params;
+    const routerParams = useParams();
+    const effectiveId = (routerParams.id || id) as string;
+    const effectiveType = (routerParams.type || type) as string;
+
     const [activeImage, setActiveImage] = useState(0);
     const [isFavorite, setIsFavorite] = useState(false);
+    const [copied, setCopied] = useState(false);
 
-    // Get params on client side as well for consistency
-    const routerParams = useParams();
-    const clientType = routerParams.type;
-    const clientId = routerParams.id;
-
-    // Use client-side params if available (for client-side navigation)
-    const effectiveType = clientType || type;
-    const effectiveId = clientId || id;
-
-    // Get property data from global properties
-    const property = getPropertyById(effectiveId as string);
-
-    // Redirect to 404 if property not found
+    const property = getPropertyById(effectiveId);
     const router = useRouter();
+
     if (!property) {
         router.push("/404");
         return null;
     }
 
-    // Get similar properties from the same location (excluding current property)
     const propertyLocation = getPropertyLocation(property);
-    const similarProperties = getPropertiesByType(effectiveType as string)
-        .filter((p) => p.type === property.type && 
-                      p.id !== property.id && 
-                      getPropertyLocation(p) === propertyLocation)
-        .slice(0, 4); // Limit to 4 similar properties
+    const contact = OFFICE_CONTACTS[propertyLocation];
 
+    const images =
+        property.images && property.images.length > 0
+            ? property.images
+            : [property.image];
+
+    const similarProperties = getPropertiesByLocation(propertyLocation)
+        .filter((p) => p.id !== property.id)
+        .slice(0, 4);
+
+    // Build quick-stats list
+    const stats: { icon: React.ReactNode; label: string; value: string }[] = [];
+    if (property.bedrooms > 0)
+        stats.push({
+            icon: <Bed className="h-5 w-5" />,
+            label: "Bedrooms",
+            value: String(property.bedrooms),
+        });
+    if (property.bathrooms > 0)
+        stats.push({
+            icon: <Bath className="h-5 w-5" />,
+            label: "Bathrooms",
+            value: String(property.bathrooms),
+        });
+    stats.push({
+        icon: <Ruler className="h-5 w-5" />,
+        label: "Area",
+        value:
+            typeof property.area === "number"
+                ? `${property.area} sq.ft`
+                : String(property.area),
+    });
+    stats.push({
+        icon: <Home className="h-5 w-5" />,
+        label: "Type",
+        value: property.type.charAt(0).toUpperCase() + property.type.slice(1),
+    });
+    if (property.yearBuilt)
+        stats.push({
+            icon: <Calendar className="h-5 w-5" />,
+            label: "Year",
+            value: String(property.yearBuilt),
+        });
+    if (property.garage !== undefined && property.garage > 0)
+        stats.push({
+            icon: <Car className="h-5 w-5" />,
+            label: "Garage",
+            value: `${property.garage} ${property.garage === 1 ? "space" : "spaces"}`,
+        });
+
+    const handleShare = useCallback(async () => {
+        const url = window.location.href;
+        try {
+            await navigator.clipboard.writeText(url);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        } catch {
+            // fallback
+        }
+    }, []);
+
+    // ─── Render ──────────────────────────────────────────────────────────
     return (
-        <div className="min-h-screen flex flex-col">
-            <main className="flex-1 pt-10">
-                {/* Back button */}
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-                    <Link
-                        href={`/properties/${property?.propertyLocation}`}
-                        className="inline-flex items-center text-gray-600 hover:text-gray-900 transition-colors group"
-                    >
-                        <ArrowLeft className="w-5 h-5 mr-2 transition-transform group-hover:-translate-x-1" />
-                        Back to {property?.propertyLocation === 'dubai' ? 'Dubai' : 'India'} Properties
-                    </Link>
-                </div>
+        <div className="min-h-screen bg-gray-50">
 
-                <div className="bg-gray-50 pb-8">
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                            {/* Left Column - Property Gallery and Details */}
-                            <div className="lg:col-span-2 space-y-8">
-                                {/* Property Gallery */}
-                                <div className="space-y-4">
-                                    <div className="relative h-[500px] w-full rounded-xl overflow-hidden shadow-lg">
-                                        <Image
-                                            src={
-                                                property.images
-                                                    ? property.images[
-                                                          activeImage
-                                                      ] || property.image
-                                                    : property.image
-                                            }
-                                            alt={`${property.title} main image`}
-                                            fill
-                                            className="object-cover transition-opacity duration-300"
-                                            priority
-                                        />
-                                        <button
-                                            onClick={() =>
-                                                setIsFavorite(!isFavorite)
-                                            }
-                                            className="absolute top-4 right-4 p-2.5 bg-white/90 backdrop-blur-sm rounded-full shadow-md hover:bg-white transition-colors"
-                                            aria-label={
-                                                isFavorite
-                                                    ? "Remove from favorites"
-                                                    : "Add to favorites"
-                                            }
-                                        >
-                                            <Heart
-                                                className={`w-5 h-5 ${
-                                                    isFavorite
-                                                        ? "fill-red-500 text-red-500"
-                                                        : "text-gray-400"
-                                                }`}
-                                            />
-                                        </button>
-                                    </div>
+            {/* ─── Hero Image ─────────────────────────────────────────── */}
+            <motion.section
+                initial="hidden"
+                animate="visible"
+                variants={fadeInUp}
+                custom={0}
+                className="relative"
+            >
+                {/* Hero bleeds behind the fixed h-32 navbar */}
+                <div className="relative h-[420px] sm:h-[500px] lg:h-[600px] w-full overflow-hidden">
+                    <Image
+                        src={images[activeImage]}
+                        alt={`${property.title} — image ${activeImage + 1}`}
+                        fill
+                        className="object-cover transition-all duration-500"
+                        priority
+                        sizes="100vw"
+                    />
+                    {/* Gradient Overlay — darker top to let white nav text breathe */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/20" />
 
-                                    {/* Thumbnails */}
-                                    <div className="flex gap-3 overflow-x-auto pb-2 -mx-2 px-2 md:pl-4">
-                                        {(
-                                            property.images || [property.image]
-                                        ).map((img, index) => {
-                                            const imageSrc =
-                                                typeof img === "string"
-                                                    ? img
-                                                    : img;
-                                            return (
-                                                <button
-                                                    key={index}
-                                                    className={`relative h-20 w-20 flex-shrink-0 rounded-lg overflow-hidden transition-all top-1 duration-200 ${
-                                                        activeImage === index
-                                                            ? "ring-2 ring-primary ring-offset-2"
-                                                            : "opacity-70 hover:opacity-100 hover:scale-105"
-                                                    }`}
-                                                    onClick={() =>
-                                                        setActiveImage(index)
-                                                    }
-                                                    aria-label={`View image ${
-                                                        index + 1
-                                                    }`}
-                                                >
-                                                    <Image
-                                                        src={imageSrc}
-                                                        alt=""
-                                                        fill
-                                                        className="object-cover"
-                                                    />
-                                                </button>
-                                            );
-                                        })}
-                                    </div>
-                                </div>
+                    {/* Breadcrumb — inside hero, positioned below the navbar */}
+                    <div className="absolute top-36 left-0 right-0 z-10 hidden sm:block">
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                            <nav className="flex items-center text-sm text-white/70 space-x-2">
+                                <Link href="/" className="hover:text-white transition-colors">Home</Link>
+                                <ChevronRight className="h-3.5 w-3.5" />
+                                <Link
+                                    href={`/properties/${propertyLocation}`}
+                                    className="hover:text-white transition-colors"
+                                >
+                                    {propertyLocation === "dubai" ? "Dubai" : "India"} Properties
+                                </Link>
+                                <ChevronRight className="h-3.5 w-3.5" />
+                                <span className="text-white font-medium truncate max-w-[200px]">
+                                    {property.title}
+                                </span>
+                            </nav>
+                        </div>
+                    </div>
 
-                                <div className="max-w-7xl mx-auto">
-                                    <div className="w-full">
-                                        <Card>
-                                            <CardHeader>
-                                                <CardTitle className="uppercase">
-                                                {property.title}
-                                                </CardTitle>
-                                            </CardHeader>
-                                            <hr className="mx-6" />
-                                            <CardContent>
-                                                <div className="mt-4">
-                                                    <p className="text-gray-600">
-                                                        {property.description ||
-                                                            "No description available for this property."}
-                                                    </p>
-                                                </div>
+                    {/* Action buttons — glass style, positioned below navbar */}
+                    <div className="absolute top-36 right-4 sm:right-6 lg:right-8 flex items-center gap-2 z-10">
+                        <button
+                            onClick={handleShare}
+                            className="flex items-center justify-center h-10 w-10 rounded-full bg-white/15 backdrop-blur-md border border-white/20 hover:bg-white/25 transition-colors"
+                            aria-label="Share property"
+                        >
+                            {copied ? (
+                                <Check className="h-5 w-5 text-green-400" />
+                            ) : (
+                                <Share2 className="h-5 w-5 text-white" />
+                            )}
+                        </button>
+                        <button
+                            onClick={() => setIsFavorite(!isFavorite)}
+                            className="flex items-center justify-center h-10 w-10 rounded-full bg-white/15 backdrop-blur-md border border-white/20 hover:bg-white/25 transition-colors"
+                            aria-label={
+                                isFavorite
+                                    ? "Remove from favorites"
+                                    : "Add to favorites"
+                            }
+                        >
+                            <Heart
+                                className={`h-5 w-5 transition-colors ${isFavorite
+                                    ? "fill-red-500 text-red-500"
+                                    : "text-white"
+                                    }`}
+                            />
+                        </button>
+                    </div>
 
-                                                <div className="mt-8">
-                                                    <h3 className="text-xl font-semibold mb-4">
-                                                        Property Details
-                                                    </h3>
-                                                    <div className="grid grid-cols-2 gap-4">
-                                                        <div className="flex justify-between py-2 border-b">
-                                                            <span className="text-gray-600">
-                                                                Property Type
-                                                            </span>
-                                                            <span className="font-medium capitalize">
-                                                                {property.type}
-                                                            </span>
-                                                        </div>
-                                                        {property.yearBuilt && (
-                                                            <div className="flex justify-between py-2 border-b">
-                                                                <span className="text-gray-600">
-                                                                    Year Built
-                                                                </span>
-                                                                <span className="font-medium">
-                                                                    {
-                                                                        property.yearBuilt
-                                                                    }
-                                                                </span>
-                                                            </div>
-                                                        )}
-                                                        {property.garage !==
-                                                            undefined && (
-                                                            <div className="flex justify-between py-2 border-b">
-                                                                <span className="text-gray-600">
-                                                                    Garage
-                                                                </span>
-                                                                <span className="font-medium">
-                                                                    {
-                                                                        property.garage
-                                                                    }{" "}
-                                                                    {property.garage ===
-                                                                    1
-                                                                        ? "space"
-                                                                        : "spaces"}
-                                                                </span>
-                                                            </div>
-                                                        )}
-                                                        <div className="flex justify-between py-2 border-b">
-                                                            <span className="text-gray-600">
-                                                                Status
-                                                            </span>
-                                                            <span
-                                                                className={`font-medium ${
-                                                                    property.status ===
-                                                                        "For Sale" ||
-                                                                    property.status ===
-                                                                        "For Rent"
-                                                                        ? "text-green-600"
-                                                                        : "text-gray-600"
-                                                                }`}
-                                                            >
-                                                                {
-                                                                    property.status
-                                                                }
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                {property.amenities &&
-                                                    property.amenities.length >
-                                                        0 && (
-                                                        <div className="mt-8">
-                                                            <h3 className="text-xl font-semibold mb-4">
-                                                                Features
-                                                            </h3>
-                                                            <div className="grid grid-cols-2 gap-2">
-                                                                {property.amenities.map(
-                                                                    (
-                                                                        amenity,
-                                                                        index
-                                                                    ) => (
-                                                                        <div
-                                                                            key={
-                                                                                index
-                                                                            }
-                                                                            className="flex items-center"
-                                                                        >
-                                                                            <span className="w-2 h-2 bg-primary rounded-full mr-2"></span>
-                                                                            <span>
-                                                                                {
-                                                                                    amenity
-                                                                                }
-                                                                            </span>
-                                                                        </div>
-                                                                    )
-                                                                )}
-                                                            </div>
-                                                        </div>
-                                                    )}
-                                            </CardContent>
-                                        </Card>
+                    {/* Overlaid Property Info */}
+                    <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 lg:p-8">
+                        <div className="max-w-7xl mx-auto">
+                            <div className="flex flex-wrap items-end justify-between gap-3">
+                                <div className="space-y-2">
+                                    <Badge
+                                        className={`${statusStyle[property.status] ||
+                                            "bg-gray-700 text-white"
+                                            } text-xs px-3 py-1 rounded-full border-0`}
+                                    >
+                                        {property.status}
+                                    </Badge>
+                                    <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white drop-shadow-lg">
+                                        {property.title}
+                                    </h1>
+                                    <div className="flex items-center gap-1.5 text-white/90 text-sm sm:text-base">
+                                        <MapPin className="h-4 w-4 flex-shrink-0" />
+                                        {property.location}
                                     </div>
                                 </div>
-                            </div>
-
-                            {/* Right Column - Property Info and Company Contact */}
-                            <div className="space-y-6">
-                                <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-                                    <div className="p-6">
-                                        <div className="flex justify-between items-start">
-                                            <div>
-                                                <h1 className="text-2xl font-bold text-gray-900">
-                                                    {property.price}
-                                                    {property.status ===
-                                                        "For Rent" && (
-                                                        <span className="text-sm text-gray-500 ml-1">
-                                                            /month
-                                                        </span>
-                                                    )}
-                                                </h1>
-                                                <div className="flex items-center text-gray-600 mt-1">
-                                                    <MapPin className="h-4 w-4 mr-1.5 flex-shrink-0" />
-                                                    <span className="text-sm">
-                                                        {property.location}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <span
-                                                className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
-                                                    property.status ===
-                                                    "For Sale"
-                                                        ? "bg-green-100 text-green-800"
-                                                        : property.status ===
-                                                          "For Rent"
-                                                        ? "bg-blue-100 text-blue-800"
-                                                        : property.status ===
-                                                          "Sold"
-                                                        ? "bg-red-100 text-red-800"
-                                                        : "bg-gray-100 text-gray-800"
-                                                }`}
-                                            >
-                                                {property.status}
+                                <div className="text-right">
+                                    <p className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white drop-shadow-lg">
+                                        {property.price}
+                                        {property.status === "For Rent" && (
+                                            <span className="text-base font-normal text-white/70 ml-1">
+                                                /month
                                             </span>
-                                        </div>
-
-                                        <div className="grid grid-cols-3 gap-4 mt-6">
-                                            <div className="text-center p-3 bg-gray-50 rounded-lg">
-                                                <Bed className="h-6 w-6 text-primary mx-auto mb-1" />
-                                                <div className="text-sm text-gray-500">
-                                                    Bedrooms
-                                                </div>
-                                                <div className="font-medium text-gray-900">
-                                                    {property.bedrooms}
-                                                </div>
-                                            </div>
-                                            <div className="text-center p-3 bg-gray-50 rounded-lg">
-                                                <Bath className="h-6 w-6 text-primary mx-auto mb-1" />
-                                                <div className="text-sm text-gray-500">
-                                                    Bathrooms
-                                                </div>
-                                                <div className="font-medium text-gray-900">
-                                                    {property.bathrooms}
-                                                </div>
-                                            </div>
-                                            <div className="text-center p-3 bg-gray-50 rounded-lg">
-                                                <Ruler className="h-6 w-6 text-primary mx-auto mb-1" />
-                                                <div className="text-sm text-gray-500">
-                                                    Area
-                                                </div>
-                                                <div className="font-medium text-gray-900">
-                                                    {property.area}
-                                                    {typeof property.area ===
-                                                    "number"
-                                                        ? " sq.ft"
-                                                        : ""}
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        {property.yearBuilt && (
-                                            <div className="mt-4 pt-4 border-t border-gray-100">
-                                                <div className="flex justify-between py-1">
-                                                    <span className="text-gray-600">
-                                                        Year Built
-                                                    </span>
-                                                    <span className="font-medium">
-                                                        {property.yearBuilt}
-                                                    </span>
-                                                </div>
-                                            </div>
                                         )}
-                                        {property.garage !== undefined && (
-                                            <div className="flex justify-between py-1">
-                                                <span className="text-gray-600">
-                                                    Garage
-                                                </span>
-                                                <span className="font-medium">
-                                                    {property.garage}{" "}
-                                                    {property.garage === 1
-                                                        ? "space"
-                                                        : "spaces"}
-                                                </span>
-                                            </div>
-                                        )}
-                                        <div className="flex justify-between py-1">
-                                            <span className="text-gray-600">
-                                                Property Type
-                                            </span>
-                                            <span className="font-medium capitalize">
-                                                {property.type}
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Company Contact Info */}
-                                <div className="bg-white rounded-xl shadow-lg p-6 mt-6 hidden md:block">
-                                    <div className="flex flex-col items-center text-center">
-                                        {/* Logo */}
-                                        <div>
-                                            <div className="flex justify-center">
-                                                <Image
-                                                    src="/images/logo.png"
-                                                    alt="Right Property Hub Logo"
-                                                    width={60}
-                                                    height={60}
-                                                    className="h-15 w-auto"
-                                                />
-                                            </div>
-                                        </div>
-
-                                        {/* Contact Info */}
-                                        <div className="space-y-3 w-full">
-                                            {propertyLocation === 'india' && (
-                                                <div className="flex items-center justify-center gap-2 text-gray-600">
-                                                    <Mail className="w-5 h-5 text-primary" />
-                                                    <span>{OFFICE_CONTACTS[propertyLocation].email}</span>
-                                                </div>
-                                            )}
-                                            <div className="flex items-center justify-center gap-2 text-gray-600">
-                                                <Phone className="w-5 h-5 text-primary" />
-                                                <span>{OFFICE_CONTACTS[propertyLocation].phone}</span>
-                                            </div>
-                                        </div>
-
-                                        {/* Social Icons */}
-                                        <div className="flex space-x-4 mt-4">
-                                            <a
-                                                href="https://www.facebook.com/share/178YN4zHWH/?mibextid=wwXIfr"
-                                                className="text-gray-500 hover:text-primary transition-colors"
-                                                aria-label="Facebook"
-                                            >
-                                                <svg
-                                                    className="h-6 w-6"
-                                                    fill="currentColor"
-                                                    viewBox="0 0 24 24"
-                                                >
-                                                    <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" />
-                                                </svg>
-                                            </a>
-                                            <a
-                                                href="https://youtube.com/@rightpropertyhubrphub?si=0pm2aHwij-YGLlXR"
-                                                className="text-gray-500 hover:text-primary transition-colors"
-                                                aria-label="Youtube"
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                            >
-                                                <svg
-                                                    className="h-6 w-6"
-                                                    fill="currentColor"
-                                                    viewBox="0 0 24 24"
-                                                >
-                                                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
-                                                </svg>
-                                            </a>
-                                            <a
-                                                href="https://www.instagram.com/right_property_hub?igsh=MW8ybDA0ZjB0c3M5bQ%3D%3D&utm_source=qr"
-                                                className="text-gray-500 hover:text-primary transition-colors"
-                                                aria-label="Instagram"
-                                            >
-                                                <svg
-                                                    className="h-5 w-5 mt-[1px]"
-                                                    fill="currentColor"
-                                                    viewBox="0 0 24 24"
-                                                >
-                                                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12.001 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
-                                                </svg>
-                                            </a>
-                                            <a
-                                                href="http://www.linkedin.com/in/right-property-hub-0533a6385"
-                                                className="text-gray-500 hover:text-primary transition-colors"
-                                                aria-label="LinkedIn"
-                                            >
-                                                <svg
-                                                    className="h-5 w-5 mt-[1px]"
-                                                    fill="currentColor"
-                                                    viewBox="0 0 24 24"
-                                                >
-                                                    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
-                                                </svg>
-                                            </a>
-                                        </div>
-                                    </div>
+                                    </p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                {/* Similar Properties */}
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-                    <div className="container mx-auto">
-                        <h2 className="text-2xl font-bold mb-6">
+                {/* Thumbnail Strip */}
+                {images.length > 1 && (
+                    <div className="bg-white border-b border-gray-100">
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+                            <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-1">
+                                {images.map((img, i) => (
+                                    <button
+                                        key={i}
+                                        onClick={() => setActiveImage(i)}
+                                        className={`relative h-16 w-20 sm:h-20 sm:w-24 flex-shrink-0 rounded-lg overflow-hidden transition-all duration-200 ${activeImage === i
+                                            ? "ring-2 ring-primary ring-offset-2 opacity-100"
+                                            : "opacity-60 hover:opacity-100"
+                                            }`}
+                                        aria-label={`View image ${i + 1}`}
+                                    >
+                                        <Image
+                                            src={typeof img === "string" ? img : img}
+                                            alt=""
+                                            fill
+                                            className="object-cover"
+                                            sizes="96px"
+                                        />
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </motion.section>
+
+            {/* ─── Quick Stats Bar ────────────────────────────────────── */}
+            <motion.section
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-40px" }}
+                variants={staggerContainer}
+                className="bg-white border-b border-gray-100 shadow-sm"
+            >
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+                    <div className="flex gap-3 overflow-x-auto scrollbar-hide pb-1">
+                        {stats.map((stat, i) => (
+                            <motion.div
+                                key={stat.label}
+                                variants={fadeInScale}
+                                className="flex items-center gap-3 flex-shrink-0 px-4 py-3 rounded-xl bg-gray-50 border border-gray-100 min-w-[130px]"
+                            >
+                                <div className="flex items-center justify-center h-10 w-10 rounded-lg bg-primary/10 text-primary">
+                                    {stat.icon}
+                                </div>
+                                <div>
+                                    <p className="text-xs text-gray-500 uppercase tracking-wide">
+                                        {stat.label}
+                                    </p>
+                                    <p className="text-sm font-semibold text-gray-900">
+                                        {stat.value}
+                                    </p>
+                                </div>
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+            </motion.section>
+
+            {/* ─── Main Content ───────────────────────────────────────── */}
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-10">
+                    {/* ── Left Column ─────────────────────────────────── */}
+                    <div className="lg:col-span-2 space-y-8">
+                        {/* Description */}
+                        <motion.div
+                            initial="hidden"
+                            whileInView="visible"
+                            viewport={{ once: true, margin: "-40px" }}
+                            variants={fadeInUp}
+                            custom={0.1}
+                            className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8"
+                        >
+                            <h2 className="text-xl font-bold text-gray-900 mb-4">
+                                About This Property
+                            </h2>
+                            <p className="text-gray-600 leading-relaxed text-[15px]">
+                                {property.description ||
+                                    "No description available for this property. Contact us for more details."}
+                            </p>
+                        </motion.div>
+
+                        {/* Property Details */}
+                        <motion.div
+                            initial="hidden"
+                            whileInView="visible"
+                            viewport={{ once: true, margin: "-40px" }}
+                            variants={fadeInUp}
+                            custom={0.15}
+                            className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8"
+                        >
+                            <h2 className="text-xl font-bold text-gray-900 mb-5">
+                                Property Details
+                            </h2>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-0">
+                                {[
+                                    {
+                                        label: "Property Type",
+                                        value:
+                                            property.type
+                                                .charAt(0)
+                                                .toUpperCase() +
+                                            property.type.slice(1),
+                                    },
+                                    {
+                                        label: "Status",
+                                        value: property.status,
+                                        highlight: true,
+                                    },
+                                    ...(property.bedrooms > 0
+                                        ? [
+                                            {
+                                                label: "Bedrooms",
+                                                value: String(
+                                                    property.bedrooms
+                                                ),
+                                            },
+                                        ]
+                                        : []),
+                                    ...(property.bathrooms > 0
+                                        ? [
+                                            {
+                                                label: "Bathrooms",
+                                                value: String(
+                                                    property.bathrooms
+                                                ),
+                                            },
+                                        ]
+                                        : []),
+                                    {
+                                        label: "Area",
+                                        value:
+                                            typeof property.area === "number"
+                                                ? `${property.area} sq.ft`
+                                                : String(property.area),
+                                    },
+                                    ...(property.yearBuilt
+                                        ? [
+                                            {
+                                                label: "Year Built",
+                                                value: String(
+                                                    property.yearBuilt
+                                                ),
+                                            },
+                                        ]
+                                        : []),
+                                    ...(property.garage !== undefined &&
+                                        property.garage > 0
+                                        ? [
+                                            {
+                                                label: "Garage",
+                                                value: `${property.garage} ${property.garage === 1 ? "space" : "spaces"}`,
+                                            },
+                                        ]
+                                        : []),
+                                    ...(property.address?.city
+                                        ? [
+                                            {
+                                                label: "City",
+                                                value: property.address.city,
+                                            },
+                                        ]
+                                        : []),
+                                    ...(property.address?.country
+                                        ? [
+                                            {
+                                                label: "Country",
+                                                value: property.address
+                                                    .country,
+                                            },
+                                        ]
+                                        : []),
+                                ].map((item, i) => (
+                                    <div
+                                        key={item.label}
+                                        className="flex justify-between items-center py-3 border-b border-gray-100 last:border-0"
+                                    >
+                                        <span className="text-sm text-gray-500">
+                                            {item.label}
+                                        </span>
+                                        <span
+                                            className={`text-sm font-medium ${item.highlight &&
+                                                (property.status ===
+                                                    "For Sale" ||
+                                                    property.status ===
+                                                    "For Rent")
+                                                ? "text-emerald-600"
+                                                : "text-gray-900"
+                                                }`}
+                                        >
+                                            {item.value}
+                                        </span>
+                                    </div>
+                                ))}
+                            </div>
+                        </motion.div>
+
+                        {/* Amenities */}
+                        {property.amenities &&
+                            property.amenities.length > 0 && (
+                                <motion.div
+                                    initial="hidden"
+                                    whileInView="visible"
+                                    viewport={{ once: true, margin: "-40px" }}
+                                    variants={fadeInUp}
+                                    custom={0.2}
+                                    className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8"
+                                >
+                                    <h2 className="text-xl font-bold text-gray-900 mb-5">
+                                        Amenities & Features
+                                    </h2>
+                                    <motion.div
+                                        variants={staggerContainer}
+                                        initial="hidden"
+                                        whileInView="visible"
+                                        viewport={{ once: true }}
+                                        className="flex flex-wrap gap-2"
+                                    >
+                                        {property.amenities.map(
+                                            (amenity, i) => (
+                                                <motion.span
+                                                    key={i}
+                                                    variants={fadeInScale}
+                                                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-gray-50 border border-gray-100 text-sm text-gray-700 hover:bg-primary/5 hover:border-primary/20 hover:text-primary transition-colors"
+                                                >
+                                                    <Check className="h-3.5 w-3.5 text-primary flex-shrink-0" />
+                                                    {amenity}
+                                                </motion.span>
+                                            )
+                                        )}
+                                    </motion.div>
+                                </motion.div>
+                            )}
+
+                        {/* Address */}
+                        {property.address &&
+                            (property.address.street ||
+                                property.address.city) && (
+                                <motion.div
+                                    initial="hidden"
+                                    whileInView="visible"
+                                    viewport={{ once: true, margin: "-40px" }}
+                                    variants={fadeInUp}
+                                    custom={0.25}
+                                    className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8"
+                                >
+                                    <h2 className="text-xl font-bold text-gray-900 mb-4">
+                                        Location
+                                    </h2>
+                                    <div className="flex items-start gap-3">
+                                        <div className="flex items-center justify-center h-10 w-10 rounded-lg bg-primary/10 text-primary flex-shrink-0 mt-0.5">
+                                            <MapPin className="h-5 w-5" />
+                                        </div>
+                                        <div className="text-[15px] text-gray-600 leading-relaxed">
+                                            {[
+                                                property.address.street,
+                                                property.address.city,
+                                                property.address.state,
+                                                property.address.zipCode,
+                                                property.address.country,
+                                            ]
+                                                .filter(Boolean)
+                                                .join(", ")}
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            )}
+                    </div>
+
+                    {/* ── Right Column (Sticky Sidebar) ──────────────── */}
+                    <div className="space-y-6 lg:sticky lg:top-24 lg:self-start">
+                        {/* Price Card */}
+                        <motion.div
+                            initial="hidden"
+                            whileInView="visible"
+                            viewport={{ once: true, margin: "-40px" }}
+                            variants={fadeInUp}
+                            custom={0.1}
+                            className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden"
+                        >
+                            <div className="bg-gradient-to-br from-primary/5 via-white to-primary/5 p-6">
+                                <div className="flex items-start justify-between gap-3">
+                                    <div>
+                                        <p className="text-2xl sm:text-3xl font-bold text-gray-900">
+                                            {property.price}
+                                        </p>
+                                        {property.status === "For Rent" && (
+                                            <span className="text-sm text-gray-500">
+                                                per month
+                                            </span>
+                                        )}
+                                    </div>
+                                    <Badge
+                                        className={`${statusStyle[property.status] ||
+                                            "bg-gray-700 text-white"
+                                            } text-xs px-3 py-1 rounded-full border-0 flex-shrink-0`}
+                                    >
+                                        {property.status}
+                                    </Badge>
+                                </div>
+                                <div className="flex items-center gap-1.5 mt-3 text-gray-500 text-sm">
+                                    <MapPin className="h-4 w-4 flex-shrink-0" />
+                                    {property.location}
+                                </div>
+                            </div>
+
+                            {/* Quick Stats in sidebar */}
+                            <div className="grid grid-cols-3 border-t border-gray-100">
+                                {property.bedrooms > 0 && (
+                                    <div className="text-center py-4 border-r border-gray-100">
+                                        <Bed className="h-5 w-5 text-primary mx-auto mb-1" />
+                                        <p className="text-xs text-gray-500">
+                                            Beds
+                                        </p>
+                                        <p className="text-sm font-semibold text-gray-900">
+                                            {property.bedrooms}
+                                        </p>
+                                    </div>
+                                )}
+                                {property.bathrooms > 0 && (
+                                    <div className="text-center py-4 border-r border-gray-100">
+                                        <Bath className="h-5 w-5 text-primary mx-auto mb-1" />
+                                        <p className="text-xs text-gray-500">
+                                            Baths
+                                        </p>
+                                        <p className="text-sm font-semibold text-gray-900">
+                                            {property.bathrooms}
+                                        </p>
+                                    </div>
+                                )}
+                                <div className="text-center py-4">
+                                    <Ruler className="h-5 w-5 text-primary mx-auto mb-1" />
+                                    <p className="text-xs text-gray-500">
+                                        Area
+                                    </p>
+                                    <p className="text-sm font-semibold text-gray-900 truncate px-2">
+                                        {typeof property.area === "number"
+                                            ? `${property.area} sqft`
+                                            : property.area}
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* CTA */}
+                            <div className="p-5 border-t border-gray-100">
+                                <a
+                                    href={`tel:${contact.phone.replace(/[^+\d]/g, "")}`}
+                                    className="flex items-center justify-center gap-2 w-full py-3 px-4 rounded-xl bg-primary text-white font-semibold text-sm hover:bg-primary/90 transition-colors shadow-sm"
+                                >
+                                    <Phone className="h-4 w-4" />
+                                    Call Now
+                                </a>
+                                <a
+                                    href={`https://wa.me/${contact.phone.replace(/[^+\d]/g, "")}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex items-center justify-center gap-2 w-full mt-2 py-3 px-4 rounded-xl border-2 border-primary text-primary font-semibold text-sm hover:bg-primary/5 transition-colors"
+                                >
+                                    WhatsApp
+                                </a>
+                            </div>
+                        </motion.div>
+
+                        {/* Contact Card */}
+                        <motion.div
+                            initial="hidden"
+                            whileInView="visible"
+                            viewport={{ once: true, margin: "-40px" }}
+                            variants={fadeInUp}
+                            custom={0.2}
+                            className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6"
+                        >
+                            <div className="flex flex-col items-center text-center">
+                                <Image
+                                    src="/images/logo.png"
+                                    alt="Right Property Hub"
+                                    width={56}
+                                    height={56}
+                                    className="h-14 w-auto mb-3"
+                                />
+                                <h3 className="font-semibold text-gray-900 text-sm">
+                                    Right Property Hub
+                                </h3>
+                                <p className="text-xs text-gray-500 mt-1">
+                                    {contact.hours}
+                                </p>
+                            </div>
+
+                            <div className="mt-5 space-y-3">
+                                <a
+                                    href={`tel:${contact.phone.replace(/[^+\d]/g, "")}`}
+                                    className="flex items-center gap-3 text-sm text-gray-600 hover:text-primary transition-colors"
+                                >
+                                    <div className="flex items-center justify-center h-9 w-9 rounded-lg bg-primary/10 text-primary flex-shrink-0">
+                                        <Phone className="h-4 w-4" />
+                                    </div>
+                                    {contact.phone}
+                                </a>
+                                <a
+                                    href={`mailto:${contact.email}`}
+                                    className="flex items-center gap-3 text-sm text-gray-600 hover:text-primary transition-colors"
+                                >
+                                    <div className="flex items-center justify-center h-9 w-9 rounded-lg bg-primary/10 text-primary flex-shrink-0">
+                                        <Mail className="h-4 w-4" />
+                                    </div>
+                                    {contact.email}
+                                </a>
+                            </div>
+
+                            {/* Social Links */}
+                            <div className="flex items-center justify-center gap-3 mt-5 pt-5 border-t border-gray-100">
+                                {SOCIAL_LINKS.map((social) => (
+                                    <a
+                                        key={social.label}
+                                        href={social.href}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        aria-label={social.label}
+                                        className="flex items-center justify-center h-9 w-9 rounded-full bg-gray-50 text-gray-500 hover:bg-primary/10 hover:text-primary transition-colors"
+                                    >
+                                        <social.Icon className="h-4 w-4" />
+                                    </a>
+                                ))}
+                            </div>
+                        </motion.div>
+                    </div>
+                </div>
+            </div>
+
+            {/* ─── Similar Properties ─────────────────────────────────── */}
+            {similarProperties.length > 0 && (
+                <motion.section
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: "-60px" }}
+                    variants={fadeInUp}
+                    custom={0}
+                    className="bg-white border-t border-gray-100"
+                >
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
+                        <div className="flex items-center justify-between mb-8">
+                            <h2 className="text-2xl font-bold text-gray-900">
+                                Similar Properties
+                            </h2>
+                            <Link
+                                href={`/properties/${propertyLocation}`}
+                                className="text-sm font-medium text-primary hover:underline hidden sm:inline-flex items-center gap-1"
+                            >
+                                View All
+                                <ChevronRight className="h-4 w-4" />
+                            </Link>
+                        </div>
+                        <motion.div
+                            variants={staggerContainer}
+                            initial="hidden"
+                            whileInView="visible"
+                            viewport={{ once: true }}
+                            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+                        >
+                            {similarProperties.map((p) => (
+                                <motion.div
+                                    key={p.id}
+                                    variants={fadeInScale}
+                                    className="rounded-xl overflow-hidden"
+                                >
+                                    <PropertyCard property={p} />
+                                </motion.div>
+                            ))}
+                        </motion.div>
+                        <div className="mt-6 text-center sm:hidden">
+                            <Link
+                                href={`/properties/${propertyLocation}`}
+                                className="text-sm font-medium text-primary hover:underline inline-flex items-center gap-1"
+                            >
+                                View All Properties
+                                <ChevronRight className="h-4 w-4" />
+                            </Link>
+                        </div>
+                    </div>
+                </motion.section>
+            )}
+
+            {/* Empty state for no similar properties */}
+            {similarProperties.length === 0 && (
+                <section className="bg-white border-t border-gray-100">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center">
+                        <h2 className="text-2xl font-bold text-gray-900 mb-4">
                             Similar Properties
                         </h2>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                            {similarProperties.length > 0 ? (
-                                similarProperties.map((similarProperty) => (
-                                    <div
-                                        key={similarProperty.id}
-                                        className="hover:shadow-lg transition-shadow duration-200 rounded-xl overflow-hidden"
-                                    >
-                                        <PropertyCard
-                                            property={{
-                                                ...similarProperty,
-                                                price: similarProperty.price,
-                                                location:
-                                                    similarProperty.location,
-                                                bedrooms:
-                                                    similarProperty.bedrooms,
-                                                bathrooms:
-                                                    similarProperty.bathrooms,
-                                                area: similarProperty.area,
-                                                image: similarProperty.image,
-                                                type: similarProperty.type,
-                                                status: similarProperty.status,
-                                            }}
-                                        />
-                                    </div>
-                                ))
-                            ) : (
-                                <div className="col-span-full text-center py-8">
-                                    <p className="text-gray-500">
-                                        No similar properties found.
-                                    </p>
-                                    <Link
-                                        href={`/properties/${effectiveType}`}
-                                        className="mt-4 inline-flex items-center text-primary hover:underline"
-                                    >
-                                        Browse all {effectiveType} properties
-                                        <svg
-                                            className="w-4 h-4 ml-1.5"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeWidth={2}
-                                                d="M14 5l7 7m0 0l-7 7m7-7H3"
-                                            />
-                                        </svg>
-                                    </Link>
-                                </div>
-                            )}
-                        </div>
+                        <p className="text-gray-500 mb-4">
+                            No similar properties found at the moment.
+                        </p>
+                        <Link
+                            href={`/properties/${propertyLocation}`}
+                            className="inline-flex items-center gap-1 text-primary font-medium hover:underline"
+                        >
+                            Browse all{" "}
+                            {propertyLocation === "dubai"
+                                ? "Dubai"
+                                : "India"}{" "}
+                            properties
+                            <ChevronRight className="h-4 w-4" />
+                        </Link>
                     </div>
-                </div>
-            </main>
+                </section>
+            )}
         </div>
     );
 };
