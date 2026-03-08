@@ -72,12 +72,12 @@ const getPropertyLocation = (property: Property): "india" | "dubai" => {
 
 const OFFICE_CONTACTS = {
     india: {
-        phone: "+1 (615) 880-0775",
+        phone: "+971 50 575 5424",
         email: "solutions@rightpropertyhub.com",
         hours: "Mon-Sat: 9 AM – 8 PM, Sun: 10 AM – 6 PM",
     },
     dubai: {
-        phone: "+1 (615) 880-0775",
+        phone: "+971 50 575 5424",
         email: "dubai@rightpropertyhub.com",
         hours: "Mon-Fri: 9 AM – 7 PM, Sat: 10 AM – 5 PM",
     },

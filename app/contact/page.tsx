@@ -90,7 +90,7 @@ const ContactPage = () => {
         {
             name: "Company Office",
             address: "Houston, USA",
-            phone: "+1 (615) 880-0775",
+            phone: "+971 50 575 5424",
             email: "solutions@rightpropertyhub.com",
             hours: "Mon-Sat: 9:00 AM - 8:00 PM\nSun: 10:00 AM - 6:00 PM",
             lat: "19.0760",
@@ -105,11 +105,11 @@ const ContactPage = () => {
             description: "Speak directly with our team",
             value: (
                 <div className="flex flex-col">
-                    <div>+1 (615) 880-0775</div>
+                    <div>+971 50 575 5424</div>
                 </div>
             ),
             action: "Call Now",
-            actionLink: "tel:+16158800775",
+            actionLink: "tel:+971505755424",
         },
         {
             icon: Mail,

@@ -150,10 +150,10 @@ const Footer = () => {
                 >
                   <Phone className="w-4 h-4 text-gray-600 flex-shrink-0" />
                   <a
-                    href="tel:+16158800775"
+                    href="tel:+971505755424"
                     className="text-sm text-gray-700 hover:text-gray-900 font-medium transition-colors"
                   >
-                    +1 (615) 880-0775
+                    +971 50 575 5424
                   </a>
                 </motion.div>
               </motion.div>
